@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { getCanHoById, insertCanHo, saveHinhAnh, updateCanHo, doiHinhAnh } from '../utils/ApiFunctions'
+import { getCanHoById, updateCanHo, doiHinhAnh } from '../utils/ApiFunctions'
 import LoaiPhongSelector from '../common/LoaiPhongSelector'
 import { useParams } from 'react-router-dom'
 import {Link} from 'react-router-dom'
@@ -35,7 +35,7 @@ const EditCanHo = () => {
                     setErrorMessage("")
                 }
                 else{
-                    setErrorMessage(result.error.message)
+                    setErrorMessage("Lấy căn hộ thất bại")
                 }
             }
             catch(error){

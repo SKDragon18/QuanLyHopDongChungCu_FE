@@ -122,3 +122,12 @@ export async function getDichVu(){
     }
 }
 
+export async function getCanHoChoThue(){
+    try{
+        const response  = await api.get("/canho")
+        return response.data
+    }catch(error){
+        throw new Error("Error fetching danh sách căn hộ")
+    }
+}
+
