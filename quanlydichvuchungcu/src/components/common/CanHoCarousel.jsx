@@ -8,7 +8,9 @@ const CanHoCarousel = () => {
         hinhAnhList:[],
         soPhong:0,
         giaThue:0,
-        moTa:''
+        moTa:'',
+        chuKy:30,
+        lo:'A'
     }])
     const [errorMessage,setErrorMessage] = useState('')
     const [isLoading, setIsLoading] = useState(false)
@@ -66,8 +68,8 @@ const CanHoCarousel = () => {
                                             style={{height:'200px'}}/>
                                         </Link>)}
                                         <Card.Body>
-                                        <Card.Title className='hotel-color'>Căn hộ {canHo.soPhong}</Card.Title>
-                                        <Card.Title className='room-price'>{formatCurrency(canHo.giaThue,'vi-VN', 'VND')}/ tháng</Card.Title>
+                                        <Card.Title className='hotel-color'>Căn hộ {canHo.soPhong} khu {canHo.lo}</Card.Title>
+                                        <Card.Title className='room-price'>{formatCurrency(canHo.giaThue,'vi-VN', 'VND')}/ {canHo.chuKy} ngày</Card.Title>
                                         <div className='flex-shrink-0'>
                                             <Link to={`thue/${canHo.idCanHo}`} className='btn btn-hotel btn-sm'>
                                                 Thuê ngay

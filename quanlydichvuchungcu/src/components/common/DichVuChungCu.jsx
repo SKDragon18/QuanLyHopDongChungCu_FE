@@ -9,7 +9,7 @@ const DichVuChungCu = () => {
       <Container className='mb-2'>
         <Header title={"Dịch vụ của chúng tôi"}/>
         <Row>
-            <h4 className='text-center'>
+            <h4 className='text-center mt-4'>
                 Các dịch vụ ở <span className='hotel-color'>Chung cư cao cấp</span>
             </h4>
             <span className='gap-2'>

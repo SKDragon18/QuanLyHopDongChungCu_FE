@@ -5,7 +5,7 @@ import LoaiPhongSelector from '../common/LoaiPhongSelector'
 const AddCanHo = ({fetchCanHoList}) => {
     const [canHo, setCanHo] = useState({
         idCanHo: 0,
-        soPhong:0,
+        soPhong:100,
         tang:0,
         dienTich:10,
         tienNghi:'',
@@ -14,7 +14,9 @@ const AddCanHo = ({fetchCanHoList}) => {
         loaiPhong:{
             idLoaiPhong:0,
             tenLoaiPhong:''
-        }
+        },
+        lo:'A',
+        chuKy:30
     })
     const[imageSave,setImageSave]=useState("")
     const[imagePreview, setImagePreview] = useState("")
@@ -143,6 +145,16 @@ const AddCanHo = ({fetchCanHoList}) => {
                         onChange={handleCanHoInputChange}/>
                     </div>
                     <div className='mb-3'>
+                        <label htmlFor='lo' className='form-label'>Lô/ Khu</label>
+                        <input
+                        className='form-control'
+                        id='lo'
+                        name='lo'
+                        maxLength='1'
+                        value={canHo.lo}
+                        onChange={handleCanHoInputChange}/>
+                    </div>
+                    <div className='mb-3'>
                         <label htmlFor='loaiPhong' className='form-label'>Loại phòng</label>
                         <div>
                             <LoaiPhongSelector 
@@ -191,6 +203,20 @@ const AddCanHo = ({fetchCanHoList}) => {
                         id='giaThue'
                         name='giaThue'
                         value={canHo.giaThue}
+                        onChange={handleCanHoInputChange}/>
+                    </div>
+                    <div className='mb-3'>
+                        <label htmlFor='chuKy' className='form-label'>Chu kỳ</label>
+                        <input
+                        className='form-control'
+                        required
+                        type='number'
+                        min='30'
+                        max='365'
+                        step='1'
+                        id='chuKy'
+                        name='chuKy'
+                        value={canHo.chuKy}
                         onChange={handleCanHoInputChange}/>
                     </div>
                     <div className='mb-3'>

@@ -38,8 +38,8 @@ const CanHoCard = ({canHo}) => {
           </div>)
             }
             <div className='flex-grow-1 ml-3 px-5'>
-                <Card.Title className='hotel-color'>Căn hộ {canHo.soPhong}</Card.Title>
-                <Card.Title className='room-price'>{formatCurrency(canHo.giaThue,'vi-VN', 'VND')}/ tháng</Card.Title>
+                <Card.Title className='hotel-color'>Căn hộ {canHo.soPhong} tầng {canHo.tang} khu {canHo.lo}</Card.Title>
+                <Card.Title className='room-price'>{formatCurrency(canHo.giaThue,'vi-VN', 'VND')}/ {canHo.chuKy} ngày</Card.Title>
                 <Card.Text>{truncateText(canHo.moTa,200)}</Card.Text>
             </div>
             <div className='flex-shrink-0 mt-3'>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import {Col, Row} from 'react-bootstrap'
 import {FaEdit, FaTrashAlt, FaEye} from 'react-icons/fa'
 import {Link} from 'react-router-dom'
-import { getCanHo, deleteCanHo } from '../utils/ApiFunctions'
+import { getCanHo, deleteCanHo, updateTrangThaiCanHo } from '../utils/ApiFunctions'
 import CanHoFilter from '../common/CanHoFilter'
 import CanHoPaginator from '../common/CanHoPaginator'
 import AddCanHo from './AddCanHo'
@@ -44,6 +44,26 @@ const DSCanHo = () => {
         const result = await deleteCanHo(idCanHo)
         if(result.data==="Xóa thành công"){
           setSuccessMessage(result.data + " căn hộ có id là " + String(idCanHo))
+          fetchCanHoList()
+        }
+        else{
+          setErrorMessage(result.errorMessage)
+        }
+      }
+      catch(error){
+        setErrorMessage(error.message)
+      }
+      setTimeout(()=>{
+        setSuccessMessage("")
+        setErrorMessage("")
+      },3000)
+    }
+
+    const handleChange = async(idCanHo)=>{
+      try{
+        const result = await updateTrangThaiCanHo(idCanHo)
+        if(result.status===200){
+          setSuccessMessage("Thay đổi trạng thái thành công căn hộ có id là " + String(idCanHo))
           fetchCanHoList()
         }
         else{
@@ -112,11 +132,12 @@ const DSCanHo = () => {
                 <tr className='text-center'>
                   <th>ID</th>
                   <th>Số phòng</th>
-                  <th>Tầng</th>
+                  <th>Lô/ Khu</th>
                   <th>Loại phòng</th>
                   <th>Diện tích</th>
                   <th>Giá thuê</th>
                   <th>Trạng thái</th>
+                  <th>Thao tác</th>
                 </tr>
               </thead>
               <tbody>
@@ -129,11 +150,28 @@ const DSCanHo = () => {
                   <tr key={canHo.idCanHo} className='text-center'>
                     <td>{canHo.idCanHo}</td>
                     <td>{canHo.soPhong}</td>
-                    <td>{canHo.tang}</td>
+                    <td>{canHo.lo}</td>
                     <td>{canHo.loaiPhong.tenLoaiPhong}</td>
                     <td>{canHo.dienTich}</td>
                     <td>{canHo.giaThue}</td>
+                    <td>
+                      {canHo.trangThai?
+                        (<button
+                          className='btn btn-dark btn-sm'
+                          onClick={()=>handleChange(canHo.idCanHo)}>
+                            Đang khóa
+                          </button>)
+                        :(<button
+                          className='btn btn-light btn-sm'
+                          onClick={()=>handleChange(canHo.idCanHo)}>
+                            Đang hoạt động
+                          </button>
+                        )
+                      }
+                    </td>
                     <td className='gap-2'>
+                      
+                      
                       <Link to={`/edit-canho/${canHo.idCanHo}`}>
                       <span className='btn btn-info btn-sm'>
                         <FaEye/>
@@ -142,6 +180,7 @@ const DSCanHo = () => {
                         <FaEdit/>
                       </span>
                       </Link>
+                      
                       <button
                       className='btn btn-danger btn-sm'
                       onClick={()=>handleDelete(canHo.idCanHo)}>

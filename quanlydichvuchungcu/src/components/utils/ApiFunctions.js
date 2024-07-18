@@ -61,6 +61,16 @@ export async function updateCanHo(canHo){
     }
 }
 
+export async function updateTrangThaiCanHo(idCanHo){
+    const response = await api.put(`/canho/${idCanHo}`)
+    if(response.status === 200){
+        return response
+    }
+    else{
+        return false
+    }
+}
+
 export async function deleteCanHo(idCanHo){
     const response = await api.delete(`/canho/${idCanHo}`)
     if(response.status === 200){

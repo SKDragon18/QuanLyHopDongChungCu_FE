@@ -6,17 +6,18 @@ import {Link} from 'react-router-dom'
 const EditCanHo = () => {
     const [canHo, setCanHo] = useState({
         idCanHo: 0,
-        soPhong:0,
+        soPhong:100,
         tang:0,
-        dienTich:0,
+        dienTich:10,
         tienNghi:'',
         moTa:'',
-        giaThue:0,
+        giaThue:100000,
         loaiPhong:{
             idLoaiPhong:0,
             tenLoaiPhong:''
         },
-        hinhAnhList:[]
+        lo:'A',
+        chuKy:30
     })
     const {idCanHo} = useParams()
     const[imageSave,setImageSave]=useState("")
@@ -156,6 +157,16 @@ const EditCanHo = () => {
                             onChange={handleCanHoInputChange}/>
                         </div>
                         <div className='mb-3'>
+                            <label htmlFor='lo' className='form-label'>Lô/ Khu</label>
+                            <input
+                            className='form-control'
+                            id='lo'
+                            name='lo'
+                            maxLength='1'
+                            value={canHo.lo}
+                            onChange={handleCanHoInputChange}/>
+                        </div>
+                        <div className='mb-3'>
                             <label htmlFor='loaiPhong' className='form-label'>Loại phòng</label>
                             <div>
                                 <LoaiPhongSelector 
@@ -205,6 +216,20 @@ const EditCanHo = () => {
                             id='giaThue'
                             name='giaThue'
                             value={canHo.giaThue}
+                            onChange={handleCanHoInputChange}/>
+                        </div>
+                        <div className='mb-3'>
+                        <label htmlFor='chuKy' className='form-label'>Chu kỳ</label>
+                        <input
+                            className='form-control'
+                            required
+                            type='number'
+                            min='30'
+                            max='365'
+                            step='1'
+                            id='chuKy'
+                            name='chuKy'
+                            value={canHo.chuKy}
                             onChange={handleCanHoInputChange}/>
                         </div>
                         <div className='mb-3'>
