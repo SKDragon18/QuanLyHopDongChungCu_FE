@@ -9,7 +9,8 @@ import NavBar from './components/layout/NavBar';
 import Footer from './components/layout/Footer';
 import CanHoListing from './components/canHo/CanHoListing';
 import Admin from './components/admin/Admin';
-
+import DSDichVu from './components/dichVu/DSDichVu';
+import EditDichVu from './components/dichVu/EditDichVu';
 function App() {
   
   return (
@@ -21,6 +22,8 @@ function App() {
             <Route path="/" element={<Home/>}/>
             <Route path="/ds-canho" element={<DSCanHo/>}/>
             <Route path="/edit-canho/:idCanHo" element={<EditCanHo/>}/>
+            <Route path="/ds-dichvu" element={<DSDichVu/>}/>
+            <Route path="/edit-dichvu/:idDichVu" element={<EditDichVu/>}/>
             <Route path="/canho" element={<CanHoListing/>}/>
             <Route path="/admin" element={<Admin/>}/>
             <Route path="/hopdong" element={<Home/>}/>

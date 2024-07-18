@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 
-const CanHoPaginator = ({currentPage, totalPages, onPageChange}) => {
+const DataPaginator = ({currentPage, totalPages, onPageChange}) => {
   const pageNumbers = Array.from({length:totalPages}, (_,i)=>i+1)
   return (
     <nav aria-label='Page navigation'>
@@ -20,4 +20,4 @@ const CanHoPaginator = ({currentPage, totalPages, onPageChange}) => {
   )
 }
 
-export default CanHoPaginator
+export default DataPaginator

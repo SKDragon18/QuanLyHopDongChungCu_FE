@@ -4,7 +4,7 @@ import {FaEdit, FaTrashAlt, FaEye} from 'react-icons/fa'
 import {Link} from 'react-router-dom'
 import { getCanHo, deleteCanHo, updateTrangThaiCanHo } from '../utils/ApiFunctions'
 import CanHoFilter from '../common/CanHoFilter'
-import CanHoPaginator from '../common/CanHoPaginator'
+import DataPaginator from '../common/DataPaginator'
 import AddCanHo from './AddCanHo'
 
 const DSCanHo = () => {
@@ -17,6 +17,12 @@ const DSCanHo = () => {
     const[showFormAdd,setShowFormAdd]=useState(false)
     const[successMessage,setSuccessMessage]=useState("")
     const[errorMessage, setErrorMessage] = useState("")
+    const formatCurrency = (value, locale = 'en-US', currency = 'USD') => {
+      return new Intl.NumberFormat(locale, {
+        style: 'currency',
+        currency: currency,
+      }).format(value);
+    };
     useEffect(()=>{
         fetchCanHoList()
     },[])
@@ -102,7 +108,7 @@ const DSCanHo = () => {
         <section className='mt-5 mb-5 container'>
             
             <div className='d-flex justify-content-center mb-3 mt-5'>
-                <h2>Danh sách dịch vụ</h2>
+                <h2>Danh sách căn hộ</h2>
             </div>
             {
               showFormAdd &&(
@@ -134,7 +140,8 @@ const DSCanHo = () => {
                   <th>Số phòng</th>
                   <th>Lô/ Khu</th>
                   <th>Loại phòng</th>
-                  <th>Diện tích</th>
+                  {/* <th>Diện tích</th> */}
+                  <th>Chu kỳ</th>
                   <th>Giá thuê</th>
                   <th>Trạng thái</th>
                   <th>Thao tác</th>
@@ -152,8 +159,9 @@ const DSCanHo = () => {
                     <td>{canHo.soPhong}</td>
                     <td>{canHo.lo}</td>
                     <td>{canHo.loaiPhong.tenLoaiPhong}</td>
-                    <td>{canHo.dienTich}</td>
-                    <td>{canHo.giaThue}</td>
+                    {/* <td>{canHo.dienTich}</td> */}
+                    <td>{canHo.chuKy} ngày</td>
+                    <td>{formatCurrency(canHo.giaThue,'vi-VN', 'VND')}</td>
                     <td>
                       {canHo.trangThai?
                         (<button
@@ -191,7 +199,7 @@ const DSCanHo = () => {
                 )))}
               </tbody>
             </table>
-            <CanHoPaginator
+            <DataPaginator
             currentPage={currentPage}
             totalPages={calculateTotalPages(numPerPage, filteredCanHoList)}
             onPageChange={handlePagninationClick}/>

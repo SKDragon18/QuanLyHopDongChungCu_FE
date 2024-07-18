@@ -5,7 +5,7 @@ import LoaiPhongSelector from '../common/LoaiPhongSelector'
 const AddCanHo = ({fetchCanHoList}) => {
     const [canHo, setCanHo] = useState({
         idCanHo: 0,
-        soPhong:100,
+        soPhong:'100',
         tang:0,
         dienTich:10,
         tienNghi:'',
@@ -125,8 +125,7 @@ const AddCanHo = ({fetchCanHoList}) => {
                         <input
                         className='form-control'
                         required
-                        type='number'
-                        min='0'
+                        maxLength='3'
                         id='soPhong'
                         name='soPhong'
                         value={canHo.soPhong}

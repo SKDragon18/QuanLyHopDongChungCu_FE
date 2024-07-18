@@ -3,7 +3,7 @@ import { getCanHoChoThue } from '../utils/ApiFunctions'
 import CanHoCard from './CanHoCard'
 import { Container, Row, Col } from 'react-bootstrap'
 import CanHoFilter from '../common/CanHoFilter'
-import CanHoPaginator from '../common/CanHoPaginator'
+import DataPaginator from '../common/DataPaginator'
 const CanHo = () => {
     const[data,setData] = useState([])
     const[error,setError] = useState(null)
@@ -50,7 +50,7 @@ const CanHo = () => {
             <CanHoFilter data={data} setFilteredData={setFilteredData}/>
         </Col>
         <Col md={6} className='d-flex align-items-center justify-content-end'>
-            <CanHoPaginator currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange}/>
+            <DataPaginator currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange}/>
         </Col>
       </Row>
       <Row>
@@ -58,7 +58,7 @@ const CanHo = () => {
       </Row>
       <Row>
         <Col md={6} className='d-flex align-items-center justify-content-end'>
-            <CanHoPaginator currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange}/>
+            <DataPaginator currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange}/>
         </Col>
       </Row>
     </Container>

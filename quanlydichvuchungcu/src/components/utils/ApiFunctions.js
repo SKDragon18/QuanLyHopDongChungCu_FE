@@ -4,6 +4,7 @@ export const api = axios.create({
     baseURL:"http://localhost:8080"
 })
 
+//Loại phòng
 export async function getLoaiPhong(){
     try{
         const response  = await api.get("/canho/loaiphong")
@@ -23,6 +24,17 @@ export async function insertLoaiPhong(loaiPhong){
     }
 }
 
+//Điều khoản
+export async function getDieuKhoan(){
+    try{
+        const response  = await api.get("/dieukhoan")
+        return response.data
+    }catch(error){
+        throw new Error("Error fetching danh sách điều khoản")
+    }
+}
+
+//Căn hộ
 export async function getCanHo(){
     try{
         const response  = await api.get("/canho")
@@ -81,7 +93,6 @@ export async function deleteCanHo(idCanHo){
     }
 }
 
-
 export async function saveHinhAnh(image, idCanHo){
     try{
         const formData  = new FormData()
@@ -113,31 +124,67 @@ export async function doiHinhAnh(image, idCanHo){
     }
 }
 
-export async function insertDichVu(dichVu){
-    const response = await api.post("/dichvu",dichvu)
-    if(response.status === 200){
-        return true
-    }
-    else{
-        return false
-    }
-}
-
-export async function getDichVu(){
-    try{
-        const response  = await api.get("/dichvu")
-        return response.data
-    }catch(error){
-        throw new Error("Error fetching dich vu")
-    }
-}
-
+//Người dùng home
 export async function getCanHoChoThue(){
     try{
         const response  = await api.get("/canho")
         return response.data
     }catch(error){
         throw new Error("Error fetching danh sách căn hộ")
+    }
+}
+
+//Dịch vụ
+export async function getDichVu(){
+    try{
+        const response  = await api.get("/dichvu")
+        return response.data
+    }catch(error){
+        throw new Error("Error fetching danh sách dịch vụ")
+    }
+}
+
+export async function getDichVuById(idDichVu){
+    try{
+        const response  = await api.get(`/dichvu/${idDichVu}`)
+        return response
+    }catch(error){
+        throw new Error("Error fetching dịch vụ")
+    }
+}
+
+export async function insertDichVu(dichvu){
+    const response = await api.post("/dichvu",dichvu)
+    return response
+}
+
+export async function updateDichVu(dichvu){
+    const response = await api.put("/dichvu",dichvu)
+    if(response.status === 200){
+        return response
+    }
+    else{
+        return false
+    }
+}
+
+export async function updateTrangThaiDichVu(dichvu){
+    const response = await api.put(`/dichvu/${dichvu}`)
+    if(response.status === 200){
+        return response
+    }
+    else{
+        return false
+    }
+}
+
+export async function deleteDichVu(idDichVu){
+    const response = await api.delete(`/dichvu/${idDichVu}`)
+    if(response.status === 200){
+        return response
+    }
+    else{
+        return false
     }
 }
 

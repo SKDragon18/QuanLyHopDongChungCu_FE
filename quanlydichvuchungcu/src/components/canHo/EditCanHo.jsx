@@ -3,10 +3,11 @@ import { getCanHoById, updateCanHo, doiHinhAnh } from '../utils/ApiFunctions'
 import LoaiPhongSelector from '../common/LoaiPhongSelector'
 import { useParams } from 'react-router-dom'
 import {Link} from 'react-router-dom'
+import DieuKhoanSelector from '../common/DieuKhoanSelector'
 const EditCanHo = () => {
     const [canHo, setCanHo] = useState({
         idCanHo: 0,
-        soPhong:100,
+        soPhong:'100',
         tang:0,
         dienTich:10,
         tienNghi:'',
@@ -17,15 +18,16 @@ const EditCanHo = () => {
             tenLoaiPhong:''
         },
         lo:'A',
-        chuKy:30
+        chuKy:30,
+        hinhAnhList:[],
+        dieuKhoanList:[]
     })
+    const[dieuKhoanCanHoList, setDieuKhoanCanHoList] = useState([])
     const {idCanHo} = useParams()
     const[imageSave,setImageSave]=useState("")
     const[imagePreview, setImagePreview] = useState("")
     const[successMessage, setSuccessMessage] = useState("")
     const[errorMessage, setErrorMessage] = useState("")
-    
-    
     
     useEffect(()=>{
         const fetchCanHoById= async()=>{
@@ -34,6 +36,7 @@ const EditCanHo = () => {
                 if(result.status===200){
                     setCanHo(result.data)
                     setErrorMessage("")
+                    setDieuKhoanCanHoList(result.data.dieuKhoanList)
                 }
                 else{
                     setErrorMessage("Lấy căn hộ thất bại")
@@ -47,12 +50,16 @@ const EditCanHo = () => {
         
     },[idCanHo])
     useEffect(()=>{
-        console.log(canHo)
+        setCanHo({...canHo, ['dieuKhoanList']:dieuKhoanCanHoList})
+    },[dieuKhoanCanHoList])
+
+    useEffect(()=>{
         if(canHo!==null&&Array.isArray(canHo.hinhAnhList)&&canHo.hinhAnhList.length>0){
             const base64Str = canHo.hinhAnhList[0]
             setImagePreview(`data:image/png;base64,${base64Str}`)
         }
     },[canHo])
+
     const handleCanHoInputChange = (e)=>{
         const name = e.target.name
         let value = e.target.value
@@ -80,13 +87,15 @@ const EditCanHo = () => {
         }
         setCanHo({...canHo, [name]:value})
     }
+
     const handleImageChange = (e) =>{
         const selectedImage = e.target.files[0]
         setImageSave(selectedImage)
         setImagePreview(URL.createObjectURL(selectedImage))
     }
+
     const changeImage = async()=>{
-        if(imagePreview){
+        if(imageSave){
             const success = await doiHinhAnh(imageSave,idCanHo)
             if(success === "Thành công"){
                 setImageSave("")
@@ -104,7 +113,10 @@ const EditCanHo = () => {
     }
     const handleSubmit = async(e) =>{
         e.preventDefault()
+        
         try{
+            console.log('Tạo')
+            console.log(canHo)
             const success = await updateCanHo(canHo)
             console.log(canHo)
             if(success&&success.status===200){
@@ -124,6 +136,7 @@ const EditCanHo = () => {
             setErrorMessage("")
         },3000)
     }
+
     return (
         <>
         <section className='container, mt-5 mb-5'>
@@ -137,8 +150,7 @@ const EditCanHo = () => {
                             <input
                             className='form-control'
                             required
-                            type='number'
-                            min='0'
+                            maxLength='3'
                             id='soPhong'
                             name='soPhong'
                             value={canHo.soPhong}
@@ -247,6 +259,11 @@ const EditCanHo = () => {
                                 className='mb-3 mt-3'/>
                             )}
                         </div>
+                        <div className='mb-3'>
+                            <label htmlFor='dieuKhoan' className='form-label'>Điều khoản</label>
+                            <DieuKhoanSelector dieuKhoanUpdateList={dieuKhoanCanHoList} setDieuKhoanUpdateList={setDieuKhoanCanHoList}/>
+                        </div>
+                        
                         {successMessage&&(
                         <div className='alert alert-success fade show'>{successMessage}</div>
                         )}
@@ -254,7 +271,7 @@ const EditCanHo = () => {
                             <div className='alert alert-danger fade show'>{errorMessage}</div>
                         )}
                         <div className='d-grid d-md-flex mt-2'>
-                            <button className='btn btn-outline-warning mx-2 mb-3'>
+                            <button type='submit' className='btn btn-outline-warning mx-2 mb-3'>
                                 Lưu
                             </button>
                             <Link className='btn btn-outline-primary mr-2 mb-3' to={`/ds-canho`}>
