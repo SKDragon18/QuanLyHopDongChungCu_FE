@@ -13,6 +13,10 @@ const Admin = () => {
       <Link to={'/ds-dichvu'}>
       Quản lý dịch vụ
       </Link>
+      <hr/>
+      <Link to={'/ds-banggia'}>
+      Quản lý giá
+      </Link>
     </section>
   )
 }

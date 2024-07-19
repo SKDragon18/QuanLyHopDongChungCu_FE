@@ -11,6 +11,8 @@ import CanHoListing from './components/canHo/CanHoListing';
 import Admin from './components/admin/Admin';
 import DSDichVu from './components/dichVu/DSDichVu';
 import EditDichVu from './components/dichVu/EditDichVu';
+import DSBangGia from './components/bangGia/DSBangGia';
+import EditBangGia from './components/bangGia/EditBangGia';
 function App() {
   
   return (
@@ -24,6 +26,8 @@ function App() {
             <Route path="/edit-canho/:idCanHo" element={<EditCanHo/>}/>
             <Route path="/ds-dichvu" element={<DSDichVu/>}/>
             <Route path="/edit-dichvu/:idDichVu" element={<EditDichVu/>}/>
+            <Route path="/ds-banggia" element={<DSBangGia/>}/>
+            <Route path="/edit-banggia/:idBangGia" element={<EditBangGia/>}/>
             <Route path="/canho" element={<CanHoListing/>}/>
             <Route path="/admin" element={<Admin/>}/>
             <Route path="/hopdong" element={<Home/>}/>
