@@ -18,7 +18,7 @@ const CanHoCard = ({canHo}) => {
   };
   
   return (
-    <Col key={canHo.id} className='mb-4' xs={12} >
+    <Col key={canHo.idCanHo} className='mb-4' xs={12} >
       <Card>
         <Card.Body className='d-flex flex-wrap align-items-center'>
             {(canHo.hinhAnhList.length>0)?

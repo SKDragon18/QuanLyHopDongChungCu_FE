@@ -1,30 +1,28 @@
 import React, { useEffect, useState } from 'react'
-import { getCanHoChoThue } from '../utils/ApiFunctions'
-import CanHoCard from './CanHoCard'
+import { getDichVuChoDangKy } from '../utils/ApiFunctions'
+import DichVuCard from './DichVuCard'
 import { Container, Row, Col } from 'react-bootstrap'
-import CanHoFilter from '../common/CanHoFilter'
 import DataPaginator from '../common/DataPaginator'
-const CanHo = () => {
+const DichVu = () => {
     const[data,setData] = useState([])
     const[error,setError] = useState(null)
     const[isLoading,setIsLoading] = useState(false)
     const[currentPage,setCurrentPage] = useState(1)
     const[numPerPage] = useState(6)
-    const[filteredData,setFilteredData] = useState([{idCanHo:'',
-        hinhAnhList:[],
-        soPhong:0,
-        giaThue:0,
-        giaKhuyenMai:0,
-        trangThaiThue:0,
-        moTa:''
+    const[filteredData,setFilteredData] = useState([{
+        idDichVu:0,
+        tenDichVu:'',
+        ghiChu:'',
+        chuKy:0,
+        giaHienTai:0,
+        giaKhuyenMai:0
     }])
     useEffect(()=>{
         setIsLoading(true)
-        getCanHoChoThue().then((dataCall)=>{
-            const data2 =dataCall.filter((canHo)=>(canHo.trangThaiThue===0))
-            .map(item=>({
+        getDichVuChoDangKy().then((dataCall)=>{
+            const data2 =dataCall.map(item=>({
                 ...item,
-                giaThue:(item.giaKhuyenMai!==null?item.giaKhuyenMai:item.giaThue)
+                giaHienTai:(item.giaKhuyenMai!==null?item.giaKhuyenMai:item.giaHienTai)
             }))
             console.log(data2)
             setData(data2)
@@ -45,24 +43,24 @@ const CanHo = () => {
         setCurrentPage(pageNumber)
     }
     const totalPages = Math.ceil(filteredData.length/numPerPage)
-    const renderCanHoList = ()=>{
+    const renderDichVuList = ()=>{
         const startIndex = (currentPage-1)*numPerPage
         const endIndex = startIndex + numPerPage
         return filteredData.slice(startIndex,endIndex)
-        .map((canHo)=><CanHoCard key={canHo.idCanHo} canHo={canHo}/>)
+        .map((dichVu)=><DichVuCard key={dichVu.idDichVu} dichVu={dichVu}/>)
     }
     return (
     <Container>
       <Row>
         <Col md={6} className='mb-3 mb-md-0'>
-            <CanHoFilter data={data} setFilteredData={setFilteredData}/>
+            
         </Col>
         <Col md={6} className='d-flex align-items-center justify-content-end'>
             <DataPaginator currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange}/>
         </Col>
       </Row>
       <Row>
-        {renderCanHoList()}
+        {renderDichVuList()}
       </Row>
       <Row>
         <Col md={6} className='d-flex align-items-center justify-content-end'>
@@ -73,4 +71,4 @@ const CanHo = () => {
   )
 }
 
-export default CanHo
+export default DichVu

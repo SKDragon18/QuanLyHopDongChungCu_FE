@@ -29,6 +29,11 @@ const NavBar = () => {
                         </NavLink>
                     </li>
                     <li className='nav-item'>
+                        <NavLink className='nav-link' aria-current='page' to={'/dichvu'}>
+                            Dịch vụ chung cư
+                        </NavLink>
+                    </li>
+                    <li className='nav-item'>
                         <NavLink className='nav-link' aria-current='page' to={'/admin'}>
                             Admin
                         </NavLink>
@@ -38,6 +43,11 @@ const NavBar = () => {
                     <li className='nav-item'>
                         <NavLink className='nav-link' aria-current='page' to={'/hopdong'}>
                             Hợp đồng
+                        </NavLink>
+                    </li>
+                    <li className='nav-item'>
+                        <NavLink className='nav-link' aria-current='page' to={'/hoadon'}>
+                            Hóa đơn của bạn
                         </NavLink>
                     </li>
                     <li className='nav-item dropdown'>

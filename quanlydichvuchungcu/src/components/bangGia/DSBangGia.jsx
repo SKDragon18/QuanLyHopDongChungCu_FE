@@ -17,7 +17,7 @@ const DSBangGia = () => {
     const formatTime = (time)=>{
       const dateObject = new Date(time)
       return dateObject.toLocaleString()
-  }
+    }
     useEffect(()=>{
         fetchBangGiaList()
     },[])

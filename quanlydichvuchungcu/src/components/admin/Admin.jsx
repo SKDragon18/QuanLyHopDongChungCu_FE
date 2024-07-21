@@ -17,6 +17,14 @@ const Admin = () => {
       <Link to={'/ds-banggia'}>
       Quản lý giá
       </Link>
+      <hr/>
+      <Link to={'/ds-hopdong'}>
+      Xem hợp đồng
+      </Link>
+      <hr/>
+      <Link to={'/tk-hoadon'}>
+      Thống kê hóa đơn
+      </Link>
     </section>
   )
 }

@@ -17,7 +17,12 @@ const CanHoCarousel = () => {
     useEffect(()=>{
         setIsLoading(true)
         getCanHoChoThue().then((data)=>{
-            setCanHoList(data)
+            const data2 =data.filter((canHo)=>(canHo.trangThaiThue===0))
+            .map(item=>({
+                ...item,
+                giaThue:(item.giaKhuyenMai!==null?item.giaKhuyenMai:item.giaThue)
+            }))
+            setCanHoList(data2)
             setIsLoading(false)
         }).catch((error)=>{
             setErrorMessage(error.message)
@@ -59,7 +64,7 @@ const CanHoCarousel = () => {
                                             style={{height:'200px'}}/>
                                         </Link>)
                                         :
-                                        (<Link to={`thue/${canHo.idCanHo}`}>
+                                        (<Link to={`/canho/thue/${canHo.idCanHo}`}>
                                             <Card.Img
                                             variant='top'
                                             src={apartment}
@@ -71,7 +76,7 @@ const CanHoCarousel = () => {
                                         <Card.Title className='hotel-color'>Căn hộ {canHo.soPhong} khu {canHo.lo}</Card.Title>
                                         <Card.Title className='room-price'>{formatCurrency(canHo.giaThue,'vi-VN', 'VND')}/ {canHo.chuKy} ngày</Card.Title>
                                         <div className='flex-shrink-0'>
-                                            <Link to={`thue/${canHo.idCanHo}`} className='btn btn-hotel btn-sm'>
+                                            <Link to={`/canho/thue/${canHo.idCanHo}`} className='btn btn-hotel btn-sm'>
                                                 Thuê ngay
                                             </Link>
                                         </div>

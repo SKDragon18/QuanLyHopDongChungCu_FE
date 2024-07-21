@@ -124,15 +124,7 @@ export async function doiHinhAnh(image, idCanHo){
     }
 }
 
-//Người dùng home
-export async function getCanHoChoThue(){
-    try{
-        const response  = await api.get("/hienthi/canhochothue")
-        return response.data
-    }catch(error){
-        throw new Error("Error fetching danh sách căn hộ")
-    }
-}
+
 
 //Dịch vụ
 export async function getDichVu(){
@@ -260,5 +252,151 @@ export async function deleteBangGia(idBangGia){
     }
     else{
         return false
+    }
+}
+
+//Khách hàng
+export async function getKhachHangById(idKhachHang){
+    try{
+        const response  = await api.get(`/nguoidung/khachhang/${idKhachHang}`)
+        return response
+    }catch(error){
+        throw new Error("Error fetching căn hộ")
+    }
+}
+
+export async function getCanHoChoThue(){
+    try{
+        const response  = await api.get("/hienthi/canhochothue")
+        return response.data
+    }catch(error){
+        throw new Error("Error fetching danh sách căn hộ")
+    }
+}
+
+export async function getDichVuChoDangKy(){
+    try{
+        const response  = await api.get("/hienthi/dichvu")
+        return response.data
+    }catch(error){
+        throw new Error("Error fetching danh sách dịch vụ")
+    }
+}
+
+export async function getCanHoChoThueById(idCanHo){
+    try{
+        const response  = await api.get(`/hienthi/canhochothue/${idCanHo}`)
+        return response
+    }catch(error){
+        throw new Error("Error fetching căn hộ")
+    }
+}
+
+export async function getDichVuChoDangKyById(idDichVu){
+    try{
+        const response  = await api.get(`/hienthi/dichvu/${idDichVu}`)
+        return response
+    }catch(error){
+        throw new Error("Error fetching căn hộ")
+    }
+}
+
+export async function dangKyHopDong(hopdong){
+    const response = await api.post("/hopdong",hopdong)
+    return response
+}
+
+export async function dangKyDichVu(yeuCauDichVu){
+    const response = await api.post("/hopdong/dichvu",yeuCauDichVu)
+    return response
+}
+
+export async function giaHanHopDong(idHopDong){
+    const response = await api.put(`/hopdong/giahan/${idHopDong}`)
+    return response
+}
+
+export async function giaHanHopDongDichVu(idYeuCauDichVu){
+    const response = await api.put(`/hopdong/dichvu/giahan/${idYeuCauDichVu}`)
+    return response
+}
+
+export async function huyHopDong(idHopDong){
+    const response = await api.put(`/hopdong/huy/${idHopDong}`)
+    return response
+}
+
+export async function huyHopDongDichVu(idYeuCauDichVu){
+    const response = await api.put(`/hopdong/dichvu/huy/${idYeuCauDichVu}`)
+    return response
+}
+export async function getAllHoaDon(){
+    try{
+        const response  = await api.get(`/hoadon`)
+        return response
+    }catch(error){
+        throw new Error("Error fetching danh sách hóa đơn")
+    }
+}
+export async function getHoaDon(maKhachHang){
+    try{
+        const response  = await api.get(`/hoadon/khachhang/${maKhachHang}`)
+        return response.data
+    }catch(error){
+        throw new Error("Error fetching danh sách hóa đơn")
+    }
+}
+
+export async function getAllHopDong(){
+    try{
+        const response  = await api.get('/hopdong')
+        return response.data
+    }catch(error){
+        throw new Error("Error fetching danh sách hợp đồng")
+    }
+}
+
+export async function getAllHopDongKhachHang(maKhachHang){
+    try{
+        const response  = await api.get(`/hopdong/khachhangall/${maKhachHang}`)
+        return response.data
+    }catch(error){
+        throw new Error("Error fetching danh sách hợp đồng")
+    }
+}
+
+export async function getHopDongKhachHang(idHopDong){
+    try{
+        const response  = await api.get(`/hopdong/khachhang/${idHopDong}`)
+        return response.data
+    }catch(error){
+        throw new Error("Error fetching hợp đồng")
+    }
+}
+
+export async function getAllHopDongDichVu(){
+    try{
+        const response  = await api.get('/hopdong/dichvu')
+        return response.data
+    }catch(error){
+        throw new Error("Error fetching danh sách hợp đồng dịch vụ")
+    }
+}
+
+export async function getAllHopDongDichVuKhachHang(maKhachHang){
+    try{
+        const response  = await api.get(`/hopdong/dichvu/khachhangall/${maKhachHang}`)
+        return response.data
+    }catch(error){
+        throw new Error("Error fetching danh sách hợp đồng dịch vụ")
+    }
+}
+
+export async function getHopDongDichVuKhachHang(idYeuCauDichVu){
+    try{
+        const response  = await api.get(`/hopdong/dichvu/khachhang/${idYeuCauDichVu}`)
+        return response.data
+    }catch(error){
+        throw new Error("Error fetching hợp đồng dịch vụ")
     }
 }

@@ -3,6 +3,7 @@ import MainHeader from '../layout/MainHeader'
 import DichVuChungCu from '../common/DichVuChungCu'
 import Parallax from '../common/Parallax'
 import CanHoCarousel from '../common/CanHoCarousel'
+import DichVuCarousel from '../common/DichVuCarousel'
 const Home = () => {
   return (
     <section>
@@ -13,7 +14,7 @@ const Home = () => {
         <CanHoCarousel/>
         <DichVuChungCu/>
         <Parallax/>
-        <CanHoCarousel/>
+        <DichVuCarousel/>
       </section>
     </section>
   )
