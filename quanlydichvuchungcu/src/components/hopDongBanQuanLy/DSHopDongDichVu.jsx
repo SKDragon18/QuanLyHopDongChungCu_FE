@@ -135,7 +135,7 @@ const DSHopDongDichVu = () => {
                         // onClick={()=>handleDelete(hopDongDichVu.idYeuCauDichVu)}>
                         //   <FaTrashAlt/>
                         // </button>
-                        <text className='text-success'>Đang hoạt động</text>
+                        <text className='text-success'>Hoạt động</text>
                       ):(
                         <text className='text-danger'>Đã hủy đăng ký</text>
                       )}

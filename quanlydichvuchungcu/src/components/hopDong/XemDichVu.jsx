@@ -249,7 +249,7 @@ const XemDichVu = () => {
                       </tbody>
                     </table>
                 </fieldset>
-                {hopDong.giaHan&&(
+                {yeuCauDichVu.giaHan&&(
                   <div className='form-group mt-2 mb-2'>
                     {successMessage&&(
                         <div className='alert alert-success fade show'>{successMessage}</div>

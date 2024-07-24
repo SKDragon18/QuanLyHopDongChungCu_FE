@@ -134,7 +134,7 @@ const DSHopDongCanHo = () => {
                         // onClick={()=>handleDelete(hopDong.idHopDong)}>
                         //   <FaTrashAlt/>
                         // </button>
-                        <text className='text-success'>Đang hoạt động</text>
+                        <text className='text-success'>Hoạt động</text>
                       ):(
                         <text className='text-danger'>Đã hủy đăng ký</text>
                     )}

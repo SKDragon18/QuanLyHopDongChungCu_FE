@@ -110,11 +110,11 @@ const ThueCanHo = () => {
     fetchKhachHangById()
   },[])
 
-  const today = new Date();
-  const todayString = today.toISOString().slice(0, 16);
-  const day7after = new Date();
+  const [today] = useState(new Date());
+  const [todayString] = useState(today.toISOString().slice(0, 16));
+  const [day7after] = useState(new Date());
   day7after.setDate(today.getDate()+7);
-  const day7afterString = day7after.toISOString().slice(0, 16);
+  const [day7afterString] = useState(day7after.toISOString().slice(0, 16));
   useEffect(()=>{
     const giaTri = (canHo.giaKhuyenMai===null)?canHo.giaThue:canHo.giaKhuyenMai
     setHopDong(hopDong=>({...hopDong,['canHo']:canHo,['giaTri']:giaTri}))
@@ -129,7 +129,7 @@ const ThueCanHo = () => {
     if(hopDong.ngayBatDau!==''){
       const thoiHan = new Date(hopDong.ngayBatDau);
       thoiHan.setDate(thoiHan.getDate()+canHo.chuKy);
-      setHopDong({...hopDong,['thoiHan']:thoiHan.toISOString().slice(0, 16)})
+      setHopDong({...hopDong,['thoiHan']:thoiHan.toISOString().slice(0, 16), ['ngayLap']:todayString})
     }
     
   },[hopDong.ngayBatDau])

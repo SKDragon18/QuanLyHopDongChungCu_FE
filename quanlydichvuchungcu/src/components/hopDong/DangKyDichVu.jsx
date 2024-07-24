@@ -345,7 +345,7 @@ const DangKyDichVu = () => {
                   onClick={()=>{
                     handleSubmit()
                   }}>
-                    Xác nhận thuê
+                    Xác nhận đăng ký
                   </button>
                 </div>
                 {isSubmitted&&(

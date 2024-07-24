@@ -130,15 +130,22 @@ const DSHopDongDichVu = () => {
                       }
                     </td>
                     <td>
-                      {!hopDongDichVu.trangThai?(
-                        <button
-                        className='btn btn-danger btn-sm'
-                        onClick={()=>handleDelete(hopDongDichVu.idYeuCauDichVu)}>
-                          <FaTrashAlt/>
-                        </button>
-                      ):(
-                        <text className='text-danger'>Đã hủy đăng ký</text>
-                      )}
+                      {
+                        hopDongDichVu.chuKy===0?(
+                          <text className='text-warning'>Dịch vụ này không thể hủy</text>
+                        ):(
+                          !hopDongDichVu.trangThai?(
+                            <button
+                            className='btn btn-danger btn-sm'
+                            onClick={()=>handleDelete(hopDongDichVu.idYeuCauDichVu)}>
+                              <FaTrashAlt/>
+                            </button>
+                          ):(
+                            <text className='text-danger'>Đã hủy đăng ký</text>
+                          )
+                        )
+                      }
+                      
                     
                     </td>
                   </tr>
