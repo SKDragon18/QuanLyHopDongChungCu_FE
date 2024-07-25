@@ -56,27 +56,32 @@ const AddCanHo = ({fetchCanHoList}) => {
     }
     const saveImage = async(data)=>{
         if(imagePreview){
-            const success = await saveHinhAnh(imageSave,data.idCanHo)
-            if(success === "Thành công"){
-                setImageSave("")
-                setSuccessMessage("Thêm căn hộ và hình thành công")
-                setCanHo({
-                    idCanHo: 0,
-                    soPhong:0,
-                    tang:0,
-                    dienTich:0,
-                    tienNghi:'',
-                    moTa:'',
-                    giaThue:0,
-                    loaiPhong:{
-                        idLoaiPhong:0,
-                        tenLoaiPhong:''
-                    }
-                })
-                setErrorMessage("")
+            try{
+                const success = await saveHinhAnh(imageSave,data.idCanHo)
+                if(success === "Thành công"){
+                    setImageSave("")
+                    setSuccessMessage("Thêm căn hộ và hình thành công")
+                    setCanHo({
+                        idCanHo: 0,
+                        soPhong:0,
+                        tang:0,
+                        dienTich:0,
+                        tienNghi:'',
+                        moTa:'',
+                        giaThue:0,
+                        loaiPhong:{
+                            idLoaiPhong:0,
+                            tenLoaiPhong:''
+                        }
+                    })
+                    setErrorMessage("")
+                }
+                else{
+                    setErrorMessage("Thêm hình thất bại")
+                }
             }
-            else{
-                setErrorMessage("Thêm hình thất bại")
+            catch(error){
+                setErrorMessage(error.message)
             }
         }
         else{

@@ -56,12 +56,7 @@ const DangKyDichVu = () => {
     const fetchDichVuById= async()=>{
       try{
           const result = await getDichVuChoDangKyById(idDichVu)
-          if(result.status===200){
-              setDichVu(result.data)
-          }
-          else{
-              setErrorMessage("Lấy dịch vụ thất bại")
-          }
+          setDichVu(result)
       }
       catch(error){
           setErrorMessage(error.message)
@@ -70,12 +65,7 @@ const DangKyDichVu = () => {
   const fetchKhachHangById= async()=>{
     try{
         const result = await getKhachHangById(ma)
-        if(result.status===200){
-            setKhachHang(result.data)
-        }
-        else{
-            setErrorMessage("Lấy thông tin khách hàng thất bại")
-        }
+        setKhachHang(result)
         setTimeout(()=>{
           setSuccessMessage("")
           setErrorMessage("")
@@ -153,12 +143,7 @@ const DangKyDichVu = () => {
       console.log(yeuCauDichVu)
       try{
         const success = await dangKyDichVu(yeuCauDichVu)
-        if(success.status===200){
-          setSuccessMessage("Đăng ký thành công")
-        }
-        else{
-          setErrorMessage("Đăng ký thất bại")
-        }
+        setSuccessMessage("Đăng ký thành công")
       }
       catch(error){
         setErrorMessage(error.message)

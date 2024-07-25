@@ -28,27 +28,20 @@ const AddDichVu = ({fetchDichVuList}) => {
         e.preventDefault()
         try{
             const success = await insertDichVu(dichVu)
-            
-            if(success.status === 200){
-                setSuccessMessage("Thêm dịch vụ thành công")
-                setDichVu({
-                    idDichVu: 0,
-                    tenDichVu:'',
-                    ghiChu:'',
-                    chuKy:30,
-                    giaHienTai:100000,
-                })
-                setTimeout(()=>{
-                    setSuccessMessage("")
-                    setErrorMessage("")
-                    fetchDichVuList()
-                    return;
-                },3000)
-            }
-            else{
-                setErrorMessage("Thêm dịch vụ thất bại")
-                console.log(success.message)
-            }
+            setSuccessMessage("Thêm dịch vụ thành công")
+            setDichVu({
+                idDichVu: 0,
+                tenDichVu:'',
+                ghiChu:'',
+                chuKy:30,
+                giaHienTai:100000,
+            })
+            setTimeout(()=>{
+                setSuccessMessage("")
+                setErrorMessage("")
+                fetchDichVuList()
+                return;
+            },3000)
         }
         catch(error){
             setErrorMessage(error.message)

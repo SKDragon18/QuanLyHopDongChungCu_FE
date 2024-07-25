@@ -24,10 +24,16 @@ import ThongKeHoaDon from './components/hoaDon/ThongKeHoaDon';
 import DSHopDongBQL from './components/hopDongBanQuanLy/DSHopDongBQL';
 import BQLXemCanHo from './components/hopDongBanQuanLy/BQLXemCanHo';
 import BQLXemDichVu from './components/hopDongBanQuanLy/BQLXemDichVu';
+import Login from './components/nguoidung/Login';
+import Register from './components/nguoidung/Register';
+import AuthProvider from './components/nguoidung/AuthProvider';
+import QuanLy from './components/banQuanLy/QuanLy';
+import RequireLogin from './components/nguoidung/RequireLogin';
 function App() {
   
   return (
     <>
+    <AuthProvider>
       <main>
         <Router>
           <NavBar/>
@@ -43,15 +49,23 @@ function App() {
             <Route path="/canho/bqlxem/:idHopDong" element={<BQLXemCanHo/>}/>
             <Route path="/dichvu/bqlxem/:idYeuCauDichVu" element={<BQLXemDichVu/>}/>
 
-            <Route path="/canho" element={<CanHoListing/>}/>
-            <Route path="/canho/thue/:idCanHo" element={<ThueCanHo/>}/>
+            <Route path="/login" element={<Login/>}/>
+            <Route path="/register" element={<Register/>}/>
+            <Route path="/canho/thue/:idCanHo" element={
+              <RequireLogin>
+                <ThueCanHo/>
+              </RequireLogin>
+              }/>
             <Route path="/canho/xem/:idHopDong" element={<XemCanHo/>}/>
             <Route path="/dichvu" element={<DichVuListing/>}/>
             <Route path="/dichvu/dangky/:idDichVu" element={<DangKyDichVu/>}/>
             <Route path="/dichvu/xem/:idYeuCauDichVu" element={<XemDichVu/>}/>
             <Route path="/hoadon" element={<DSHoaDon/>}/>
+
+
             <Route path="/tk-hoadon" element={<ThongKeHoaDon/>}/>
             <Route path="/admin" element={<Admin/>}/>
+            <Route path="/banquanly" element={<QuanLy/>}/>
             <Route path="/hopdong" element={<DSHopDong/>}/>
             <Route path="/login" element={<Home/>}/>
             <Route path="/logout" element={<Home/>}/>
@@ -60,6 +74,7 @@ function App() {
         </Router>
         <Footer/>
       </main>
+      </AuthProvider>
     </>
   )
 }

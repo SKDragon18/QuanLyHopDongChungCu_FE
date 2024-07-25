@@ -48,13 +48,8 @@ const DSCanHo = () => {
     const handleDelete = async(idCanHo)=>{
       try{
         const result = await deleteCanHo(idCanHo)
-        if(result.data==="Xóa thành công"){
-          setSuccessMessage(result.data + " căn hộ có id là " + String(idCanHo))
-          fetchCanHoList()
-        }
-        else{
-          setErrorMessage(result.errorMessage)
-        }
+        setSuccessMessage(result + " căn hộ có id là " + String(idCanHo))
+        fetchCanHoList()
       }
       catch(error){
         setErrorMessage(error.message)
@@ -68,13 +63,8 @@ const DSCanHo = () => {
     const handleChange = async(idCanHo)=>{
       try{
         const result = await updateTrangThaiCanHo(idCanHo)
-        if(result.status===200){
-          setSuccessMessage("Thay đổi trạng thái thành công căn hộ có id là " + String(idCanHo))
-          fetchCanHoList()
-        }
-        else{
-          setErrorMessage(result.errorMessage)
-        }
+        setSuccessMessage("Thay đổi trạng thái thành công căn hộ có id là " + String(idCanHo))
+        fetchCanHoList()
       }
       catch(error){
         setErrorMessage(error.message)

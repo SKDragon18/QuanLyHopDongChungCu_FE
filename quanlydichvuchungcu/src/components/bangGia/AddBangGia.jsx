@@ -39,9 +39,7 @@ const AddBangGia = ({fetchBangGiaList}) => {
         e.preventDefault()
         try{
             const success = await insertBangGia(bangGia)
-            
-            if(success.status === 200){
-                setSuccessMessage("Thêm bảng giả thành công")
+            setSuccessMessage("Thêm bảng giả thành công")
                 setBangGia({
                     idBangGia: 0,
                     noiDung:'',
@@ -54,11 +52,6 @@ const AddBangGia = ({fetchBangGiaList}) => {
                     fetchBangGiaList()
                     return;
                 },3000)
-            }
-            else{
-                setErrorMessage("Thêm bảng giá thất bại")
-                console.log(success.message)
-            }
         }
         catch(error){
             setErrorMessage(error.message)

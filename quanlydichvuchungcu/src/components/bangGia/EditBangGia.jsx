@@ -21,37 +21,32 @@ const EditBangGia = () => {
     const fetchBangGiaById= async()=>{
         try{
             const result = await getBangGiaById(idBangGia)
-            if(result.status===200){
-                setBangGia(result.data)
+            setBangGia(result)
                 setErrorMessage("")
-                if(Array.isArray(result.data.canHoList)){
-                    setCanHoUpdateList(result.data.canHoList)
+                if(Array.isArray(result.canHoList)){
+                    setCanHoUpdateList(result.canHoList)
                 }
                 else{
                     setCanHoUpdateList([])
                 }
-                if(Array.isArray(result.data.dichVuList)){
-                    setDichVuUpdateList(result.data.dichVuList)
+                if(Array.isArray(result.dichVuList)){
+                    setDichVuUpdateList(result.dichVuList)
                 }
                 else{
                     setDichVuUpdateList([])
                 }
-                if(result.data.dichVuList.length===0){
+                if(result.dichVuList.length===0){
                     setShowUploadDichVu(true)
                 }
                 else{
                     setShowUploadDichVu(false)
                 }
-                if(result.data.canHoList.length===0){
+                if(result.canHoList.length===0){
                     setShowUploadCanHo(true)
                 }
                 else{
                     setShowUploadCanHo(false)
                 }
-            }
-            else{
-                setErrorMessage("Lấy căn hộ thất bại")
-            }
         }
         catch(error){
             setErrorMessage(error.message)
@@ -72,13 +67,8 @@ const EditBangGia = () => {
     const handleUploadCanHo = async(idBangGia)=>{
         try{
           const result = await uploadGiaCanHo(idBangGia)
-          if(result.status===200){
-            setSuccessMessage(result.data)
+          setSuccessMessage(result)
             fetchBangGiaById()
-          }
-          else{
-            setErrorMessage(result.errorMessage)
-          }
         }
         catch(error){
           setErrorMessage(error.message)
@@ -92,13 +82,8 @@ const EditBangGia = () => {
     const handleUploadDichVu = async(idBangGia)=>{
         try{
           const result = await uploadGiaDichVu(idBangGia)
-          if(result.status===200){
-            setSuccessMessage(result.data)
+          setSuccessMessage(result)
             fetchBangGiaById()
-          }
-          else{
-            setErrorMessage(result.errorMessage)
-          }
         }
         catch(error){
           setErrorMessage(error.message)
@@ -120,14 +105,8 @@ const EditBangGia = () => {
         
         try{
             const success = await updateBangGia(bangGia)
-            console.log(bangGia)
-            if(success&&success.status===200){
-                setSuccessMessage("Cập nhật bảng giá thành công")
-                fetchBangGiaById()
-            }
-            else{
-                setErrorMessage("Cập nhật bảng giá thất bại")
-            }
+            setSuccessMessage("Cập nhật bảng giá thành công")
+            fetchBangGiaById()
         }
         catch(error){
             setErrorMessage(error.message)

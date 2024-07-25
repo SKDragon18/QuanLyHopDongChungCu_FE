@@ -1,10 +1,10 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-const Admin = () => {
+const QuanLy = () => {
   return (
     <section className='container mt-5'>
-      <h2>Trang dành cho Admin</h2>
+      <h2>Trang dành cho ban quản lý</h2>
       <hr/>
       <Link to={'/ds-canho'}>
       Quản lý căn hộ
@@ -29,4 +29,4 @@ const Admin = () => {
   )
 }
 
-export default Admin
+export default QuanLy

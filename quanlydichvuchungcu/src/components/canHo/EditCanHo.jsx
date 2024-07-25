@@ -33,14 +33,9 @@ const EditCanHo = () => {
         const fetchCanHoById= async()=>{
             try{
                 const result = await getCanHoById(idCanHo)
-                if(result.status===200){
-                    setCanHo(result.data)
-                    setErrorMessage("")
-                    setDieuKhoanCanHoList(result.data.dieuKhoanList)
-                }
-                else{
-                    setErrorMessage("Lấy căn hộ thất bại")
-                }
+                setCanHo(result)
+                setErrorMessage("")
+                setDieuKhoanCanHoList(result.dieuKhoanList)
             }
             catch(error){
                 setErrorMessage(error.message)
@@ -96,14 +91,19 @@ const EditCanHo = () => {
 
     const changeImage = async()=>{
         if(imageSave){
-            const success = await doiHinhAnh(imageSave,idCanHo)
-            if(success === "Thành công"){
-                setImageSave("")
-                setSuccessMessage("Cập nhật căn hộ và hình thành công")
-                setErrorMessage("")
+            try{
+                const success = await doiHinhAnh(imageSave,idCanHo)
+                if(success === "Thành công"){
+                    setImageSave("")
+                    setSuccessMessage("Cập nhật căn hộ và hình thành công")
+                    setErrorMessage("")
+                }
+                else{
+                    setErrorMessage("Thêm hình thất bại")
+                }
             }
-            else{
-                setErrorMessage("Thêm hình thất bại")
+            catch(error){
+                setErrorMessage(error.message)
             }
         }
         else{
@@ -115,18 +115,10 @@ const EditCanHo = () => {
         e.preventDefault()
         
         try{
-            console.log('Tạo')
-            console.log(canHo)
             const success = await updateCanHo(canHo)
             console.log(canHo)
-            if(success&&success.status===200){
-                setSuccessMessage("Cập nhật căn hộ thành công")
-                setCanHo(success.data)
-                changeImage()
-            }
-            else{
-                setErrorMessage("Cập nhật căn hộ thất bại")
-            }
+            setCanHo(success)
+            setSuccessMessage("Cập nhật căn hộ thành công")
         }
         catch(error){
             setErrorMessage(error.message)

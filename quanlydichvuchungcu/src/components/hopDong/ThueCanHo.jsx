@@ -72,13 +72,7 @@ const ThueCanHo = () => {
     const fetchCanHoById= async()=>{
       try{
           const result = await getCanHoChoThueById(idCanHo)
-          if(result.status===200){
-              setCanHo(result.data)
-              
-          }
-          else{
-              setErrorMessage("Lấy căn hộ thất bại")
-          }
+          setCanHo(result)
       }
       catch(error){
           setErrorMessage(error.message)
@@ -87,14 +81,7 @@ const ThueCanHo = () => {
   const fetchKhachHangById= async()=>{
     try{
         const result = await getKhachHangById(ma)
-        if(result.status===200){
-            
-            setKhachHang(result.data)
-            
-        }
-        else{
-            setErrorMessage("Lấy thông tin khách hàng thất bại")
-        }
+        setKhachHang(result)
         setTimeout(()=>{
           setSuccessMessage("")
           setErrorMessage("")
@@ -154,12 +141,7 @@ const ThueCanHo = () => {
       console.log(hopDong)
       try{
         const success = await dangKyHopDong(hopDong)
-        if(success.status===200){
-          setSuccessMessage("Đăng ký thành công")
-        }
-        else{
-          setErrorMessage("Đăng ký thất bại")
-        }
+        setSuccessMessage("Đăng ký thành công")
       }
       catch(error){
         setErrorMessage(error.message)

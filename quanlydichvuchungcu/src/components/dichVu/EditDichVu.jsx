@@ -21,19 +21,13 @@ const EditDichVu = () => {
         const fetchDichVuById= async()=>{
             try{
                 const result = await getDichVuById(idDichVu)
-                if(result.status===200){
-                    setDichVu(result.data)
-                    setErrorMessage("")
-                    if(Array.isArray(result.data.dieuKhoanList)){
-                        setDieuKhoanDichVuList(result.data.dieuKhoanList)
-                    }
-                    else{
-                        setDieuKhoanDichVuList([])
-                    }
-                    
+                setDichVu(result)
+                setErrorMessage("")
+                if(Array.isArray(result.dieuKhoanList)){
+                    setDieuKhoanDichVuList(result.dieuKhoanList)
                 }
                 else{
-                    setErrorMessage("Lấy căn hộ thất bại")
+                    setDieuKhoanDichVuList([])
                 }
             }
             catch(error){
@@ -70,13 +64,8 @@ const EditDichVu = () => {
             console.log(dichVu)
             const success = await updateDichVu(dichVu)
             console.log(dichVu)
-            if(success&&success.status===200){
-                setSuccessMessage("Cập nhật dịch vụ thành công")
-                setDichVu(success.data)
-            }
-            else{
-                setErrorMessage("Cập nhật dịch vụ thất bại")
-            }
+            setSuccessMessage("Cập nhật dịch vụ thành công")
+            setDichVu(success.data)
         }
         catch(error){
             setErrorMessage(error.message)

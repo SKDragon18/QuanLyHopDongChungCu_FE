@@ -37,13 +37,8 @@ const DSHopDongCanHo = () => {
     const handleDelete = async(idHopDong)=>{
       try{
         const result = await huyHopDong(idHopDong)
-        if(result.status===200){
-          setSuccessMessage(result.data)
-          fetchHopDongList()
-        }
-        else{
-          setErrorMessage(result.errorMessage)
-        }
+        setSuccessMessage(result)
+        fetchHopDongList()
       }
       catch(error){
         setErrorMessage(error.message)

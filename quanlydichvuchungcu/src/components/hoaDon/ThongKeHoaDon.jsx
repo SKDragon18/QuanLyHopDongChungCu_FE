@@ -28,9 +28,7 @@ const ThongKeHoaDon = () => {
         setIsLoading(true)
         try{
             const result = await getAllHoaDon()
-            if(result.status===200){
-              setHoaDonList(result.data)
-            }
+            setHoaDonList(result)
             setIsLoading(false)
         }catch(error){
             setErrorMessage(error.message)

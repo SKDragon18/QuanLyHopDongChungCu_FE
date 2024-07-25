@@ -42,13 +42,8 @@ const DSDichVu = () => {
     const handleDelete = async(idDichVu)=>{
       try{
         const result = await deleteDichVu(idDichVu)
-        if(result.data==="Xóa thành công"){
-          setSuccessMessage(result.data + " dịch vụ có id là " + String(idDichVu))
-          fetchDichVuList()
-        }
-        else{
-          setErrorMessage(result.errorMessage)
-        }
+        setSuccessMessage(result + " dịch vụ có id là " + String(idDichVu))
+        fetchDichVuList()
       }
       catch(error){
         setErrorMessage(error.message)
@@ -62,13 +57,8 @@ const DSDichVu = () => {
     const handleChange = async(idDichVu)=>{
       try{
         const result = await updateTrangThaiDichVu(idDichVu)
-        if(result.status===200){
-          setSuccessMessage("Thay đổi trạng thái thành công dịch vụ có id là " + String(idDichVu))
-          fetchDichVuList()
-        }
-        else{
-          setErrorMessage(result.errorMessage)
-        }
+        setSuccessMessage("Thay đổi trạng thái thành công dịch vụ có id là " + String(idDichVu))
+        fetchDichVuList()
       }
       catch(error){
         setErrorMessage(error.message)

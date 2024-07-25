@@ -39,13 +39,8 @@ const DSBangGia = () => {
     const handleDelete = async(idBangGia)=>{
       try{
         const result = await deleteBangGia(idBangGia)
-        if(result.data==="Xóa thành công"){
-          setSuccessMessage(result.data + " bảng giá có id là " + String(idBangGia))
-          fetchBangGiaList()
-        }
-        else{
-          setErrorMessage(result.errorMessage)
-        }
+        setSuccessMessage(result + " bảng giá có id là " + String(idBangGia))
+        fetchBangGiaList()
       }
       catch(error){
         setErrorMessage(error.message)
@@ -59,13 +54,8 @@ const DSBangGia = () => {
     const handleChange = async(idBangGia)=>{
       try{
         const result = await updateTrangThaiBangGia(idBangGia)
-        if(result.status===200){
-          setSuccessMessage("Thay đổi trạng thái thành công bảng giá có id là " + String(idBangGia))
-          fetchBangGiaList()
-        }
-        else{
-          setErrorMessage(result.errorMessage)
-        }
+        setSuccessMessage("Thay đổi trạng thái thành công bảng giá có id là " + String(idBangGia))
+        fetchBangGiaList()
       }
       catch(error){
         setErrorMessage(error.message)

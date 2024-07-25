@@ -1,10 +1,15 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import {Link, NavLink} from 'react-router-dom'
+import Logout from '../nguoidung/Logout'
+import { AuthContext } from '../nguoidung/AuthProvider'
 const NavBar = () => {
     const[showAccount, setShowAccount] = useState(false)
+    // const {user} = useContext(AuthContext)
     const handleAccountClick= ()=>{
         setShowAccount(!showAccount)
     }
+    const isLoggedIn = localStorage.getItem("token")
+    const userRole = localStorage.getItem("role")
   return (
     <nav className='navbar navbar-expand-lg bg-body-tertiary px-5 shadow mt-2 sticky-top'>
         <div className='container-fluid'>
@@ -33,23 +38,38 @@ const NavBar = () => {
                             Dịch vụ chung cư
                         </NavLink>
                     </li>
-                    <li className='nav-item'>
+                    {isLoggedIn&&userRole === "admin" &&(
+                        <li className='nav-item'>
                         <NavLink className='nav-link' aria-current='page' to={'/admin'}>
                             Admin
                         </NavLink>
-                    </li>
+                        </li>
+                    )}
+                    {isLoggedIn&&userRole === "quanly" &&(
+                        <li className='nav-item'>
+                        <NavLink className='nav-link' aria-current='page' to={'/banquanly'}>
+                            Ban quản lý
+                        </NavLink>
+                        </li>
+                    )}
+                    
                 </ul>
                 <ul className='d-flex navbar-nav'>
-                    <li className='nav-item'>
-                        <NavLink className='nav-link' aria-current='page' to={'/hopdong'}>
-                            Hợp đồng
-                        </NavLink>
-                    </li>
-                    <li className='nav-item'>
-                        <NavLink className='nav-link' aria-current='page' to={'/hoadon'}>
-                            Hóa đơn của bạn
-                        </NavLink>
-                    </li>
+                    {isLoggedIn && userRole === "khachhang" &&(
+                        <>
+                        <li className='nav-item'>
+                            <NavLink className='nav-link' aria-current='page' to={'/hopdong'}>
+                                Hợp đồng
+                            </NavLink>
+                        </li>
+                        <li className='nav-item'>
+                            <NavLink className='nav-link' aria-current='page' to={'/hoadon'}>
+                                Hóa đơn của bạn
+                            </NavLink>
+                        </li>
+                        </>
+                    )}
+                    
                     <li className='nav-item dropdown'>
                         <a
                         className={`nav-link dropdown-toggle ${showAccount?'show':''}`}
@@ -65,21 +85,25 @@ const NavBar = () => {
                         <ul
                         className={`dropdown-menu ${showAccount?'show':''}`}
                         aria-labelledby='navbarDropdown'>
+                            {!isLoggedIn?(
+                                <li>
+                                    <Link to={'/login'} className='dropdown-item'>
+                                        Đăng nhập
+                                    </Link>
+                                </li>
+                            ):(
                             <li>
-                                <Link to={'/login'} className='dropdown-item'>
-                                    Đăng nhập
-                                </Link>
+                                <Logout/>
                             </li>
-                            <li>
+                            )}
+                            {/* <li>
                                 <Link to={'/profile'} className='dropdown-item'>
                                     Thông tin cá nhân
                                 </Link>
-                            </li>
-                            <li>
-                                <Link to={'/logout'} className='dropdown-item'>
+                            </li> */}
+                            {/* <Link to={'/logout'} className='dropdown-item'>
                                     Thoát
-                                </Link>
-                            </li>
+                                </Link> */}
                         </ul>
                     </li>
                 </ul>

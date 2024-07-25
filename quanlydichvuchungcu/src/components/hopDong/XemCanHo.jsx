@@ -102,12 +102,7 @@ const XemCanHo = () => {
       console.log(hopDong)
       try{
         const success = await giaHanHopDong(idHopDong)
-        if(success.status===200){
-          setSuccessMessage("Gia hạn thành công")
-        }
-        else{
-          setErrorMessage("Gia hạn thất bại")
-        }
+        setSuccessMessage("Gia hạn thành công")
       }
       catch(error){
         setErrorMessage(error.message)

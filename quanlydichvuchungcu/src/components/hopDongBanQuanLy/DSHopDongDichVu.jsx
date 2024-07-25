@@ -38,13 +38,8 @@ const DSHopDongDichVu = () => {
     const handleDelete = async(idYeuCauDichVu)=>{
       try{
         const result = await huyHopDongDichVu(idYeuCauDichVu)
-        if(result.status===200){
-          setSuccessMessage(result.data)
+        setSuccessMessage(result)
           fetchHopDongDichVuList()
-        }
-        else{
-          setErrorMessage(result.errorMessage)
-        }
       }
       catch(error){
         setErrorMessage(error.message)

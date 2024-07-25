@@ -77,12 +77,7 @@ const XemDichVu = () => {
       console.log(yeuCauDichVu)
       try{
         const success = await giaHanHopDongDichVu(idYeuCauDichVu)
-        if(success.status===200){
-          setSuccessMessage("Gia hạn thành công")
-        }
-        else{
-          setErrorMessage("Gia hạn thất bại")
-        }
+        setSuccessMessage("Gia hạn thành công")
       }
       catch(error){
         setErrorMessage(error.message)
