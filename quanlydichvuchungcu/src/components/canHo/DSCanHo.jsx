@@ -141,7 +141,7 @@ const DSCanHo = () => {
                 {(currentCanHoList.length===0)?
                 (
                   <tr>
-                    <td colSpan="7" className='text-center'>Danh sách rỗng</td>
+                    <td colSpan="10" className='text-center'>Danh sách rỗng</td>
                   </tr>
                 ):(currentCanHoList.map((canHo)=>(
                   <tr key={canHo.idCanHo} className='text-center'>

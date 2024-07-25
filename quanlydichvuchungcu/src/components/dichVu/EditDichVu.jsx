@@ -65,7 +65,7 @@ const EditDichVu = () => {
             const success = await updateDichVu(dichVu)
             console.log(dichVu)
             setSuccessMessage("Cập nhật dịch vụ thành công")
-            setDichVu(success.data)
+            setDichVu(success)
         }
         catch(error){
             setErrorMessage(error.message)

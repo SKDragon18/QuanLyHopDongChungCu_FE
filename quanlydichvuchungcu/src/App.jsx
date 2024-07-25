@@ -29,6 +29,8 @@ import Register from './components/nguoidung/Register';
 import AuthProvider from './components/nguoidung/AuthProvider';
 import QuanLy from './components/banQuanLy/QuanLy';
 import RequireLogin from './components/nguoidung/RequireLogin';
+import DSTaiKhoan from './components/taikhoan.jsx/DSTaiKhoan';
+import EditTaiKhoan from './components/taikhoan.jsx/EditTaiKhoan';
 function App() {
   
   return (
@@ -51,17 +53,22 @@ function App() {
 
             <Route path="/login" element={<Login/>}/>
             <Route path="/register" element={<Register/>}/>
+            <Route path="/canho" element={<CanHoListing/>}/>
             <Route path="/canho/thue/:idCanHo" element={
               <RequireLogin>
                 <ThueCanHo/>
               </RequireLogin>
               }/>
             <Route path="/canho/xem/:idHopDong" element={<XemCanHo/>}/>
+
             <Route path="/dichvu" element={<DichVuListing/>}/>
             <Route path="/dichvu/dangky/:idDichVu" element={<DangKyDichVu/>}/>
             <Route path="/dichvu/xem/:idYeuCauDichVu" element={<XemDichVu/>}/>
+
             <Route path="/hoadon" element={<DSHoaDon/>}/>
 
+            <Route path="/ds-taikhoan" element={<DSTaiKhoan/>}/>
+            <Route path="/edit-taikhoan/:role/:tenDangNhap" element={<EditTaiKhoan/>}/>
 
             <Route path="/tk-hoadon" element={<ThongKeHoaDon/>}/>
             <Route path="/admin" element={<Admin/>}/>

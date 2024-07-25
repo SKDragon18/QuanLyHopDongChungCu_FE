@@ -12,10 +12,13 @@ export const getHeader = () =>{
     }
 }
 
+//Quản lý
 //Loại phòng
 export async function getLoaiPhong(){
     try{
-        const response  = await api.get("/canho/loaiphong")
+        const response  = await api.get("/canho/loaiphong",{
+            headers:getHeader()
+        })
         const data = response.data
         if(data.code ===200){
             return data.result
@@ -31,7 +34,9 @@ export async function getLoaiPhong(){
 export async function insertLoaiPhong(loaiPhong){
     
     try{
-        const response = await api.post("/canho/loaiphong",loaiPhong)
+        const response = await api.post("/canho/loaiphong",loaiPhong, {
+            headers:getHeader()
+        })
         const data = response.data
         if(data.code ===200){
             return data.result
@@ -49,7 +54,9 @@ export async function insertLoaiPhong(loaiPhong){
 //Điều khoản
 export async function getDieuKhoan(){
     try{
-        const response  = await api.get("/dieukhoan")
+        const response  = await api.get("/dieukhoan",{
+            headers:getHeader()
+        })
         const data = response.data
         if(data.code ===200){
             return data.result
@@ -65,7 +72,9 @@ export async function getDieuKhoan(){
 //Căn hộ
 export async function getCanHo(){
     try{
-        const response  = await api.get("/canho")
+        const response  = await api.get("/canho", {
+            headers:getHeader()
+        })
         const data = response.data
         if(data.code ===200){
             return data.result
@@ -80,7 +89,9 @@ export async function getCanHo(){
 
 export async function getCanHoById(idCanHo){
     try{
-        const response  = await api.get(`/canho/${idCanHo}`)
+        const response  = await api.get(`/canho/${idCanHo}`,{
+            headers:getHeader()
+        })
         const data = response.data
         if(data.code ===200){
             return data.result
@@ -95,7 +106,9 @@ export async function getCanHoById(idCanHo){
 
 export async function insertCanHo(canHo){
     try{
-        const response = await api.post("/canho",canHo)
+        const response = await api.post("/canho",canHo,{
+            headers:getHeader()
+        })
         const data = response.data
         if(data.code ===200){
             return data.result
@@ -111,7 +124,9 @@ export async function insertCanHo(canHo){
 
 export async function updateCanHo(canHo){
     try{
-        const response = await api.put("/canho",canHo)
+        const response = await api.put("/canho",canHo,{
+            headers:getHeader()
+        })
         const data = response.data
         if(data.code===200){
             return data.result
@@ -127,7 +142,10 @@ export async function updateCanHo(canHo){
 
 export async function updateTrangThaiCanHo(idCanHo){
     try{
-        const response = await api.put(`/canho/${idCanHo}`)
+        const response = await api.put(`/canho/${idCanHo}`,
+        {},{
+            headers:getHeader()
+        })
         const data = response.data
         if(data.code===200){
             return data.result
@@ -143,7 +161,10 @@ export async function updateTrangThaiCanHo(idCanHo){
 
 export async function deleteCanHo(idCanHo){
     try{
-        const response = await api.delete(`/canho/${idCanHo}`)
+        const response = await api.delete(`/canho/${idCanHo}`,
+        {
+            headers:getHeader()
+        })
         const data = response.data
         if(data.code===200){
             return data.result
@@ -162,7 +183,9 @@ export async function saveHinhAnh(image, idCanHo){
         const formData  = new FormData()
         formData.append("images", image)
         formData.append("idCanHo", idCanHo)
-        const response  = await api.post("/canho/hinhanh",formData)
+        const response  = await api.post("/canho/hinhanh",formData,{
+            headers:getHeader()
+        })
         const data = response.data
         console.log(data)
         if(data.code===200){
@@ -182,7 +205,9 @@ export async function doiHinhAnh(image, idCanHo){
         const formData  = new FormData()
         formData.append("images", image)
         formData.append("idCanHo", idCanHo)
-        const response  = await api.post("/canho/doihinhanh",formData)
+        const response  = await api.post("/canho/doihinhanh",formData,{
+            headers:getHeader()
+        })
         const data = response.data
         if(data.code===200){
             return "Thành công"
@@ -200,7 +225,9 @@ export async function doiHinhAnh(image, idCanHo){
 //Dịch vụ
 export async function getDichVu(){
     try{
-        const response  = await api.get("/dichvu")
+        const response  = await api.get("/dichvu",{
+            headers:getHeader()
+        })
         const data = response.data
         if(data.code===200){
             return data.result
@@ -215,7 +242,11 @@ export async function getDichVu(){
 
 export async function getDichVuById(idDichVu){
     try{
-        const response  = await api.get(`/dichvu/${idDichVu}`)
+        const response  = await api.get(`/dichvu/${idDichVu}`,
+            {
+                headers:getHeader()
+            }
+        )
         const data = response.data
         if(data.code===200){
             return data.result
@@ -230,7 +261,9 @@ export async function getDichVuById(idDichVu){
 
 export async function insertDichVu(dichvu){
     try{
-        const response = await api.post("/dichvu",dichvu)
+        const response = await api.post("/dichvu",dichvu,{
+            headers:getHeader()
+        })
         const data = response.data
         if(data.code===200){
             return data.result
@@ -246,7 +279,9 @@ export async function insertDichVu(dichvu){
 
 export async function updateDichVu(dichvu){
     try{
-        const response = await api.put("/dichvu",dichvu)
+        const response = await api.put("/dichvu",dichvu,{
+            headers:getHeader()
+        })
         const data = response.data
         if(data.code===200){
             return data.result
@@ -262,7 +297,10 @@ export async function updateDichVu(dichvu){
 
 export async function updateTrangThaiDichVu(dichvu){
     try{
-        const response = await api.put(`/dichvu/${dichvu}`)
+        const response = await api.put(`/dichvu/${dichvu}`,
+        {},    {
+            headers:getHeader()
+        })
         const data = response.data
         if(data.code===200){
             return data.result
@@ -278,7 +316,10 @@ export async function updateTrangThaiDichVu(dichvu){
 
 export async function deleteDichVu(idDichVu){
     try{
-        const response = await api.delete(`/dichvu/${idDichVu}`)
+        const response = await api.delete(`/dichvu/${idDichVu}`,
+        {
+            headers:getHeader()
+        })
         const data = response.data
         if(data.code===200){
             return data.result
@@ -295,7 +336,9 @@ export async function deleteDichVu(idDichVu){
 //Quản lý giá
 export async function getBangGia(){
     try{
-        const response  = await api.get("/banggia")
+        const response  = await api.get("/banggia",{
+            headers:getHeader()
+        })
         const data = response.data
         if(data.code===200){
             return data.result
@@ -310,7 +353,9 @@ export async function getBangGia(){
 
 export async function getBangGiaById(idBangGia){
     try{
-        const response  = await api.get(`/banggia/${idBangGia}`)
+        const response  = await api.get(`/banggia/${idBangGia}`,{
+            headers:getHeader()
+        })
         const data = response.data
         if(data.code===200){
             return data.result
@@ -324,8 +369,11 @@ export async function getBangGiaById(idBangGia){
 }
 
 export async function insertBangGia(banggia){
+    
     try{
-        const response = await api.post("/banggia",banggia)
+        const response = await api.post("/banggia",banggia,{
+            headers:getHeader()
+        })
         const data = response.data
         if(data.code===200){
             return data.result
@@ -341,7 +389,9 @@ export async function insertBangGia(banggia){
 export async function updateBangGia(banggia){
     
     try{
-        const response = await api.put("/banggia",banggia)
+        const response = await api.put("/banggia",banggia,{
+            headers:getHeader()
+        })
         const data = response.data
         if(data.code===200){
             return data.result
@@ -356,8 +406,14 @@ export async function updateBangGia(banggia){
 
 export async function updateTrangThaiBangGia(idBangGia){
     try{
-        const response = await api.put(`/banggia/${idBangGia}`)
+        console.log(getHeader())
+        const response = await api.put(`/banggia/${idBangGia}`,
+        {},  {
+            headers:getHeader()
+        })
+        
         const data = response.data
+        console.log(data)
         if(data.code===200){
             return data.result
         }
@@ -371,7 +427,12 @@ export async function updateTrangThaiBangGia(idBangGia){
 
 export async function uploadGiaCanHo(idBangGia){
     try{
-        const response = await api.put(`/banggia/uploadcanho/${idBangGia}`)
+        const response = await api.put(`/banggia/uploadcanho/${idBangGia}`,
+            {},
+            {
+                headers:getHeader()
+            }
+        )
         const data = response.data
         if(data.code===200){
             return data.result
@@ -386,7 +447,12 @@ export async function uploadGiaCanHo(idBangGia){
 
 export async function uploadGiaDichVu(idBangGia){
     try{
-        const response = await api.put(`/banggia/uploaddichvu/${idBangGia}`)
+        const response = await api.put(`/banggia/uploaddichvu/${idBangGia}`,
+            {},
+            {
+                headers:getHeader()
+            }
+        )
         const data = response.data
         if(data.code===200){
             return data.result
@@ -402,7 +468,11 @@ export async function uploadGiaDichVu(idBangGia){
 
 export async function deleteBangGia(idBangGia){
     try{
-        const response = await api.delete(`/banggia/${idBangGia}`)
+        const response = await api.delete(`/banggia/${idBangGia}`,
+            {
+                headers:getHeader()
+            }
+        )
         const data = response.data
         if(data.code===200){
             return data.result
@@ -414,6 +484,7 @@ export async function deleteBangGia(idBangGia){
         throw new Error(error.message)
     }
 }
+
 
 //Khách hàng
 export async function getKhachHangById(idKhachHang){
@@ -699,18 +770,6 @@ export async function getHopDongDichVuKhachHang(idYeuCauDichVu){
     }
 }
 
-export async function getTaiKhoanList(){
-    try{
-        const response = await api.get('/taikhoan',{
-            headers:getHeader()
-        })
-        return response.data
-    }
-    catch(error){
-        throw error
-    }
-}
-
 export async function loginUser(login){
     try{
         const response = await api.post('/nguoidung/dangnhap', login)
@@ -725,6 +784,150 @@ export async function loginUser(login){
 export async function registerUser(taikhoan){
     try{
         const response = await api.post('/nguoidung/dangky', taikhoan)
+        const data = response.data
+        if(data.code===200){
+            return data.result
+        }
+        else{
+            throw new Error(data.message)
+        }
+    }catch(error){
+        throw new Error(error.message)
+    }
+}
+
+//Admin
+
+export async function getTaiKhoanList(taikhoan){
+    try{
+        const response = await api.get('/taikhoan', {
+            headers:getHeader()
+        })
+        const data = response.data
+        if(data.code===200){
+            return data.result
+        }
+        else{
+            throw new Error(data.message)
+        }
+    }catch(error){
+        throw new Error(error.message)
+    }
+}
+
+export async function insertTaiKhoan(taikhoan){
+    try{
+        const response = await api.post('/taikhoan',taikhoan, {
+            headers:getHeader()
+        })
+        const data = response.data
+        if(data.code===200){
+            return data.result
+        }
+        else{
+            throw new Error(data.message)
+        }
+    }catch(error){
+        throw new Error(error.message)
+    }
+}
+
+export async function updateTrangThaiTaiKhoan(tenDangNhap){
+    try{
+        const response = await api.put(`/taikhoan/updatekhoa/${tenDangNhap}`,
+        {},{
+            headers:getHeader()
+        })
+        const data = response.data
+        if(data.code===200){
+            return data.result
+        }
+        else{
+            throw new Error(data.message)
+        }
+    }
+    catch(error){
+        throw new Error(error.message)
+    }
+}
+
+export async function updateQuyenTaiKhoan(tenDangNhap){
+    try{
+        const response = await api.put(`/taikhoan/updatequyen/${tenDangNhap}`,
+        {},{
+            headers:getHeader()
+        })
+        const data = response.data
+        if(data.code===200){
+            return data.result
+        }
+        else{
+            throw new Error(data.message)
+        }
+    }
+    catch(error){
+        throw new Error(error.message)
+    }
+}
+
+
+//Quyền
+export async function insertQuyen(quyen){
+    try{
+        const response = await api.post('/taikhoan/quyen',quyen, {
+            headers:getHeader()
+        })
+        const data = response.data
+        if(data.code===200){
+            return data.result
+        }
+        else{
+            throw new Error(data.message)
+        }
+    }catch(error){
+        throw new Error(error.message)
+    }
+}
+
+export async function getQuyen(){
+    try{
+        const response = await api.get('/taikhoan/quyen', {
+            headers:getHeader()
+        })
+        const data = response.data
+        if(data.code===200){
+            return data.result
+        }
+        else{
+            throw new Error(data.message)
+        }
+    }catch(error){
+        throw new Error(error.message)
+    }
+}
+
+export async function getBanQuanLyById(ma){
+    try{
+        const response  = await api.get(`/taikhoan/banquanly/${ma}`,{
+            headers:getHeader()
+        })
+        const data = response.data
+        if(data.code===200){
+            return data.result
+        }
+        else{
+            throw new Error(data.message)
+        }
+    }catch(error){
+        throw new Error(error.message)
+    }
+}
+
+export async function updateBanQuanLy(banquanly){
+    try{
+        const response  = await api.put('/taikhoan/banquanly',banquanly,{
+            headers:getHeader()
+        })
         const data = response.data
         if(data.code===200){
             return data.result
