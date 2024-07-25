@@ -78,7 +78,9 @@ const Login = () => {
                 <span style={{marginLeft:"10px"}}>
                    <Link to={'/register'}>Đăng ký ngay</Link>
                 </span>
-
+                <span style={{marginLeft:"10px"}}>
+                   <Link to={'/forgot'}>Quên mật khẩu?</Link>
+                </span>
             </div>
         </form>
     </section>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import {Col, Row} from 'react-bootstrap'
 import {FaEdit, FaEye, FaRedo} from 'react-icons/fa'
 import {Link} from 'react-router-dom'
-import { updateTrangThaiTaiKhoan, getTaiKhoanList, updateQuyenTaiKhoan } from '../utils/ApiFunctions'
+import { updateTrangThaiTaiKhoan, getTaiKhoanList, updateQuyenTaiKhoan, resetTaiKhoan } from '../utils/ApiFunctions'
 import DataPaginator from '../common/DataPaginator'
 import AddTaiKhoan from './AddTaiKhoan'
 
@@ -56,6 +56,20 @@ const DSTaiKhoan = () => {
         const result = await updateQuyenTaiKhoan(tenDangNhap)
         setSuccessMessage("Thay đổi quyền thành công " + String(tenDangNhap))
         fetchTaiKhoanList()
+      }
+      catch(error){
+        setErrorMessage(error.message)
+      }
+      setTimeout(()=>{
+        setSuccessMessage("")
+        setErrorMessage("")
+      },3000)
+    }
+
+    const handleReset = async(tenDangNhap)=>{
+      try{
+        const result = await resetTaiKhoan(tenDangNhap)
+        setSuccessMessage(result)
       }
       catch(error){
         setErrorMessage(error.message)
@@ -190,7 +204,7 @@ const DSTaiKhoan = () => {
                       </Link>
                       <button
                       className='btn btn-primary btn-sm'
-                      onClick={()=>handleDelete(taiKhoan.tenDangNhap)}>
+                      onClick={()=>handleReset(taiKhoan.tenDangNhap)}>
                         <FaRedo/>
                       </button>
                       </td>

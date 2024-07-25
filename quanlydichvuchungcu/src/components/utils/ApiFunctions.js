@@ -667,7 +667,9 @@ export async function getAllHoaDon(){
 }
 export async function getHoaDon(maKhachHang){
     try{
-        const response  = await api.get(`/hoadon/khachhang/${maKhachHang}`)
+        const response  = await api.get(`/hoadon/khachhang/${maKhachHang}`,{
+            headers:getHeader()
+        })
         const data = response.data
         if(data.code===200){
             return data.result
@@ -796,6 +798,36 @@ export async function registerUser(taikhoan){
     }
 }
 
+export async function getCode(tenDangNhap){
+    try{
+        const response = await api.get(`/nguoidung/maxacnhan/${tenDangNhap}`)
+        const data = response.data
+        if(data.code===200){
+            return data.result
+        }
+        else{
+            throw new Error(data.message)
+        }
+    }catch(error){
+        throw new Error(error.message)
+    }
+}
+
+export async function recoverPassword(doiMatKhau){
+    try{
+        const response = await api.put('/nguoidung/quenmatkhau', doiMatKhau)
+        const data = response.data
+        if(data.code===200){
+            return data.result
+        }
+        else{
+            throw new Error(data.message)
+        }
+    }catch(error){
+        throw new Error(error.message)
+    }
+}
+
 //Admin
 
 export async function getTaiKhoanList(taikhoan){
@@ -870,6 +902,24 @@ export async function updateQuyenTaiKhoan(tenDangNhap){
     }
 }
 
+export async function resetTaiKhoan(tenDangNhap){
+    try{
+        const response = await api.put(`/taikhoan/reset/${tenDangNhap}`,
+        {},{
+            headers:getHeader()
+        })
+        const data = response.data
+        if(data.code===200){
+            return data.result
+        }
+        else{
+            throw new Error(data.message)
+        }
+    }
+    catch(error){
+        throw new Error(error.message)
+    }
+}
 
 //Quyền
 export async function insertQuyen(quyen){

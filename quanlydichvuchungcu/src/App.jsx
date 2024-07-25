@@ -31,6 +31,7 @@ import QuanLy from './components/banQuanLy/QuanLy';
 import RequireLogin from './components/nguoidung/RequireLogin';
 import DSTaiKhoan from './components/taikhoan.jsx/DSTaiKhoan';
 import EditTaiKhoan from './components/taikhoan.jsx/EditTaiKhoan';
+import ForgotPassword from './components/nguoidung/ForgotPassword';
 function App() {
   
   return (
@@ -53,6 +54,8 @@ function App() {
 
             <Route path="/login" element={<Login/>}/>
             <Route path="/register" element={<Register/>}/>
+            <Route path="/forgot" element={<ForgotPassword/>}/>
+
             <Route path="/canho" element={<CanHoListing/>}/>
             <Route path="/canho/thue/:idCanHo" element={
               <RequireLogin>
