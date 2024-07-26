@@ -24,11 +24,7 @@ const Login = () => {
             const data = success.result
             auth.handleLogin(data)
             console.log(data)
-            // localStorage.setItem("token",token)
-            // localStorage.setItem("tenDangNhap",data.tenDangNhap)
-            // localStorage.setItem("role", data.quyen.tenQuyen)
             navigate(redirectUrl,{replace:true})
-            // window.location.reload()
         }
         else{
             setErrorMessage(success.message)
@@ -79,7 +75,7 @@ const Login = () => {
                    <Link to={'/register'}>Đăng ký ngay</Link>
                 </span>
                 <span style={{marginLeft:"10px"}}>
-                   <Link to={'/forgot'}>Quên mật khẩu?</Link>
+                   <Link to={'/forgot'} className='text-danger'>Quên mật khẩu?</Link>
                 </span>
             </div>
         </form>

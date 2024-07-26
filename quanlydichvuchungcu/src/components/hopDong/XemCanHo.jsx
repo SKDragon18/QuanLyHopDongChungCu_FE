@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import {getHopDongKhachHang, giaHanHopDong} from '../utils/ApiFunctions'
+import {checkPayment, createPayment, getHopDongKhachHang, giaHanHopDong} from '../utils/ApiFunctions'
 import { useParams } from 'react-router-dom'
 import { Form, FormControl } from 'react-bootstrap'
 import apartment from '../../assets/images/apartment.png'
@@ -17,9 +17,11 @@ const XemCanHo = () => {
       const dateObject = new Date(time)
       return dateObject.toLocaleString()
     }
+    const[urlPay,setUrlPay] = useState('')
     const[hopDong, setHopDong] = useState({
         ngayLap: '',
         khachHang:{},
+        soHoaDon:0,
         canHo:{idCanHo:0,
           soPhong:'0',
           tang:0,
@@ -101,14 +103,52 @@ const XemCanHo = () => {
       e.preventDefault()
       console.log(hopDong)
       try{
-        const success = await giaHanHopDong(idHopDong)
-        setSuccessMessage("Gia hạn thành công")
+        const success = await createPayment(String(hopDong.giaTri))
+        setHopDong({...hopDong,['soHoaDon']:success.soHoaDon})
+        setUrlPay(success.url)
       }
       catch(error){
         setErrorMessage(error.message)
       }
+      setTimeout(()=>{
+        setErrorMessage("")
+      },3000)
     }
-    
+    const giaHan = async (e)=>{
+      e.preventDefault()
+      console.log(hopDong)
+      try{
+        const success = await giaHanHopDong(idHopDong, hopDong.soHoaDon)
+        setSuccessMessage(success)
+        setTimeout(()=>{
+          window.location.href='/hopdong'
+        },2000)
+      }
+      catch(error){
+        setErrorMessage(error.message)
+      }
+      setTimeout(()=>{
+        setErrorMessage("")
+      },3000)
+    }
+    const check = async (e)=>{
+      e.preventDefault()
+      try{
+        if(hopDong.soHoaDon===0)return;
+        console.log(hopDong.soHoaDon)
+        const success = await checkPayment(hopDong.soHoaDon)
+        console.log(success)
+        if(success==='1'){
+          giaHan(e)
+        }
+      }
+      catch(error){
+        setErrorMessage(error.message)
+      }
+      setTimeout(()=>{
+        setErrorMessage("")
+      },3000)
+    }
   return (
     <>
       <div className='container mb-5'>
@@ -307,20 +347,29 @@ const XemCanHo = () => {
                 </fieldset>
                 {hopDong.giaHan&&(
                   <div className='form-group mt-2 mb-2'>
-                    {successMessage&&(
-                        <div className='alert alert-success fade show'>{successMessage}</div>
-                        )}
-                        {errorMessage&&(
-                            <div className='alert alert-danger fade show'>{errorMessage}</div>
-                        )}
+                    
                     <button type='submit' className='btn btn-danger'>
                       Xác nhận thanh toán và gia hạn hợp đồng
                     </button>
                   </div>
                 )}
               </Form>
-              
-                
+              {urlPay!==''&&(
+              <a href={urlPay} className='btn btn-primary mb-3 mt-3' target="_blank" rel="noopener noreferrer">
+                Đến VNPay
+              </a>
+              )}
+              {urlPay!==''&&(
+              <button type='button' className='btn btn-hotel' onClick={check}>
+                Nhận kết quả
+              </button>
+              )}
+              {successMessage&&(
+              <div className='alert alert-success fade show'>{successMessage}</div>
+              )}
+              {errorMessage&&(
+                  <div className='alert alert-danger fade show'>{errorMessage}</div>
+              )}  
                 
             </div>
           </div>

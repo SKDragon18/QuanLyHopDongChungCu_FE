@@ -96,14 +96,16 @@ const ThongKeHoaDon = () => {
                     <td>{hoaDon.soHoaDon}</td>
                     <td>{(hoaDon.hopDong===null)?('Dịch vụ'):('Căn hộ')}</td>
                     <td>
-                      {hoaDon.hopDong!==null?(
+                      {hoaDon.hopDong!==null&&(
                         'Số '+hoaDon.hopDong.canHo.soPhong + ' khu ' + hoaDon.hopDong.canHo.lo
-                      ):(hoaDon.yeuCauDichVu.dichVu.tenDichVu)}
+                      )}
+                      {hoaDon.yeuCauDichVu!==null&&(hoaDon.yeuCauDichVu.dichVu.tenDichVu)}
                     </td>
                     <td>
-                      {hoaDon.hopDong!==null?(
+                      {hoaDon.hopDong!==null&&(
                         hoaDon.hopDong.khachHang.maKhachHang
-                      ):(hoaDon.yeuCauDichVu.hopDong.khachHang.maKhachHang)}
+                      )}
+                      {hoaDon.yeuCauDichVu!==null&&(hoaDon.yeuCauDichVu.hopDong.khachHang.maKhachHang)}
                     </td>
                     <td>{formatTime(hoaDon.thoiGianDong)}</td>
                     <td>{formatCurrency(hoaDon.tongHoaDon,'vi-VN', 'VND')}</td>

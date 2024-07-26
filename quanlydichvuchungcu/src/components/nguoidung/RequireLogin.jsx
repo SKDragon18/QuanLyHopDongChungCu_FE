@@ -1,7 +1,7 @@
 import React from "react"
 import { Navigate, useLocation } from "react-router-dom"
 
-const RequireLogin = ({ children }) => {
+export const RequireLogin = ({ children }) => {
 	const user = localStorage.getItem("tenDangNhap")
     console.log(user)
 	const location = useLocation()
@@ -10,4 +10,25 @@ const RequireLogin = ({ children }) => {
 	}
 	return children
 }
-export default RequireLogin
+
+export const RequireAdmin = ({ children }) => {
+	const user = localStorage.getItem("tenDangNhap")
+	const role = localStorage.getItem("role")
+    console.log(user)
+	const location = useLocation()
+	if (!user||(user&&role!=='admin')) {
+		return <Navigate to="/login" state={{ path: location.pathname }} />
+	}
+	return children
+}
+
+export const RequireQuanLy = ({ children }) => {
+	const user = localStorage.getItem("tenDangNhap")
+	const role = localStorage.getItem("role")
+    console.log(user)
+	const location = useLocation()
+	if (!user||(user&&role!=='quanly')) {
+		return <Navigate to="/login" state={{ path: location.pathname }} />
+	}
+	return children
+}

@@ -6,7 +6,7 @@ import { getHoaDon} from '../utils/ApiFunctions'
 import DataPaginator from '../common/DataPaginator'
 const DSHoaDon = () => {
     const[hoaDonList,setHoaDonList]=useState([])
-    const[maKhachHang]=useState('trangialong')
+    const[maKhachHang]=useState(localStorage.getItem("tenDangNhap"))
     const[currentPage,setCurrentPage]=useState(1)
     const[numPerPage]=useState(8)
     const[isLoading,setIsLoading] = useState(false)

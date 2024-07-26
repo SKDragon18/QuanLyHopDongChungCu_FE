@@ -7,7 +7,7 @@ import DataPaginator from '../common/DataPaginator'
 import AddTaiKhoan from './AddTaiKhoan'
 
 const DSTaiKhoan = () => {
-    const username = localStorage.getItem("tenDangNhap")
+    const [username] = useState(localStorage.getItem("tenDangNhap"))
     const[taiKhoanList,setTaiKhoanList]=useState([])
     const[currentPage,setCurrentPage]=useState(1)
     const[numPerPage]=useState(8)

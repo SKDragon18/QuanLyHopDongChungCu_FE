@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import {dangKyHopDong, getCanHoChoThueById, getKhachHangById} from '../utils/ApiFunctions'
+import {checkPayment, createPayment, dangKyHopDong, getCanHoChoThueById, getKhachHangById} from '../utils/ApiFunctions'
 import { useParams } from 'react-router-dom'
 import { Form, FormControl } from 'react-bootstrap'
 import apartment from '../../assets/images/apartment.png'
@@ -9,7 +9,8 @@ const ThueCanHo = () => {
     const[errorMessage,setErrorMessage]=useState('')
     const[successMessage,setSuccessMessage]=useState('')
     const {idCanHo} = useParams()
-    const [ma] = useState('trangialong')
+    const [urlPay,setUrlPay] = useState('');
+    const [username] = useState(localStorage.getItem("tenDangNhap"))
     const formatCurrency = (value, locale = 'en-US', currency = 'USD') => {
       return new Intl.NumberFormat(locale, {
         style: 'currency',
@@ -18,6 +19,7 @@ const ThueCanHo = () => {
     };
     const[hopDong, setHopDong] = useState({
         idHopDong:0,
+        soHoaDon:0,
         ngayLap: '',
         khachHang:{},
         canHo:{idCanHo:0,
@@ -80,12 +82,12 @@ const ThueCanHo = () => {
   }
   const fetchKhachHangById= async()=>{
     try{
-        const result = await getKhachHangById(ma)
+        const result = await getKhachHangById(username)
         setKhachHang(result)
         setTimeout(()=>{
           setSuccessMessage("")
           setErrorMessage("")
-      },3000)
+        },3000)
     }
     catch(error){
         setErrorMessage(error.message)
@@ -100,6 +102,7 @@ const ThueCanHo = () => {
   const [today] = useState(new Date());
   const [todayString] = useState(today.toISOString().slice(0, 16));
   const [day7after] = useState(new Date());
+
   day7after.setDate(today.getDate()+7);
   const [day7afterString] = useState(day7after.toISOString().slice(0, 16));
   useEffect(()=>{
@@ -121,33 +124,87 @@ const ThueCanHo = () => {
     
   },[hopDong.ngayBatDau])
 
-    const handleInputChange=(e)=>{
-        const{name,value} = e.target
+  const handleInputChange=(e)=>{
+      const{name,value} = e.target
 
-        setHopDong({...hopDong,[name]:value})
-        setErrorMessage("")
+      setHopDong({...hopDong,[name]:value})
+      setErrorMessage("")
+  }
+  const handleSubmit=()=>{
+    try{
+      setIsSubmitted(true)
     }
-    const handleSubmit=()=>{
-      try{
-        setIsSubmitted(true)
-        // navigate("/",{state:{message:""}})
+    catch(error){
+      setErrorMessage(error.message)
+    }
+  }
+  const handlePay = async (e)=>{
+    e.preventDefault()
+    console.log(hopDong)
+    try{
+      const success = await createPayment(String(hopDong.giaTri))
+      setHopDong({...hopDong,['soHoaDon']:success.soHoaDon})
+      setUrlPay(success.url)
+    }
+    catch(error){
+      setErrorMessage(error.message)
+    }
+    setTimeout(()=>{
+      setErrorMessage("")
+    },3000)
+  }
+  const dangKy = async(e)=>{
+    e.preventDefault()
+    try{
+      const success = await dangKyHopDong(hopDong)
+      setSuccessMessage("Đăng ký thành công")
+      setTimeout(()=>{
+        window.location.href='/hopdong'
+      },2000)
+    }
+    catch(error){
+      setErrorMessage(error.message)
+    }
+    setTimeout(()=>{
+      setSuccessMessage("")
+      setErrorMessage("")
+    },3000)
+  }
+  const check = async (e)=>{
+    e.preventDefault()
+    try{
+      if(hopDong.soHoaDon===0)return;
+      console.log(hopDong.soHoaDon)
+      const success = await checkPayment(hopDong.soHoaDon)
+      console.log(success)
+      if(success==='1'){
+        dangKy(e)
       }
-      catch(error){
-        setErrorMessage(error.message)
+      else if(success==='0'){
+        setErrorMessage("Thanh toán thất bại")
+      }
+      else{
+        setErrorMessage("Lỗi: Đã mất hóa đơn")
       }
     }
-    const handlePay = async (e)=>{
-      e.preventDefault()
-      console.log(hopDong)
-      try{
-        const success = await dangKyHopDong(hopDong)
-        setSuccessMessage("Đăng ký thành công")
-      }
-      catch(error){
-        setErrorMessage(error.message)
-      }
+    catch(error){
+      setErrorMessage(error.message)
     }
-    
+    setTimeout(()=>{
+      setErrorMessage("")
+    },3000)
+  }
+    // useEffect(() => {
+    //   let interval;
+    //   if (isPaymentRequired) {
+    //     interval = setInterval(() => {
+    //       checkPayment()
+    //     }, 10000);
+    //   }
+    //   return () => {
+    //     if (interval) clearInterval(interval);
+    //   };
+    // }, [isPaymentRequired]);
   return (
     <>
       <div className='container mb-5'>
@@ -362,21 +419,32 @@ const ThueCanHo = () => {
                 </div>
                 {isSubmitted&&(
                   <div className='form-group mt-2 mb-2'>
-                    {successMessage&&(
-                        <div className='alert alert-success fade show'>{successMessage}</div>
-                        )}
-                        {errorMessage&&(
-                            <div className='alert alert-danger fade show'>{errorMessage}</div>
-                        )}
-                    <button type='submit' className='btn btn-hotel'
-                    >
+                    
+                    <button type='submit' className='btn btn-hotel'>
                       Xác nhận thanh toán
                     </button>
+                    
                   </div>
+                  
                 )}
-              </Form>
-              
                 
+              </Form>
+              {urlPay!==''&&(
+              <a href={urlPay} className='btn btn-primary mb-3 mt-3' target="_blank" rel="noopener noreferrer">
+                Đến VNPay
+              </a>
+              )}
+              {urlPay!==''&&(
+              <button type='button' className='btn btn-hotel' onClick={check}>
+                Nhận kết quả
+              </button>
+              )}
+              {successMessage&&(
+                  <div className='alert alert-success fade show'>{successMessage}</div>
+              )}
+              {errorMessage&&(
+                  <div className='alert alert-danger fade show'>{errorMessage}</div>
+              )}
                 
             </div>
           </div>

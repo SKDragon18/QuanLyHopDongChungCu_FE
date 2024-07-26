@@ -592,9 +592,9 @@ export async function dangKyDichVu(yeuCauDichVu){
     }
 }
 
-export async function giaHanHopDong(idHopDong){
+export async function checkHopDongDichVu(yeuCauDichVu){
     try{
-        const response = await api.put(`/hopdong/giahan/${idHopDong}`)
+        const response = await api.post("/hopdong/dichvu/checkyeucau",yeuCauDichVu)
         const data = response.data
         if(data.code===200){
             return data.result
@@ -607,9 +607,24 @@ export async function giaHanHopDong(idHopDong){
     }
 }
 
-export async function giaHanHopDongDichVu(idYeuCauDichVu){
+export async function giaHanHopDong(idHopDong,soHoaDon){
     try{
-        const response = await api.put(`/hopdong/dichvu/giahan/${idYeuCauDichVu}`)
+        const response = await api.put(`/hopdong/giahan/${idHopDong}/${soHoaDon}`)
+        const data = response.data
+        if(data.code===200){
+            return data.result
+        }
+        else{
+            throw new Error(data.message)
+        }
+    }catch(error){
+        throw new Error(error.message)
+    }
+}
+
+export async function giaHanHopDongDichVu(idYeuCauDichVu,soHoaDon){
+    try{
+        const response = await api.put(`/hopdong/dichvu/giahan/${idYeuCauDichVu}/${soHoaDon}`)
         const data = response.data
         if(data.code===200){
             return data.result
@@ -920,6 +935,42 @@ export async function resetTaiKhoan(tenDangNhap){
         throw new Error(error.message)
     }
 }
+
+//Thanh toán
+export async function createPayment(amount){
+    try{
+        const response = await api.post('/hoadon/create-payment',amount, {
+            headers:getHeader()
+        })
+        const data = response.data
+        if(data.code===200){
+            return data.result
+        }
+        else{
+            throw new Error(data.message)
+        }
+    }catch(error){
+        throw new Error(error.message)
+    }
+}
+
+export async function checkPayment(id){
+    try{
+        const response = await api.get(`/hoadon/check-payment/${id}`,{
+            headers:getHeader()
+        })
+        const data = response.data
+        if(data.code===200){
+            return data.result
+        }
+        else{
+            throw new Error(data.message)
+        }
+    }catch(error){
+        throw new Error(error.message)
+    }
+}
+
 
 //Quyền
 export async function insertQuyen(quyen){

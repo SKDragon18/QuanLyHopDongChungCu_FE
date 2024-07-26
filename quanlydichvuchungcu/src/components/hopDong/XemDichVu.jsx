@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import {getHopDongDichVuKhachHang, giaHanHopDongDichVu} from '../utils/ApiFunctions'
+import {checkPayment, createPayment, getHopDongDichVuKhachHang, giaHanHopDongDichVu} from '../utils/ApiFunctions'
 import { useParams } from 'react-router-dom'
 import { Form, FormControl } from 'react-bootstrap'
 const XemDichVu = () => {
@@ -17,10 +17,12 @@ const XemDichVu = () => {
       const dateObject = new Date(time)
       return dateObject.toLocaleString()
     }
+    const [urlPay,setUrlPay] = useState('')
     const[yeuCauDichVu, setYeuCauDichVu] = useState({
       hopDong:{
         idHopDong:0
       },
+      soHoaDon:0,
       dichVu:{},
       giaTra:0,
       ngayYeuCau:'',
@@ -76,14 +78,52 @@ const XemDichVu = () => {
       e.preventDefault()
       console.log(yeuCauDichVu)
       try{
-        const success = await giaHanHopDongDichVu(idYeuCauDichVu)
-        setSuccessMessage("Gia hạn thành công")
+        const success = await createPayment(String(yeuCauDichVu.giaTra))
+        setYeuCauDichVu({...yeuCauDichVu,['soHoaDon']:success.soHoaDon})
+        setUrlPay(success.url)
       }
       catch(error){
         setErrorMessage(error.message)
       }
+      setTimeout(()=>{
+        setErrorMessage("")
+      },3000)
     }
-    
+    const giaHan = async (e)=>{
+      e.preventDefault()
+      console.log(yeuCauDichVu)
+      try{
+        const success = await giaHanHopDongDichVu(idYeuCauDichVu, yeuCauDichVu.soHoaDon)
+        setSuccessMessage(success)
+        setTimeout(()=>{
+          window.location.href='/hopdong'
+        },2000)
+      }
+      catch(error){
+        setErrorMessage(error.message)
+      }
+      setTimeout(()=>{
+        setErrorMessage("")
+      },3000)
+    }
+    const check = async (e)=>{
+      e.preventDefault()
+      try{
+        if(yeuCauDichVu.soHoaDon===0)return;
+        console.log(yeuCauDichVu.soHoaDon)
+        const success = await checkPayment(yeuCauDichVu.soHoaDon)
+        console.log(success)
+        if(success==='1'){
+          giaHan(e)
+        }
+      }
+      catch(error){
+        setErrorMessage(error.message)
+      }
+      setTimeout(()=>{
+        setErrorMessage("")
+      },3000)
+    }
   return (
     <>
       <div className='container mb-5'>
@@ -246,20 +286,29 @@ const XemDichVu = () => {
                 </fieldset>
                 {yeuCauDichVu.giaHan&&(
                   <div className='form-group mt-2 mb-2'>
-                    {successMessage&&(
-                        <div className='alert alert-success fade show'>{successMessage}</div>
-                        )}
-                        {errorMessage&&(
-                            <div className='alert alert-danger fade show'>{errorMessage}</div>
-                        )}
+                    
                     <button type='submit' className='btn btn-danger'>
                       Xác nhận thanh toán và gia hạn hợp đồng
                     </button>
                   </div>
                 )}
               </Form>
-              
-                
+              {urlPay!==''&&(
+              <a href={urlPay} className='btn btn-primary mb-3 mt-3' target="_blank" rel="noopener noreferrer">
+                Đến VNPay
+              </a>
+              )}
+              {urlPay!==''&&(
+              <button type='button' className='btn btn-hotel' onClick={check}>
+                Nhận kết quả
+              </button>
+              )}
+              {successMessage&&(
+              <div className='alert alert-success fade show'>{successMessage}</div>
+              )}
+              {errorMessage&&(
+                  <div className='alert alert-danger fade show'>{errorMessage}</div>
+              )}  
                 
             </div>
           </div>

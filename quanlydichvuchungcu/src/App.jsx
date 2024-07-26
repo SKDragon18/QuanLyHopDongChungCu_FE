@@ -28,7 +28,7 @@ import Login from './components/nguoidung/Login';
 import Register from './components/nguoidung/Register';
 import AuthProvider from './components/nguoidung/AuthProvider';
 import QuanLy from './components/banQuanLy/QuanLy';
-import RequireLogin from './components/nguoidung/RequireLogin';
+import {RequireLogin,RequireAdmin, RequireQuanLy} from './components/nguoidung/RequireLogin';
 import DSTaiKhoan from './components/taikhoan.jsx/DSTaiKhoan';
 import EditTaiKhoan from './components/taikhoan.jsx/EditTaiKhoan';
 import ForgotPassword from './components/nguoidung/ForgotPassword';
@@ -41,7 +41,33 @@ function App() {
         <Router>
           <NavBar/>
           <Routes>
+            {/* khongquyen */}
             <Route path="/" element={<Home/>}/>
+            <Route path="/profile" element={<Home/>}/>
+            <Route path="/login" element={<Login/>}/>
+            <Route path="/register" element={<Register/>}/>
+            <Route path="/forgot" element={<ForgotPassword/>}/>
+            <Route path="/canho" element={<CanHoListing/>}/>
+            <Route path="/dichvu" element={<DichVuListing/>}/>
+            {/* khachhang */}
+            <Route path="/canho/thue/:idCanHo" element={
+              <RequireLogin><ThueCanHo/></RequireLogin>}/>
+            <Route path="/dichvu/dangky/:idDichVu" element={
+              <RequireLogin><DangKyDichVu/></RequireLogin>}/>
+              <Route path="/canho/xem/:idHopDong" element={
+                <RequireLogin><XemCanHo/></RequireLogin>}/>
+            <Route path="/dichvu/xem/:idYeuCauDichVu" element={
+              <RequireLogin><XemDichVu/></RequireLogin>}/>
+            <Route path="/hopdong" element={<RequireLogin><DSHopDong/></RequireLogin>}/>
+            <Route path="/hoadon" element={<RequireLogin><DSHoaDon/></RequireLogin>}/>
+            
+            {/* admin */}
+            <Route path="/admin" element={<RequireAdmin><Admin/></RequireAdmin>}/>
+            <Route path="/ds-taikhoan" element={<RequireAdmin><DSTaiKhoan/></RequireAdmin>}/>
+            <Route path="/edit-taikhoan/:role/:tenDangNhap" element={
+              <RequireAdmin><EditTaiKhoan/></RequireAdmin>}/>
+            {/* banquanly */}
+            <Route path="/banquanly" element={<QuanLy/>}/>
             <Route path="/ds-canho" element={<DSCanHo/>}/>
             <Route path="/edit-canho/:idCanHo" element={<EditCanHo/>}/>
             <Route path="/ds-dichvu" element={<DSDichVu/>}/>
@@ -51,35 +77,8 @@ function App() {
             <Route path="/ds-hopdong" element={<DSHopDongBQL/>}/>
             <Route path="/canho/bqlxem/:idHopDong" element={<BQLXemCanHo/>}/>
             <Route path="/dichvu/bqlxem/:idYeuCauDichVu" element={<BQLXemDichVu/>}/>
-
-            <Route path="/login" element={<Login/>}/>
-            <Route path="/register" element={<Register/>}/>
-            <Route path="/forgot" element={<ForgotPassword/>}/>
-
-            <Route path="/canho" element={<CanHoListing/>}/>
-            <Route path="/canho/thue/:idCanHo" element={
-              <RequireLogin>
-                <ThueCanHo/>
-              </RequireLogin>
-              }/>
-            <Route path="/canho/xem/:idHopDong" element={<XemCanHo/>}/>
-
-            <Route path="/dichvu" element={<DichVuListing/>}/>
-            <Route path="/dichvu/dangky/:idDichVu" element={<DangKyDichVu/>}/>
-            <Route path="/dichvu/xem/:idYeuCauDichVu" element={<XemDichVu/>}/>
-
-            <Route path="/hoadon" element={<DSHoaDon/>}/>
-
-            <Route path="/ds-taikhoan" element={<DSTaiKhoan/>}/>
-            <Route path="/edit-taikhoan/:role/:tenDangNhap" element={<EditTaiKhoan/>}/>
-
             <Route path="/tk-hoadon" element={<ThongKeHoaDon/>}/>
-            <Route path="/admin" element={<Admin/>}/>
-            <Route path="/banquanly" element={<QuanLy/>}/>
-            <Route path="/hopdong" element={<DSHopDong/>}/>
-            <Route path="/login" element={<Home/>}/>
-            <Route path="/logout" element={<Home/>}/>
-            <Route path="/profile" element={<Home/>}/>
+            
           </Routes>
         </Router>
         <Footer/>

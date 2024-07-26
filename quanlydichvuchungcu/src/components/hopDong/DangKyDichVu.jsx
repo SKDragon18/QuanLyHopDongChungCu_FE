@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import {dangKyDichVu, getDichVuChoDangKyById, getKhachHangById, getAllHopDongKhachHang} from '../utils/ApiFunctions'
+import {dangKyDichVu, getDichVuChoDangKyById, getKhachHangById, getAllHopDongKhachHang, createPayment, checkPayment, checkHopDongDichVu} from '../utils/ApiFunctions'
 import { useParams } from 'react-router-dom'
 import { Form, FormControl } from 'react-bootstrap'
 const DangKyDichVu = () => {
@@ -8,15 +8,17 @@ const DangKyDichVu = () => {
     const[errorMessage,setErrorMessage]=useState('')
     const[successMessage,setSuccessMessage]=useState('')
     const {idDichVu} = useParams()
-    const [ma] = useState('trangialong')
+    const [ma] = useState(localStorage.getItem("tenDangNhap"))
     const formatCurrency = (value, locale = 'en-US', currency = 'USD') => {
       return new Intl.NumberFormat(locale, {
         style: 'currency',
         currency: currency,
       }).format(value);
     };
+    const [urlPay,setUrlPay]=useState('')
     const[yeuCauDichVu, setYeuCauDichVu] = useState({
       idYeuCauDichVu:0,
+      soHoaDon:0,
       hopDong:{
         idHopDong:0
       },
@@ -113,7 +115,8 @@ const DangKyDichVu = () => {
     const handleInputChange=(e)=>{
         const{name,value} = e.target
         if(name==='hopDong'){
-          
+          setIsSubmitted(false)
+          setUrlPay('')
           const hopDongChon = ({
             idHopDong:value
           })
@@ -126,14 +129,26 @@ const DangKyDichVu = () => {
         }
         
     }
-    const handleSubmit=()=>{
+    const handleSubmit=async ()=>{
       try{
-        setIsSubmitted(true)
-        // navigate("/",{state:{message:""}})
+        const success = await checkHopDongDichVu(yeuCauDichVu)
+        if(success==="Hợp lệ"){
+          setIsSubmitted(true)
+          setUrlPay('')
+        }
+        else{
+          setIsSubmitted(false)
+          setUrlPay('')
+        }
       }
       catch(error){
         setErrorMessage(error.message)
+        setIsSubmitted(false)
+        setUrlPay('')
       }
+      setTimeout(()=>{
+        setErrorMessage("")
+      },3000)
     }
     const handlePay = async (e)=>{
       if(yeuCauDichVu.hopDong.idHopDong===0){
@@ -142,14 +157,60 @@ const DangKyDichVu = () => {
       e.preventDefault()
       console.log(yeuCauDichVu)
       try{
-        const success = await dangKyDichVu(yeuCauDichVu)
-        setSuccessMessage("Đăng ký thành công")
+        const success = await createPayment(String(yeuCauDichVu.giaTra))
+        setYeuCauDichVu({...yeuCauDichVu,['soHoaDon']:success.soHoaDon})
+        setUrlPay(success.url)
       }
       catch(error){
         setErrorMessage(error.message)
       }
+      setTimeout(()=>{
+        setErrorMessage("")
+      },3000)
+      
+      
     }
-    
+    const dangKy = async(e)=>{
+      e.preventDefault()
+      try{
+        const success = await dangKyDichVu(yeuCauDichVu)
+        setSuccessMessage(success)
+        setTimeout(()=>{
+          window.location.href='/hopdong'
+        },2000)
+      }
+      catch(error){
+        setErrorMessage(error.message)
+      }
+      setTimeout(()=>{
+        setSuccessMessage("")
+        setErrorMessage("")
+      },3000)
+    }
+    const check = async (e)=>{
+      e.preventDefault()
+      try{
+        if(yeuCauDichVu.soHoaDon===0)return;
+        console.log(yeuCauDichVu.soHoaDon)
+        const success = await checkPayment(yeuCauDichVu.soHoaDon)
+        console.log(success)
+        if(success==='1'){
+          dangKy(e)
+        }
+        else if(success==='0'){
+          setErrorMessage("Thanh toán thất bại")
+        }
+        else{
+          setErrorMessage("Lỗi: Đã mất hóa đơn")
+        }
+      }
+      catch(error){
+        setErrorMessage(error.message)
+      }
+      setTimeout(()=>{
+        setErrorMessage("")
+      },3000)
+    }
   return (
     <>
       <div className='container mb-5'>
@@ -203,11 +264,14 @@ const DangKyDichVu = () => {
                     value={yeuCauDichVu.hopDong.idHopDong}>
                       {
                           hopDongList.map((val, key)=>{
+                            if(!val.trangThai){
                               return(
-                          <option key={key} value={val.idHopDong}>
-                              {'Căn hộ '+val.canHo.soPhong + ' tầng '+val.canHo.tang+' khu '+val.canHo.lo}
-                          </option>
-                          )})}
+                                <option key={key} value={val.idHopDong}>
+                                    {'Căn hộ '+val.canHo.soPhong + ' tầng '+val.canHo.tang+' khu '+val.canHo.lo}
+                                </option>)
+                            }
+                            
+                          })}
                           
                   </select>
                   )}
@@ -335,12 +399,7 @@ const DangKyDichVu = () => {
                 </div>
                 {isSubmitted&&(
                   <div className='form-group mt-2 mb-2'>
-                    {successMessage&&(
-                        <div className='alert alert-success fade show'>{successMessage}</div>
-                        )}
-                        {errorMessage&&(
-                            <div className='alert alert-danger fade show'>{errorMessage}</div>
-                        )}
+                    
                     <button type='submit' className='btn btn-hotel'
                     >
                       Xác nhận thanh toán
@@ -348,7 +407,22 @@ const DangKyDichVu = () => {
                   </div>
                 )}
               </Form>
-              
+              {urlPay!==''&&(
+              <a href={urlPay} className='btn btn-primary mb-3 mt-3' target="_blank" rel="noopener noreferrer">
+                Đến VNPay
+              </a>
+              )}
+              {urlPay!==''&&(
+              <button type='button' className='btn btn-hotel' onClick={check}>
+                Nhận kết quả
+              </button>
+              )}
+              {successMessage&&(
+                  <div className='alert alert-success fade show'>{successMessage}</div>
+              )}
+              {errorMessage&&(
+                  <div className='alert alert-danger fade show'>{errorMessage}</div>
+              )}
                 
                 
             </div>

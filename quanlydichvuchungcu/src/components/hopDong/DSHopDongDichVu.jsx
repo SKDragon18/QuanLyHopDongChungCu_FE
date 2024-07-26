@@ -5,7 +5,7 @@ import {FaEdit, FaTrashAlt, FaEye} from 'react-icons/fa'
 import {Link} from 'react-router-dom'
 const DSHopDongDichVu = () => {
     const[hopDongDichVuList,setHopDongDichVuList]=useState([])
-    const[maKhachHang]=useState('trangialong')
+    const[maKhachHang]=useState(localStorage.getItem("tenDangNhap"))
     const[currentPage,setCurrentPage]=useState(1)
     const[numPerPage]=useState(8)
     const[isLoading,setIsLoading] = useState(false)
@@ -102,7 +102,7 @@ const DSHopDongDichVu = () => {
                 {(currentHopDongDichVuList.length===0)?
                 (
                   <tr>
-                    <td colSpan="7" className='text-center'>Danh sách rỗng</td>
+                    <td colSpan="10" className='text-center'>Danh sách rỗng</td>
                   </tr>
                 ):(currentHopDongDichVuList.map((hopDongDichVu)=>(
                   <tr key={hopDongDichVu.idYeuCauDichVu} className='text-center'>
