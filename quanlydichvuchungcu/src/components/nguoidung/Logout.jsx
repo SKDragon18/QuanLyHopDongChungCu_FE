@@ -1,10 +1,11 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { AuthContext } from './AuthProvider'
 import { Link, useNavigate } from 'react-router-dom'
 
 const Logout = () => {
   const auth = useContext(AuthContext)
     const navigate = useNavigate()
+    const [tenDangNhap] = useState(localStorage.getItem("tenDangNhap"))
     const handleLogout = ()=>{
         auth.handleLogout()
         // window.location.reload()
@@ -12,7 +13,7 @@ const Logout = () => {
     }
     return (<>
         <li>
-            <Link className='dropdown-item' to={'/login'}>
+            <Link className='dropdown-item' to={`/profile/${tenDangNhap}`}>
                 Thông tin cá nhân
             </Link>
         </li>

@@ -32,6 +32,7 @@ import {RequireLogin,RequireAdmin, RequireQuanLy} from './components/nguoidung/R
 import DSTaiKhoan from './components/taikhoan.jsx/DSTaiKhoan';
 import EditTaiKhoan from './components/taikhoan.jsx/EditTaiKhoan';
 import ForgotPassword from './components/nguoidung/ForgotPassword';
+import Profile from './components/nguoidung/Profile';
 function App() {
   
   return (
@@ -43,7 +44,7 @@ function App() {
           <Routes>
             {/* khongquyen */}
             <Route path="/" element={<Home/>}/>
-            <Route path="/profile" element={<Home/>}/>
+            <Route path="/profile/:tenDangNhap" element={<Profile/>}/>
             <Route path="/login" element={<Login/>}/>
             <Route path="/register" element={<Register/>}/>
             <Route path="/forgot" element={<ForgotPassword/>}/>

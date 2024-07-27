@@ -96,14 +96,6 @@ const NavBar = () => {
                                 <Logout/>
                             </li>
                             )}
-                            {/* <li>
-                                <Link to={'/profile'} className='dropdown-item'>
-                                    Thông tin cá nhân
-                                </Link>
-                            </li> */}
-                            {/* <Link to={'/logout'} className='dropdown-item'>
-                                    Thoát
-                                </Link> */}
                         </ul>
                     </li>
                 </ul>

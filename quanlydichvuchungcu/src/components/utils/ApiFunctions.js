@@ -12,6 +12,13 @@ export const getHeader = () =>{
     }
 }
 
+export const getHeader2 = () =>{
+    const token = localStorage.getItem("token")
+    return {
+        Authorization: `Bearer ${token}`
+    }
+}
+
 //Quản lý
 //Loại phòng
 export async function getLoaiPhong(){
@@ -184,7 +191,7 @@ export async function saveHinhAnh(image, idCanHo){
         formData.append("images", image)
         formData.append("idCanHo", idCanHo)
         const response  = await api.post("/canho/hinhanh",formData,{
-            headers:getHeader()
+            headers:getHeader2()
         })
         const data = response.data
         console.log(data)
@@ -206,19 +213,20 @@ export async function doiHinhAnh(image, idCanHo){
         formData.append("images", image)
         formData.append("idCanHo", idCanHo)
         const response  = await api.post("/canho/doihinhanh",formData,{
-            headers:getHeader()
+            headers:getHeader2()
         })
         const data = response.data
         if(data.code===200){
-            return "Thành công"
+            return data.result
         }
         else{
-            return "Thất bại"
+            throw new Error(data.message)
         }
     }catch(error){
         throw new Error(error.message)
     }
 }
+
 
 
 
@@ -490,6 +498,58 @@ export async function deleteBangGia(idBangGia){
 export async function getKhachHangById(idKhachHang){
     try{
         const response  = await api.get(`/nguoidung/khachhang/${idKhachHang}`)
+        const data = response.data
+        if(data.code===200){
+            return data.result
+        }
+        else{
+            throw new Error(data.message)
+        }
+    }catch(error){
+        throw new Error(error.message)
+    }
+}
+
+export async function getTaiKhoanById(idKhachHang){
+    try{
+        const response  = await api.get(`/nguoidung/thongtin/${idKhachHang}`)
+        const data = response.data
+        if(data.code===200){
+            return data.result
+        }
+        else{
+            throw new Error(data.message)
+        }
+    }catch(error){
+        throw new Error(error.message)
+    }
+}
+
+export async function doiAvatar(image, tenDangNhap){
+    try{
+        const formData  = new FormData()
+        formData.append("images", image)
+        formData.append("tenDangNhap", tenDangNhap)
+        const response  = await api.post("/nguoidung/doihinhanh",formData,{
+            headers:getHeader2()
+        })
+        const data = response.data
+        if(data.code===200){
+            return data.result
+        }
+        else{
+            throw new Error(data.message)
+        }
+    }catch(error){
+        throw new Error(error.message)
+    }
+}
+
+export async function updateKhachHang(khachhang){
+    try{
+        const response  = await api.put('/nguoidung/khachhang', khachhang,{
+            headers:getHeader()
+        })
         const data = response.data
         if(data.code===200){
             return data.result

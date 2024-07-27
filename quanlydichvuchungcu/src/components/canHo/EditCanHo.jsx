@@ -93,14 +93,7 @@ const EditCanHo = () => {
         if(imageSave){
             try{
                 const success = await doiHinhAnh(imageSave,idCanHo)
-                if(success === "Thành công"){
-                    setImageSave("")
-                    setSuccessMessage("Cập nhật căn hộ và hình thành công")
-                    setErrorMessage("")
-                }
-                else{
-                    setErrorMessage("Thêm hình thất bại")
-                }
+                setSuccessMessage(success)
             }
             catch(error){
                 setErrorMessage(error.message)
@@ -118,7 +111,10 @@ const EditCanHo = () => {
             const success = await updateCanHo(canHo)
             console.log(canHo)
             setCanHo(success)
-            setSuccessMessage("Cập nhật căn hộ thành công")
+            setTimeout(()=>{
+                setSuccessMessage("Cập nhật căn hộ thành công")
+            },1000)
+            changeImage()
         }
         catch(error){
             setErrorMessage(error.message)
