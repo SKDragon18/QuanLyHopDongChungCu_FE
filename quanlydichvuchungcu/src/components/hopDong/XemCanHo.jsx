@@ -6,6 +6,7 @@ import apartment from '../../assets/images/apartment.png'
 const XemCanHo = () => {
     const[errorMessage,setErrorMessage]=useState('')
     const[successMessage,setSuccessMessage]=useState('')
+    const[isSubmitted, setIsSubmitted]=useState(false)
     const {idHopDong} = useParams()
     const formatCurrency = (value, locale = 'en-US', currency = 'USD') => {
       return new Intl.NumberFormat(locale, {
@@ -21,7 +22,6 @@ const XemCanHo = () => {
     const[hopDong, setHopDong] = useState({
         ngayLap: '',
         khachHang:{},
-        soHoaDon:0,
         canHo:{idCanHo:0,
           soPhong:'0',
           tang:0,
@@ -90,65 +90,29 @@ const XemCanHo = () => {
     fetchHopDongById()
   },[])
 
-    const handleSubmit=()=>{
-      try{
-        setIsSubmitted(true)
-        // navigate("/",{state:{message:""}})
-      }
-      catch(error){
-        setErrorMessage(error.message)
-      }
+  const handleSubmit=(e)=>{
+    e.preventDefault()
+    setIsSubmitted(true)
+  }
+  const handlePay = async (e)=>{
+    e.preventDefault()
+    console.log(hopDong)
+    try{
+      const success = await giaHanHopDong(idHopDong)
+      setUrlPay(success.url)
     }
-    const handlePay = async (e)=>{
-      e.preventDefault()
-      console.log(hopDong)
-      try{
-        const success = await createPayment(String(hopDong.giaTri))
-        setHopDong({...hopDong,['soHoaDon']:success.soHoaDon})
-        setUrlPay(success.url)
-      }
-      catch(error){
-        setErrorMessage(error.message)
-      }
-      setTimeout(()=>{
-        setErrorMessage("")
-      },3000)
+    catch(error){
+      setErrorMessage(error.message)
     }
-    const giaHan = async (e)=>{
-      e.preventDefault()
-      console.log(hopDong)
-      try{
-        const success = await giaHanHopDong(idHopDong, hopDong.soHoaDon)
-        setSuccessMessage(success)
-        setTimeout(()=>{
-          window.location.href='/hopdong'
-        },2000)
-      }
-      catch(error){
-        setErrorMessage(error.message)
-      }
-      setTimeout(()=>{
-        setErrorMessage("")
-      },3000)
+    setTimeout(()=>{
+      setErrorMessage("")
+    },3000)
+  }
+  const changePage = ()=>{
+    if(urlPay!=''){
+      window.location.href=urlPay
     }
-    const check = async (e)=>{
-      e.preventDefault()
-      try{
-        if(hopDong.soHoaDon===0)return;
-        console.log(hopDong.soHoaDon)
-        const success = await checkPayment(hopDong.soHoaDon)
-        console.log(success)
-        if(success==='1'){
-          giaHan(e)
-        }
-      }
-      catch(error){
-        setErrorMessage(error.message)
-      }
-      setTimeout(()=>{
-        setErrorMessage("")
-      },3000)
-    }
+  }
   return (
     <>
       <div className='container mb-5'>
@@ -280,7 +244,7 @@ const XemCanHo = () => {
               <div className='card card-body mt-5'>
               <h4 className='card card-title text-center'>Hợp đồng thuê căn hộ</h4>
 
-              <Form onSubmit={handlePay}>
+              <Form onSubmit={handleSubmit}>
                 <fieldset style={{border:'2px'}}>
                   <legend>Thông tin hợp đồng</legend>
                   <div className='row'>
@@ -347,21 +311,23 @@ const XemCanHo = () => {
                 </fieldset>
                 {hopDong.giaHan&&(
                   <div className='form-group mt-2 mb-2'>
-                    
                     <button type='submit' className='btn btn-danger'>
-                      Xác nhận thanh toán và gia hạn hợp đồng
+                      Gia hạn hợp đồng
                     </button>
+                    
+                  </div>
+                )}
+                {isSubmitted&&(
+                  <div className='form-group mt-2 mb-2'>
+                      <button type='button' className='btn btn-hotel' onClick={handlePay}>
+                        Xác nhận thanh toán bằng VNPay
+                      </button>
                   </div>
                 )}
               </Form>
               {urlPay!==''&&(
-              <a href={urlPay} className='btn btn-primary mb-3 mt-3' target="_blank" rel="noopener noreferrer">
-                Đến VNPay
-              </a>
-              )}
-              {urlPay!==''&&(
-              <button type='button' className='btn btn-hotel' onClick={check}>
-                Nhận kết quả
+              <button type='button' className='btn btn-primary mb-3 mt-3' onClick={changePage}>
+              Đến trang VNPay
               </button>
               )}
               {successMessage&&(

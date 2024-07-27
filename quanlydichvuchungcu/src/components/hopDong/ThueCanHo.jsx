@@ -19,7 +19,6 @@ const ThueCanHo = () => {
     };
     const[hopDong, setHopDong] = useState({
         idHopDong:0,
-        soHoaDon:0,
         ngayLap: '',
         khachHang:{},
         canHo:{idCanHo:0,
@@ -142,8 +141,7 @@ const ThueCanHo = () => {
     e.preventDefault()
     console.log(hopDong)
     try{
-      const success = await createPayment(String(hopDong.giaTri))
-      setHopDong({...hopDong,['soHoaDon']:success.soHoaDon})
+      const success = await dangKyHopDong(hopDong)
       setUrlPay(success.url)
     }
     catch(error){
@@ -153,58 +151,13 @@ const ThueCanHo = () => {
       setErrorMessage("")
     },3000)
   }
-  const dangKy = async(e)=>{
-    e.preventDefault()
-    try{
-      const success = await dangKyHopDong(hopDong)
-      setSuccessMessage("Đăng ký thành công")
-      setTimeout(()=>{
-        window.location.href='/hopdong'
-      },2000)
+
+  const changePage = ()=>{
+    if(urlPay!=''){
+      window.location.href=urlPay
     }
-    catch(error){
-      setErrorMessage(error.message)
-    }
-    setTimeout(()=>{
-      setSuccessMessage("")
-      setErrorMessage("")
-    },3000)
   }
-  const check = async (e)=>{
-    e.preventDefault()
-    try{
-      if(hopDong.soHoaDon===0)return;
-      console.log(hopDong.soHoaDon)
-      const success = await checkPayment(hopDong.soHoaDon)
-      console.log(success)
-      if(success==='1'){
-        dangKy(e)
-      }
-      else if(success==='0'){
-        setErrorMessage("Thanh toán thất bại")
-      }
-      else{
-        setErrorMessage("Lỗi: Đã mất hóa đơn")
-      }
-    }
-    catch(error){
-      setErrorMessage(error.message)
-    }
-    setTimeout(()=>{
-      setErrorMessage("")
-    },3000)
-  }
-    // useEffect(() => {
-    //   let interval;
-    //   if (isPaymentRequired) {
-    //     interval = setInterval(() => {
-    //       checkPayment()
-    //     }, 10000);
-    //   }
-    //   return () => {
-    //     if (interval) clearInterval(interval);
-    //   };
-    // }, [isPaymentRequired]);
+  
   return (
     <>
       <div className='container mb-5'>
@@ -421,7 +374,7 @@ const ThueCanHo = () => {
                   <div className='form-group mt-2 mb-2'>
                     
                     <button type='submit' className='btn btn-hotel'>
-                      Xác nhận thanh toán
+                      Xác nhận thanh toán bằng VNPay
                     </button>
                     
                   </div>
@@ -430,13 +383,8 @@ const ThueCanHo = () => {
                 
               </Form>
               {urlPay!==''&&(
-              <a href={urlPay} className='btn btn-primary mb-3 mt-3' target="_blank" rel="noopener noreferrer">
-                Đến VNPay
-              </a>
-              )}
-              {urlPay!==''&&(
-              <button type='button' className='btn btn-hotel' onClick={check}>
-                Nhận kết quả
+              <button type='button' className='btn btn-primary mb-3 mt-3' onClick={changePage}>
+              Đến trang VNPay
               </button>
               )}
               {successMessage&&(

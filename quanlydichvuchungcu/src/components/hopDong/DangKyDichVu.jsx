@@ -18,7 +18,6 @@ const DangKyDichVu = () => {
     const [urlPay,setUrlPay]=useState('')
     const[yeuCauDichVu, setYeuCauDichVu] = useState({
       idYeuCauDichVu:0,
-      soHoaDon:0,
       hopDong:{
         idHopDong:0
       },
@@ -157,8 +156,7 @@ const DangKyDichVu = () => {
       e.preventDefault()
       console.log(yeuCauDichVu)
       try{
-        const success = await createPayment(String(yeuCauDichVu.giaTra))
-        setYeuCauDichVu({...yeuCauDichVu,['soHoaDon']:success.soHoaDon})
+        const success = await dangKyDichVu(yeuCauDichVu)
         setUrlPay(success.url)
       }
       catch(error){
@@ -167,49 +165,11 @@ const DangKyDichVu = () => {
       setTimeout(()=>{
         setErrorMessage("")
       },3000)
-      
-      
     }
-    const dangKy = async(e)=>{
-      e.preventDefault()
-      try{
-        const success = await dangKyDichVu(yeuCauDichVu)
-        setSuccessMessage(success)
-        setTimeout(()=>{
-          window.location.href='/hopdong'
-        },2000)
+    const changePage = ()=>{
+      if(urlPay!=''){
+        window.location.href=urlPay
       }
-      catch(error){
-        setErrorMessage(error.message)
-      }
-      setTimeout(()=>{
-        setSuccessMessage("")
-        setErrorMessage("")
-      },3000)
-    }
-    const check = async (e)=>{
-      e.preventDefault()
-      try{
-        if(yeuCauDichVu.soHoaDon===0)return;
-        console.log(yeuCauDichVu.soHoaDon)
-        const success = await checkPayment(yeuCauDichVu.soHoaDon)
-        console.log(success)
-        if(success==='1'){
-          dangKy(e)
-        }
-        else if(success==='0'){
-          setErrorMessage("Thanh toán thất bại")
-        }
-        else{
-          setErrorMessage("Lỗi: Đã mất hóa đơn")
-        }
-      }
-      catch(error){
-        setErrorMessage(error.message)
-      }
-      setTimeout(()=>{
-        setErrorMessage("")
-      },3000)
     }
   return (
     <>
@@ -402,19 +362,14 @@ const DangKyDichVu = () => {
                     
                     <button type='submit' className='btn btn-hotel'
                     >
-                      Xác nhận thanh toán
+                      Xác nhận thanh toán bằng VNPay
                     </button>
                   </div>
                 )}
               </Form>
               {urlPay!==''&&(
-              <a href={urlPay} className='btn btn-primary mb-3 mt-3' target="_blank" rel="noopener noreferrer">
-                Đến VNPay
-              </a>
-              )}
-              {urlPay!==''&&(
-              <button type='button' className='btn btn-hotel' onClick={check}>
-                Nhận kết quả
+              <button type='button' className='btn btn-primary mb-3 mt-3' onClick={changePage}>
+              Đến trang VNPay
               </button>
               )}
               {successMessage&&(

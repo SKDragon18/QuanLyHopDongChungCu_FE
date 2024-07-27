@@ -3,7 +3,7 @@ import {checkPayment, createPayment, getHopDongDichVuKhachHang, giaHanHopDongDic
 import { useParams } from 'react-router-dom'
 import { Form, FormControl } from 'react-bootstrap'
 const XemDichVu = () => {
-    // const[isValidated, setIsValidated]= useState(false)
+    const[isSubmitted, setIsSubmitted]= useState(false)
     const[errorMessage,setErrorMessage]=useState('')
     const[successMessage,setSuccessMessage]=useState('')
     const {idYeuCauDichVu} = useParams()
@@ -22,7 +22,6 @@ const XemDichVu = () => {
       hopDong:{
         idHopDong:0
       },
-      soHoaDon:0,
       dichVu:{},
       giaTra:0,
       ngayYeuCau:'',
@@ -74,56 +73,30 @@ const XemDichVu = () => {
     fetchHopDongDichVu()
   },[])
 
-    const handlePay = async (e)=>{
-      e.preventDefault()
-      console.log(yeuCauDichVu)
-      try{
-        const success = await createPayment(String(yeuCauDichVu.giaTra))
-        setYeuCauDichVu({...yeuCauDichVu,['soHoaDon']:success.soHoaDon})
-        setUrlPay(success.url)
-      }
-      catch(error){
-        setErrorMessage(error.message)
-      }
-      setTimeout(()=>{
-        setErrorMessage("")
-      },3000)
+  const handleSubmit = (e)=>{
+    e.preventDefault()
+    setIsSubmitted(true)
+  }
+
+  const handlePay = async (e)=>{
+    e.preventDefault()
+    console.log(yeuCauDichVu)
+    try{
+      const success = await giaHanHopDongDichVu(idYeuCauDichVu)
+      setUrlPay(success.url)
     }
-    const giaHan = async (e)=>{
-      e.preventDefault()
-      console.log(yeuCauDichVu)
-      try{
-        const success = await giaHanHopDongDichVu(idYeuCauDichVu, yeuCauDichVu.soHoaDon)
-        setSuccessMessage(success)
-        setTimeout(()=>{
-          window.location.href='/hopdong'
-        },2000)
-      }
-      catch(error){
-        setErrorMessage(error.message)
-      }
-      setTimeout(()=>{
-        setErrorMessage("")
-      },3000)
+    catch(error){
+      setErrorMessage(error.message)
     }
-    const check = async (e)=>{
-      e.preventDefault()
-      try{
-        if(yeuCauDichVu.soHoaDon===0)return;
-        console.log(yeuCauDichVu.soHoaDon)
-        const success = await checkPayment(yeuCauDichVu.soHoaDon)
-        console.log(success)
-        if(success==='1'){
-          giaHan(e)
-        }
-      }
-      catch(error){
-        setErrorMessage(error.message)
-      }
-      setTimeout(()=>{
-        setErrorMessage("")
-      },3000)
+    setTimeout(()=>{
+      setErrorMessage("")
+    },3000)
+  }
+  const changePage = ()=>{
+    if(urlPay!=''){
+      window.location.href=urlPay
     }
+  }
   return (
     <>
       <div className='container mb-5'>
@@ -219,7 +192,7 @@ const XemDichVu = () => {
               <div className='card card-body mt-5'>
               <h4 className='card card-title text-center'>Hợp đồng đăng ký dịch vụ</h4>
 
-              <Form onSubmit={handlePay}>
+              <Form onSubmit={handleSubmit}>
                 <fieldset style={{border:'2px'}}>
                   <legend>Thông tin hợp đồng</legend>
                   <div className='row'>
@@ -286,21 +259,23 @@ const XemDichVu = () => {
                 </fieldset>
                 {yeuCauDichVu.giaHan&&(
                   <div className='form-group mt-2 mb-2'>
-                    
                     <button type='submit' className='btn btn-danger'>
-                      Xác nhận thanh toán và gia hạn hợp đồng
+                      Gia hạn hợp đồng
                     </button>
+                    
                   </div>
                 )}
+                {isSubmitted&&(
+                      <div className='form-group mt-2 mb-2'>
+                      <button type='button' className='btn btn-hotel' onClick={handlePay}>
+                        Xác nhận thanh toán bằng VNPay
+                      </button>
+                      </div>
+                    )}
               </Form>
               {urlPay!==''&&(
-              <a href={urlPay} className='btn btn-primary mb-3 mt-3' target="_blank" rel="noopener noreferrer">
-                Đến VNPay
-              </a>
-              )}
-              {urlPay!==''&&(
-              <button type='button' className='btn btn-hotel' onClick={check}>
-                Nhận kết quả
+              <button type='button' className='btn btn-primary mb-3 mt-3' onClick={changePage}>
+              Đến trang VNPay
               </button>
               )}
               {successMessage&&(

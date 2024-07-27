@@ -624,7 +624,7 @@ export async function getDichVuChoDangKyById(idDichVu){
 
 export async function dangKyHopDong(hopdong){
     try{
-        const response = await api.post("/hopdong",hopdong)
+        const response = await api.post("/hopdong/hopdong/create-payment",hopdong)
         const data = response.data
         if(data.code===200){
             return data.result
@@ -639,7 +639,7 @@ export async function dangKyHopDong(hopdong){
 
 export async function dangKyDichVu(yeuCauDichVu){
     try{
-        const response = await api.post("/hopdong/dichvu",yeuCauDichVu)
+        const response = await api.post("/hopdong/yeucaudichvu/create-payment",yeuCauDichVu)
         const data = response.data
         if(data.code===200){
             return data.result
@@ -667,9 +667,9 @@ export async function checkHopDongDichVu(yeuCauDichVu){
     }
 }
 
-export async function giaHanHopDong(idHopDong,soHoaDon){
+export async function giaHanHopDong(idHopDong){
     try{
-        const response = await api.put(`/hopdong/giahan/${idHopDong}/${soHoaDon}`)
+        const response = await api.post(`/hopdong/giahanhopdong/create-payment/${idHopDong}`)
         const data = response.data
         if(data.code===200){
             return data.result
@@ -682,9 +682,9 @@ export async function giaHanHopDong(idHopDong,soHoaDon){
     }
 }
 
-export async function giaHanHopDongDichVu(idYeuCauDichVu,soHoaDon){
+export async function giaHanHopDongDichVu(idYeuCauDichVu){
     try{
-        const response = await api.put(`/hopdong/dichvu/giahan/${idYeuCauDichVu}/${soHoaDon}`)
+        const response = await api.post(`/hopdong/giahanyeucaudichvu/create-payment/${idYeuCauDichVu}`)
         const data = response.data
         if(data.code===200){
             return data.result
