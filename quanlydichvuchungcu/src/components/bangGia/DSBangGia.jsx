@@ -5,6 +5,7 @@ import {Link} from 'react-router-dom'
 import { getBangGia, deleteBangGia, updateTrangThaiBangGia } from '../utils/ApiFunctions'
 import DataPaginator from '../common/DataPaginator'
 import AddBangGia from './AddBangGia'
+import SimpleDialog from '../common/SimpleDialog'
 
 const DSBangGia = () => {
     const[bangGiaList,setBangGiaList]=useState([])
@@ -14,6 +15,8 @@ const DSBangGia = () => {
     const[showFormAdd,setShowFormAdd]=useState(false)
     const[successMessage,setSuccessMessage]=useState("")
     const[errorMessage, setErrorMessage] = useState("")
+    const[open,setOpen]= useState(false)
+    const[id,setId]=useState(-1)
     const formatTime = (time)=>{
       const dateObject = new Date(time)
       return dateObject.toLocaleString()
@@ -36,7 +39,9 @@ const DSBangGia = () => {
       setCurrentPage(1)
     },[bangGiaList])
 
-    const handleDelete = async(idBangGia)=>{
+    const handleDelete = async()=>{
+      if(id===-1)return
+      const idBangGia = id
       try{
         const result = await deleteBangGia(idBangGia)
         setSuccessMessage(result + " bảng giá có id là " + String(idBangGia))
@@ -49,6 +54,11 @@ const DSBangGia = () => {
         setSuccessMessage("")
         setErrorMessage("")
       },3000)
+    }
+
+    const handleClickOpen=(id)=>{
+      setId(id)
+      setOpen(true)
     }
 
     const handleChange = async(idBangGia)=>{
@@ -87,7 +97,7 @@ const DSBangGia = () => {
         <>
         
         <section className='mt-5 mb-5 container'>
-            
+            <div><SimpleDialog open={open} setOpen={setOpen} handle={handleDelete} message={'xóa bảng giá'}/></div>
             <div className='d-flex justify-content-center mb-3 mt-5'>
                 <h2>Danh sách bảng giá</h2>
             </div>
@@ -166,7 +176,7 @@ const DSBangGia = () => {
                       
                       <button
                       className='btn btn-danger btn-sm'
-                      onClick={()=>handleDelete(bangGia.idBangGia)}>
+                      onClick={()=>handleClickOpen(bangGia.idBangGia)}>
                         <FaTrashAlt/>
                       </button>
                     </td>

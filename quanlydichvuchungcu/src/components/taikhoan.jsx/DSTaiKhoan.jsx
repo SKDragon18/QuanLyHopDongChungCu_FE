@@ -5,6 +5,7 @@ import {Link} from 'react-router-dom'
 import { updateTrangThaiTaiKhoan, getTaiKhoanList, updateQuyenTaiKhoan, resetTaiKhoan } from '../utils/ApiFunctions'
 import DataPaginator from '../common/DataPaginator'
 import AddTaiKhoan from './AddTaiKhoan'
+import SimpleDialog from '../common/SimpleDialog'
 
 const DSTaiKhoan = () => {
     const [username] = useState(localStorage.getItem("tenDangNhap"))
@@ -15,6 +16,8 @@ const DSTaiKhoan = () => {
     const[showFormAdd,setShowFormAdd]=useState(false)
     const[successMessage,setSuccessMessage]=useState("")
     const[errorMessage, setErrorMessage] = useState("")
+    const[open,setOpen]= useState(false)
+    const[id,setId]=useState('')
     useEffect(()=>{
         fetchTaiKhoanList()
     },[])
@@ -66,7 +69,9 @@ const DSTaiKhoan = () => {
       },3000)
     }
 
-    const handleReset = async(tenDangNhap)=>{
+    const handleReset = async()=>{
+      if(id==='')return
+      const tenDangNhap = id
       try{
         const result = await resetTaiKhoan(tenDangNhap)
         setSuccessMessage(result)
@@ -78,6 +83,11 @@ const DSTaiKhoan = () => {
         setSuccessMessage("")
         setErrorMessage("")
       },3000)
+    }
+
+    const handleClickOpen=(id)=>{
+      setId(id)
+      setOpen(true)
     }
 
     const handlePagninationClick=(pageNumber)=>{
@@ -101,7 +111,9 @@ const DSTaiKhoan = () => {
         <>
         
         <section className='mt-5 mb-5 container'>
-            
+            <div>
+              <SimpleDialog open={open} setOpen={setOpen} handle={handleReset} message={'reset mật khẩu tài khoản này'}/>
+            </div>
             <div className='d-flex justify-content-center mb-3 mt-5'>
                 <h2>Danh sách tài khoản</h2>
             </div>
@@ -204,7 +216,7 @@ const DSTaiKhoan = () => {
                       </Link>
                       <button
                       className='btn btn-primary btn-sm'
-                      onClick={()=>handleReset(taiKhoan.tenDangNhap)}>
+                      onClick={()=>handleClickOpen(taiKhoan.tenDangNhap)}>
                         <FaRedo/>
                       </button>
                       </td>

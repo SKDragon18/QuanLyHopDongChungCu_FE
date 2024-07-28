@@ -1,0 +1,20 @@
+// useEffect(()=>{
+        // const client = new Client({
+        //   brokerURL:'ws://localhost:8080/ws',
+        //   reconnectDelay:5000,
+        //   onConnect:()=>{
+        //     console.log('Connected')
+        //     client.subscribe(`/topic/notifications/${tenDangNhap}`,(messageResponse)=>{
+        //       alert(messageResponse.body)
+        //       setMessage(messageResponse.body)
+        //     })
+        //   },
+        //   onDisconnect:()=>{
+        //     console.log('Disconnected')
+        //   }
+        // })
+        // client.activate()
+        // return ()=>{
+        //     client.deactivate()
+        // }
+    // },[tenDangNhap])

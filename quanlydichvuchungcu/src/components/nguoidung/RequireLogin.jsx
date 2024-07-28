@@ -3,7 +3,6 @@ import { Navigate, useLocation } from "react-router-dom"
 
 export const RequireLogin = ({ children }) => {
 	const user = localStorage.getItem("tenDangNhap")
-    console.log(user)
 	const location = useLocation()
 	if (!user) {
 		return <Navigate to="/login" state={{ path: location.pathname }} />
@@ -14,7 +13,6 @@ export const RequireLogin = ({ children }) => {
 export const RequireAdmin = ({ children }) => {
 	const user = localStorage.getItem("tenDangNhap")
 	const role = localStorage.getItem("role")
-    console.log(user)
 	const location = useLocation()
 	if (!user||(user&&role!=='admin')) {
 		return <Navigate to="/login" state={{ path: location.pathname }} />
@@ -25,7 +23,6 @@ export const RequireAdmin = ({ children }) => {
 export const RequireQuanLy = ({ children }) => {
 	const user = localStorage.getItem("tenDangNhap")
 	const role = localStorage.getItem("role")
-    console.log(user)
 	const location = useLocation()
 	if (!user||(user&&role!=='quanly')) {
 		return <Navigate to="/login" state={{ path: location.pathname }} />

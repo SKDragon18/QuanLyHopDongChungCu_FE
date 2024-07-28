@@ -5,16 +5,18 @@ import {Link} from 'react-router-dom'
 import { getDichVu, deleteDichVu, updateTrangThaiDichVu } from '../utils/ApiFunctions'
 import DataPaginator from '../common/DataPaginator'
 import AddDichVu from './AddDichVu'
+import SimpleDialog from '../common/SimpleDialog'
 
 const DSDichVu = () => {
     const[dichVuList,setDichVuList]=useState([])
     const[currentPage,setCurrentPage]=useState(1)
     const[numPerPage]=useState(8)
     const[isLoading,setIsLoading] = useState(false)
-    // const[filteredDichVuList,setFilteredDichVuList] = useState([])
     const[showFormAdd,setShowFormAdd]=useState(false)
     const[successMessage,setSuccessMessage]=useState("")
     const[errorMessage, setErrorMessage] = useState("")
+    const[open,setOpen]= useState(false)
+    const[id,setId]=useState(-1)
     const formatCurrency = (value, locale = 'en-US', currency = 'USD') => {
       return new Intl.NumberFormat(locale, {
         style: 'currency',
@@ -39,7 +41,9 @@ const DSDichVu = () => {
       setCurrentPage(1)
     },[dichVuList])
 
-    const handleDelete = async(idDichVu)=>{
+    const handleDelete = async()=>{
+      if(id===-1)return
+      const idDichVu = id
       try{
         const result = await deleteDichVu(idDichVu)
         setSuccessMessage(result + " dịch vụ có id là " + String(idDichVu))
@@ -52,6 +56,11 @@ const DSDichVu = () => {
         setSuccessMessage("")
         setErrorMessage("")
       },3000)
+    }
+
+    const handleClickOpen=(id)=>{
+      setId(id)
+      setOpen(true)
     }
 
     const handleChange = async(idDichVu)=>{
@@ -90,7 +99,9 @@ const DSDichVu = () => {
         <>
         
         <section className='mt-5 mb-5 container'>
-            
+            <div>
+              <SimpleDialog open={open} setOpen={setOpen} handle={handleDelete} message={'xóa thông tin dịch vụ'}/>
+            </div>
             <div className='d-flex justify-content-center mb-3 mt-5'>
                 <h2>Danh sách dịch vụ</h2>
             </div>
@@ -169,7 +180,7 @@ const DSDichVu = () => {
                       
                       <button
                       className='btn btn-danger btn-sm'
-                      onClick={()=>handleDelete(dichVu.idDichVu)}>
+                      onClick={()=>handleClickOpen(dichVu.idDichVu)}>
                         <FaTrashAlt/>
                       </button>
                     </td>

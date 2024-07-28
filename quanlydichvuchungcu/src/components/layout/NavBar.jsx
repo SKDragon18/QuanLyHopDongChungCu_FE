@@ -2,30 +2,23 @@ import React, { useContext, useState } from 'react'
 import {Link, NavLink} from 'react-router-dom'
 import Logout from '../nguoidung/Logout'
 import { AuthContext } from '../nguoidung/AuthProvider'
+import NotificationComponent from '../notification/NotificationComponent'
 const NavBar = () => {
     const[showAccount, setShowAccount] = useState(false)
     // const {user} = useContext(AuthContext)
     const handleAccountClick= ()=>{
         setShowAccount(!showAccount)
     }
+    console.log(1)
+    const tenDangNhap = localStorage.getItem("tenDangNhap")
     const isLoggedIn = localStorage.getItem("token")
     const userRole = localStorage.getItem("role")
   return (
     <nav className='navbar navbar-expand-lg bg-body-tertiary px-5 shadow mt-2 sticky-top'>
         <div className='container-fluid'>
             <Link to={"/"}>
-            <span className='hotel-color'>Chung cư cao cấp</span>
+                <span className='hotel-color'>Chung cư cao cấp</span>
             </Link>
-            {/* <button
-            className='navbar-toggle'
-            type='button'
-            data-bs-toggle='collapse'
-            data-bs-target='#navbarScroll'
-            aria-controls='navbarScroll'
-            aria-expanded='false'
-            aria-label='Toggle navigation'>
-                <span className='navbar-toggler-icon'></span>
-            </button> */}
             <div className='collapse navbar-collapse' id='navbarScroll'>
                 <ul className='navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll'>
                     <li className='nav-item'>
@@ -68,6 +61,11 @@ const NavBar = () => {
                             </NavLink>
                         </li>
                         </>
+                    )}
+                    {isLoggedIn &&(
+                        <li className='nav-item'>
+                            <NotificationComponent tenDangNhap={tenDangNhap} role={userRole}/>
+                        </li>
                     )}
                     
                     <li className='nav-item dropdown'>

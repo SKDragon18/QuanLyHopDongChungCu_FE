@@ -7,16 +7,19 @@ import CanHoFilter from '../common/CanHoFilter'
 import DataPaginator from '../common/DataPaginator'
 import AddCanHo from './AddCanHo'
 
+import SimpleDialog from '../common/SimpleDialog'
+
 const DSCanHo = () => {
     const[canHoList,setCanHoList]=useState([])
     const[currentPage,setCurrentPage]=useState(1)
     const[numPerPage]=useState(8)
     const[isLoading,setIsLoading] = useState(false)
     const[filteredCanHoList,setFilteredCanHoList] = useState([])
-    // const[selectedLoaiPhong,setSelectedLoaiPhong] = useState("")
     const[showFormAdd,setShowFormAdd]=useState(false)
     const[successMessage,setSuccessMessage]=useState("")
     const[errorMessage, setErrorMessage] = useState("")
+    const[open,setOpen]= useState(false)
+    const[id,setId]=useState(-1)
     const formatCurrency = (value, locale = 'en-US', currency = 'USD') => {
       return new Intl.NumberFormat(locale, {
         style: 'currency',
@@ -45,7 +48,9 @@ const DSCanHo = () => {
       setCurrentPage(1)
     },[filteredCanHoList])
 
-    const handleDelete = async(idCanHo)=>{
+    const handleDelete = async()=>{
+      if(id===-1)return
+      const idCanHo = id
       try{
         const result = await deleteCanHo(idCanHo)
         setSuccessMessage(result + " căn hộ có id là " + String(idCanHo))
@@ -60,6 +65,12 @@ const DSCanHo = () => {
       },3000)
     }
 
+    const handleClickOpen=(id)=>{
+      setId(id)
+      setOpen(true)
+    }
+
+    
     const handleChange = async(idCanHo)=>{
       try{
         const result = await updateTrangThaiCanHo(idCanHo)
@@ -96,7 +107,9 @@ const DSCanHo = () => {
         <>
         
         <section className='mt-5 mb-5 container'>
-            
+            <div>
+              <SimpleDialog open={open} setOpen={setOpen} handle={handleDelete} message={'xóa thông tin căn hộ'}/>
+            </div>
             <div className='d-flex justify-content-center mb-3 mt-5'>
                 <h2>Danh sách căn hộ</h2>
             </div>
@@ -181,7 +194,7 @@ const DSCanHo = () => {
                       
                       <button
                       className='btn btn-danger btn-sm'
-                      onClick={()=>handleDelete(canHo.idCanHo)}>
+                      onClick={()=>handleClickOpen(canHo.idCanHo)}>
                         <FaTrashAlt/>
                       </button>
                     </td>

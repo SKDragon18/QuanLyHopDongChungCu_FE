@@ -495,6 +495,7 @@ export async function deleteBangGia(idBangGia){
 
 
 //Khách hàng
+
 export async function getKhachHangById(idKhachHang){
     try{
         const response  = await api.get(`/nguoidung/khachhang/${idKhachHang}`)
@@ -726,6 +727,37 @@ export async function huyHopDongDichVu(idYeuCauDichVu){
         throw new Error(error.message)
     }
 }
+
+export async function notify(idKhachHang){
+    try{
+        const response  = await api.get(`/hopdong/notifications/${idKhachHang}`)
+        const data = response.data
+        if(data.code===200){
+            return data.result
+        }
+        else{
+            throw new Error(data.message)
+        }
+    }catch(error){
+        throw new Error(error.message)
+    }
+}
+
+export async function notifyBanQuanLy(){
+    try{
+        const response  = await api.get('/hopdong/notifications')
+        const data = response.data
+        if(data.code===200){
+            return data.result
+        }
+        else{
+            throw new Error(data.message)
+        }
+    }catch(error){
+        throw new Error(error.message)
+    }
+}
+
 export async function getAllHoaDon(){
     try{
         const response  = await api.get(`/hoadon`,{headers:getHeader()})
