@@ -9,6 +9,10 @@ const Admin = () => {
       <Link to={'/ds-taikhoan'}>
       Quản lý tài khoản
       </Link>
+      <hr/>
+      <Link to={'/ds-quyen'}>
+      Xem danh sách quyền
+      </Link>
     </section>
   )
 }

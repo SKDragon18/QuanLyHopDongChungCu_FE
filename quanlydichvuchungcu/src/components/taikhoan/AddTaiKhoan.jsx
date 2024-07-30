@@ -35,6 +35,7 @@ const AddTaiKhoan = ({fetchTaiKhoanList}) => {
         setTimeout(()=>{
             setSuccessMessage("")
             setErrorMessage("")
+            fetchTaiKhoanList()
         },3000)
     }
     return (

@@ -7,6 +7,8 @@ import GiaDichVu from './GiaDichVu'
 const EditBangGia = () => {
     const [bangGia, setBangGia] = useState({
         idBangGia: 0,
+        noiDung:'',
+        banQuanLy:{},
         canHoList:[],
         dichVuList:[]
     })
@@ -17,7 +19,7 @@ const EditBangGia = () => {
     const {idBangGia} = useParams()
     const[successMessage, setSuccessMessage] = useState("")
     const[errorMessage, setErrorMessage] = useState("")
-
+    const tenDangNhap = localStorage.getItem("tenDangNhap")
     const fetchBangGiaById= async()=>{
         try{
             const result = await getBangGiaById(idBangGia)
@@ -65,6 +67,10 @@ const EditBangGia = () => {
     },[dichVuUpdateList])
 
     const handleUploadCanHo = async(idBangGia)=>{
+        if(bangGia.banQuanLy!==null&&bangGia.banQuanLy.ma!==tenDangNhap){
+            alert("Bạn không có quyền thay đổi")
+            return
+        }
         try{
           const result = await uploadGiaCanHo(idBangGia)
           setSuccessMessage(result)
@@ -80,6 +86,10 @@ const EditBangGia = () => {
     }
 
     const handleUploadDichVu = async(idBangGia)=>{
+        if(bangGia.banQuanLy!==null&&bangGia.banQuanLy.ma!==tenDangNhap){
+            alert("Bạn không có quyền thay đổi")
+            return
+        }
         try{
           const result = await uploadGiaDichVu(idBangGia)
           setSuccessMessage(result)
@@ -102,7 +112,10 @@ const EditBangGia = () => {
 
     const handleSubmit = async(e) =>{
         e.preventDefault()
-        
+        if(bangGia.banQuanLy!==null&&bangGia.banQuanLy.ma!==tenDangNhap){
+            alert("Bạn không có quyền thay đổi")
+            return
+        }
         try{
             const success = await updateBangGia(bangGia)
             setSuccessMessage("Cập nhật bảng giá thành công")

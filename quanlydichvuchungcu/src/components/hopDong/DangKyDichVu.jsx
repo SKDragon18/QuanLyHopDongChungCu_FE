@@ -9,6 +9,7 @@ const DangKyDichVu = () => {
     const[successMessage,setSuccessMessage]=useState('')
     const {idDichVu} = useParams()
     const [ma] = useState(localStorage.getItem("tenDangNhap"))
+    const [role]= useState(localStorage.getItem("role"))
     const formatCurrency = (value, locale = 'en-US', currency = 'USD') => {
       return new Intl.NumberFormat(locale, {
         style: 'currency',
@@ -349,7 +350,8 @@ const DangKyDichVu = () => {
                       </tbody>
                     </table>
                 </fieldset>
-                <div className='form-group mt-2 mb-2'>
+                {role==='khachhang'&&(
+                  <div className='form-group mt-2 mb-2'>
                   <button type='button' className='btn btn-hotel'
                   onClick={()=>{
                     handleSubmit()
@@ -357,6 +359,8 @@ const DangKyDichVu = () => {
                     Xác nhận đăng ký
                   </button>
                 </div>
+                )}
+                
                 {isSubmitted&&(
                   <div className='form-group mt-2 mb-2'>
                     

@@ -25,6 +25,16 @@ const QuanLy = () => {
       <Link to={'/tk-hoadon'}>
       Thống kê hóa đơn
       </Link>
+      <br/>
+      <br/>
+      <br/>
+      <Link to={'/ds-loaiphong'}>
+      Xem danh sách loại phòng
+      </Link>
+      <hr/>
+      <Link to={'/ds-dieukhoan'}>
+      Xem danh sách điều khoản 
+      </Link>
     </section>
   )
 }

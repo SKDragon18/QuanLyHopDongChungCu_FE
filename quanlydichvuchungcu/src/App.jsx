@@ -29,10 +29,13 @@ import Register from './components/nguoidung/Register';
 import AuthProvider from './components/nguoidung/AuthProvider';
 import QuanLy from './components/banQuanLy/QuanLy';
 import {RequireLogin,RequireAdmin, RequireQuanLy} from './components/nguoidung/RequireLogin';
-import DSTaiKhoan from './components/taikhoan.jsx/DSTaiKhoan';
-import EditTaiKhoan from './components/taikhoan.jsx/EditTaiKhoan';
+import DSTaiKhoan from './components/taikhoan/DSTaiKhoan';
+import EditTaiKhoan from './components/taikhoan/EditTaiKhoan';
+import DSQuyen from './components/quyen/DSQuyen';
 import ForgotPassword from './components/nguoidung/ForgotPassword';
 import Profile from './components/nguoidung/Profile';
+import DSLoaiPhong from './components/loaiPhong/DSLoaiPhong';
+import DSDieuKhoan from './components/dieuKhoan/DSDieuKhoan';
 function App() {
   
   return (
@@ -65,6 +68,7 @@ function App() {
             {/* admin */}
             <Route path="/admin" element={<RequireAdmin><Admin/></RequireAdmin>}/>
             <Route path="/ds-taikhoan" element={<RequireAdmin><DSTaiKhoan/></RequireAdmin>}/>
+            <Route path="/ds-quyen" element={<RequireAdmin><DSQuyen/></RequireAdmin>}/>
             <Route path="/edit-taikhoan/:role/:tenDangNhap" element={
               <RequireAdmin><EditTaiKhoan/></RequireAdmin>}/>
             {/* banquanly */}
@@ -79,6 +83,8 @@ function App() {
             <Route path="/canho/bqlxem/:idHopDong" element={<BQLXemCanHo/>}/>
             <Route path="/dichvu/bqlxem/:idYeuCauDichVu" element={<BQLXemDichVu/>}/>
             <Route path="/tk-hoadon" element={<ThongKeHoaDon/>}/>
+            <Route path="/ds-loaiphong" element={<DSLoaiPhong/>}/>
+            <Route path="/ds-dieukhoan" element={<DSDieuKhoan/>}/>
             
           </Routes>
         </Router>

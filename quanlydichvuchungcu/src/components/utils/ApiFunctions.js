@@ -38,6 +38,23 @@ export async function getLoaiPhong(){
     }
 }
 
+export async function getLoaiPhongById(id){
+    try{
+        const response  = await api.get(`/canho/loaiphong/${id}`,{
+            headers:getHeader()
+        })
+        const data = response.data
+        if(data.code ===200){
+            return data.result
+        }
+        else{
+            throw new Error(data.message)
+        }
+    }catch(error){
+        throw new Error(error.message)
+    }
+}
+
 export async function insertLoaiPhong(loaiPhong){
     
     try{
@@ -58,10 +75,115 @@ export async function insertLoaiPhong(loaiPhong){
         
 }
 
+export async function updateLoaiPhong(loaiPhong){
+    
+    try{
+        const response = await api.put("/canho/loaiphong",loaiPhong, {
+            headers:getHeader()
+        })
+        const data = response.data
+        if(data.code ===200){
+            return data.result
+        }
+        else{
+            throw new Error(data.message)
+        }
+    }
+    catch(error){
+        throw new Error(error.message)
+    }
+        
+}
+
+export async function deleteLoaiPhong(idLoaiPhong){
+    try{
+        const response = await api.delete(`/canho/loaiphong/${idLoaiPhong}`, {
+            headers:getHeader()
+        })
+        const data = response.data
+        if(data.code===200){
+            return data.result
+        }
+        else{
+            throw new Error(data.message)
+        }
+    }catch(error){
+        throw new Error(error.message)
+    }
+}
+
 //Điều khoản
 export async function getDieuKhoan(){
     try{
         const response  = await api.get("/dieukhoan",{
+            headers:getHeader()
+        })
+        const data = response.data
+        if(data.code ===200){
+            return data.result
+        }
+        else{
+            throw new Error(data.message)
+        }
+    }catch(error){
+        throw new Error(error.message)
+    }
+}
+
+export async function getDieuKhoanByMa(ma){
+    try{
+        const response  = await api.get(`/dieukhoan/${ma}`,{
+            headers:getHeader()
+        })
+        const data = response.data
+        if(data.code ===200){
+            return data.result
+        }
+        else{
+            throw new Error(data.message)
+        }
+    }catch(error){
+        throw new Error(error.message)
+    }
+}
+
+export async function insertDieuKhoan(dieukhoan){
+    try{
+        const response  = await api.post("/dieukhoan",dieukhoan,{
+            headers:getHeader()
+        })
+        const data = response.data
+        if(data.code ===200){
+            return data.result
+        }
+        else{
+            throw new Error(data.message)
+        }
+    }catch(error){
+        throw new Error(error.message)
+    }
+}
+
+export async function updateDieuKhoan(dieukhoan){
+    try{
+        const response  = await api.put("/dieukhoan",dieukhoan,{
+            headers:getHeader()
+        })
+        const data = response.data
+        if(data.code ===200){
+            return data.result
+        }
+        else{
+            throw new Error(data.message)
+        }
+    }catch(error){
+        throw new Error(error.message)
+    }
+}
+
+export async function deleteDieuKhoan(ma){
+    try{
+        const response  = await api.delete(`/dieukhoan/${ma}`,{
             headers:getHeader()
         })
         const data = response.data
@@ -1065,23 +1187,6 @@ export async function checkPayment(id){
 
 
 //Quyền
-export async function insertQuyen(quyen){
-    try{
-        const response = await api.post('/taikhoan/quyen',quyen, {
-            headers:getHeader()
-        })
-        const data = response.data
-        if(data.code===200){
-            return data.result
-        }
-        else{
-            throw new Error(data.message)
-        }
-    }catch(error){
-        throw new Error(error.message)
-    }
-}
-
 export async function getQuyen(){
     try{
         const response = await api.get('/taikhoan/quyen', {
@@ -1099,9 +1204,77 @@ export async function getQuyen(){
     }
 }
 
+export async function getQuyenById(id){
+    try{
+        const response = await api.get(`/taikhoan/quyen/${id}`, {
+            headers:getHeader()
+        })
+        const data = response.data
+        if(data.code===200){
+            return data.result
+        }
+        else{
+            throw new Error(data.message)
+        }
+    }catch(error){
+        throw new Error(error.message)
+    }
+}
+
+export async function insertQuyen(quyen){
+    try{
+        const response = await api.post('/taikhoan/quyen',quyen, {
+            headers:getHeader()
+        })
+        const data = response.data
+        if(data.code===200){
+            return data.result
+        }
+        else{
+            throw new Error(data.message)
+        }
+    }catch(error){
+        throw new Error(error.message)
+    }
+}
+
+export async function updateQuyen(quyen){
+    try{
+        const response = await api.put('/taikhoan/quyen',quyen, {
+            headers:getHeader()
+        })
+        const data = response.data
+        if(data.code===200){
+            return data.result
+        }
+        else{
+            throw new Error(data.message)
+        }
+    }catch(error){
+        throw new Error(error.message)
+    }
+}
+
+export async function deleteQuyen(idQuyen){
+    try{
+        const response = await api.delete(`/taikhoan/quyen/${idQuyen}`, {
+            headers:getHeader()
+        })
+        const data = response.data
+        if(data.code===200){
+            return data.result
+        }
+        else{
+            throw new Error(data.message)
+        }
+    }catch(error){
+        throw new Error(error.message)
+    }
+}
+
 export async function getBanQuanLyById(ma){
     try{
-        const response  = await api.get(`/taikhoan/banquanly/${ma}`,{
+        const response  = await api.get(`/nguoidung/banquanly/${ma}`,{
             headers:getHeader()
         })
         const data = response.data

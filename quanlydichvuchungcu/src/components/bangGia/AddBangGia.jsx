@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { insertBangGia, saveHinhAnh } from '../utils/ApiFunctions'
+import { getBanQuanLyById, insertBangGia} from '../utils/ApiFunctions'
 
 const AddBangGia = ({fetchBangGiaList}) => {
     const [bangGia, setBangGia] = useState({
@@ -7,32 +7,30 @@ const AddBangGia = ({fetchBangGiaList}) => {
         noiDung:'',
         thoiGianBatDau:'',
         thoiGianKetThuc:'',
+        banQuanLy:{}
     })
+    const tenDangNhap = localStorage.getItem("tenDangNhap")
     const[successMessage, setSuccessMessage] = useState("")
     const[errorMessage, setErrorMessage] = useState("")
-    const toDatetimeLocal = (date) => {
-        const ten = (i) => (i < 10 ? '0' : '') + i;
-        const YYYY = date.getFullYear();
-        const MM = ten(date.getMonth() + 1);
-        const DD = ten(date.getDate());
-        const HH = ten(date.getHours());
-        const II = ten(date.getMinutes());
-        return `${YYYY}-${MM}-${DD}T${HH}:${II}`;
-      };
+    const fetchBanQuanLy = async()=>{
+        try{
+            const result = await getBanQuanLyById(tenDangNhap)
+            setBangGia({...bangGia,['banQuanLy']:result})
+        }catch(error){
+            setErrorMessage(error.message)
+            setTimeout(()=>{
+                setErrorMessage("")
+              },3000)
+        }
+    }
+    useEffect(()=>{
+        fetchBanQuanLy()
+    },[tenDangNhap])
+    
     const handleBangGiaInputChange = (e)=>{
         const name = e.target.name
         let value = e.target.value
-        // if((name==="thoiGianBatDau"||name==="thoiGianKetThuc")){
-        //     console.log(value)
-            
-        //     const dateObject = new Date(value)
-        //     const dateObjectUTC = new Date (dateObject.getTime() - 7 * 60 * 60 * 1000)
-        //     value = toDatetimeLocal(dateObjectUTC)
-        //     console.log(value)
-        // }
         setBangGia({...bangGia, [name]:value})
-        // console.log("Change")
-        // console.log(bangGia)
     }
     
     const handleSubmit = async(e) =>{

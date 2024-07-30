@@ -131,6 +131,7 @@ const DSBangGia = () => {
                   <th>Nội dung</th>
                   <th>Thời gian bắt dầu</th>
                   <th>Thời gian kết thúc</th>
+                  <th>Quản lý</th>
                   <th>Trạng thái</th>
                   <th>Thao tác</th>
                 </tr>
@@ -147,6 +148,7 @@ const DSBangGia = () => {
                     <td>{bangGia.noiDung}</td>
                     <td>{formatTime(bangGia.thoiGianBatDau)}</td>
                     <td>{formatTime(bangGia.thoiGianKetThuc)}</td>
+                    <td>{bangGia.banQuanLy!==null?bangGia.banQuanLy.ma:'N/A'}</td>
                     <td>
                       {!bangGia.apDung?
                         (<button

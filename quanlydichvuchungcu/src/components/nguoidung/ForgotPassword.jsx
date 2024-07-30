@@ -52,12 +52,15 @@ const ForgotPassword = () => {
         try{
             const result = await recoverPassword(user)
             setSuccessMessage(result)
+            setTimeout(()=>{
+                setSuccessMessage("")
+                window.location.href='/login'
+            },3000)
         }
         catch(error){
             setErrorMessage(`ForgotPassword error: ${error.message}`)
         }
         setTimeout(()=>{
-            setSuccessMessage("")
             setErrorMessage("")
         },3000)
     }
