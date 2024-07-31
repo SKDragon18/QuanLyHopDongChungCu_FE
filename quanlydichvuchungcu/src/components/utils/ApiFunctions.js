@@ -1057,6 +1057,21 @@ export async function recoverPassword(doiMatKhau){
     }
 }
 
+export async function changePassword(doiMatKhau){
+    try{
+        const response = await api.put('/nguoidung/doimatkhau', doiMatKhau)
+        const data = response.data
+        if(data.code===200){
+            return data.result
+        }
+        else{
+            throw new Error(data.message)
+        }
+    }catch(error){
+        throw new Error(error.message)
+    }
+}
+
 //Admin
 
 export async function getTaiKhoanList(taikhoan){

@@ -18,6 +18,11 @@ const Logout = () => {
             </Link>
         </li>
         <li>
+            <Link className='dropdown-item' to={'/changepassword'}>
+                Đổi mật khẩu
+            </Link>
+        </li>
+        <li>
             <hr className='dropdown-divider'/>
         </li>
         <button className='dropdown-item' onClick={handleLogout}>

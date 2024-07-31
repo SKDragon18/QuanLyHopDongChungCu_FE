@@ -36,6 +36,9 @@ import ForgotPassword from './components/nguoidung/ForgotPassword';
 import Profile from './components/nguoidung/Profile';
 import DSLoaiPhong from './components/loaiPhong/DSLoaiPhong';
 import DSDieuKhoan from './components/dieuKhoan/DSDieuKhoan';
+import ChangePassword from './components/nguoidung/ChangePassword';
+import SuccessPayment from './components/result/SuccessPayment';
+import FailPayment from './components/result/FailPayment';
 function App() {
   
   return (
@@ -51,6 +54,7 @@ function App() {
             <Route path="/login" element={<Login/>}/>
             <Route path="/register" element={<Register/>}/>
             <Route path="/forgot" element={<ForgotPassword/>}/>
+            <Route path="/changepassword" element={<ChangePassword/>}/>
             <Route path="/canho" element={<CanHoListing/>}/>
             <Route path="/dichvu" element={<DichVuListing/>}/>
             {/* khachhang */}
@@ -64,7 +68,8 @@ function App() {
               <RequireLogin><XemDichVu/></RequireLogin>}/>
             <Route path="/hopdong" element={<RequireLogin><DSHopDong/></RequireLogin>}/>
             <Route path="/hoadon" element={<RequireLogin><DSHoaDon/></RequireLogin>}/>
-            
+            <Route path="/success" element={<SuccessPayment/>}/>
+            <Route path="/fail" element={<FailPayment/>}/>
             {/* admin */}
             <Route path="/admin" element={<RequireAdmin><Admin/></RequireAdmin>}/>
             <Route path="/ds-taikhoan" element={<RequireAdmin><DSTaiKhoan/></RequireAdmin>}/>
@@ -85,6 +90,7 @@ function App() {
             <Route path="/tk-hoadon" element={<ThongKeHoaDon/>}/>
             <Route path="/ds-loaiphong" element={<DSLoaiPhong/>}/>
             <Route path="/ds-dieukhoan" element={<DSDieuKhoan/>}/>
+
             
           </Routes>
         </Router>
