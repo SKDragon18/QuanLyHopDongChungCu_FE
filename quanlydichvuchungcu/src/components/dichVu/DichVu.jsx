@@ -3,6 +3,7 @@ import { getDichVuChoDangKy } from '../utils/ApiFunctions'
 import DichVuCard from './DichVuCard'
 import { Container, Row, Col } from 'react-bootstrap'
 import DataPaginator from '../common/DataPaginator'
+import DichVuSearch from '../common/DichVuSearch'
 const DichVu = () => {
     const[data,setData] = useState([])
     const[error,setError] = useState(null)
@@ -53,7 +54,7 @@ const DichVu = () => {
     <Container>
       <Row>
         <Col md={6} className='mb-3 mb-md-0'>
-            
+            <DichVuSearch data={data} setFilteredData={setFilteredData}/>
         </Col>
         <Col md={6} className='d-flex align-items-center justify-content-end'>
             <DataPaginator currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange}/>

@@ -246,7 +246,7 @@ const BQLXemCanHo = () => {
               <h4 className='card card-title text-center'>Hợp đồng thuê căn hộ</h4>
 
               <Form onSubmit={handlePay}>
-                <fieldset style={{border:'2px'}}>
+              <fieldset style={{border:'2px'}}>
                   <legend>Thông tin hợp đồng</legend>
                   <div className='row'>
                     <div className='col-6'>
@@ -268,6 +268,40 @@ const BQLXemCanHo = () => {
                     />
                     </div>
                   </div>
+                  <div className='row mb-3'>
+                    <div className='col-6'>
+                    <Form.Label htmlFor='ngayLap'>Ngày lập</Form.Label>
+                    <FormControl
+                    readOnly
+                    id='ngayLap'
+                    name='ngayLap'
+                    value={formatTime(hopDong.ngayLap)}
+                    />
+                    </div>
+                    <div className='col-6'>
+                    <Form.Label htmlFor='chuKy'>Thời hạn hợp đồng</Form.Label>
+                    <FormControl
+                    readOnly
+                    id='chuKy'
+                    name='chuKy'
+                    value={String(hopDong.chuKy) +' ngày'}
+                    />
+                    </div>
+                  </div>
+                  <div className='row'>
+                    <div className='col-6'>
+                    
+                    </div>
+                    <div className='col-6'>
+                    <Form.Label htmlFor='thoiGianDong'>Thời gian thanh toán tiếp theo</Form.Label>
+                    <FormControl
+                    readOnly
+                    id='thoiGianDong'
+                    name='thoiGianDong'
+                    value={formatTime(hopDong.thoiGianDong)}
+                    />
+                    </div>
+                  </div>
                 </fieldset>
                 <fieldset style={{border:'2px'}}>
                   <div className='row'>
@@ -281,12 +315,12 @@ const BQLXemCanHo = () => {
                     />
                     </div>
                     <div className='col-6'>
-                    <Form.Label htmlFor='chuKy'>Chu kỳ</Form.Label>
+                    <Form.Label htmlFor='chuKyDong'>Chu kỳ thanh toán</Form.Label>
                     <FormControl
                     readOnly
-                    id='chuKy'
-                    name='chuKy'
-                    value={hopDong.chuKy + ' ngày'}
+                    id='chuKyDong'
+                    name='chuKyDong'
+                    value={hopDong.chuKyDong + ' ngày'}
                     />
                     </div>
                   </div>

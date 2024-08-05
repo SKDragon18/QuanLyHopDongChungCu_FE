@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { getAllHopDong, huyHopDong} from '../utils/ApiFunctions'
+import { duyetCanHo, getAllHopDong, huyHopDong} from '../utils/ApiFunctions'
 import DataPaginator from '../common/DataPaginator'
 import {Link} from 'react-router-dom'
+import {formatCurrency, formatTime} from '../utils/FormatValue'
+import {sequenceYeuCauCanHo} from '../utils/ConvertYeuCau'
 import {FaEdit, FaTrashAlt, FaEye} from 'react-icons/fa'
+import SimpleDialog from '../common/SimpleDialog'
 const DSHopDongCanHo = () => {
     const[hopDongList,setHopDongList]=useState([])
     const[currentPage,setCurrentPage]=useState(1)
@@ -10,16 +13,11 @@ const DSHopDongCanHo = () => {
     const[isLoading,setIsLoading] = useState(false)
     const[successMessage,setSuccessMessage]=useState("")
     const[errorMessage, setErrorMessage] = useState("")
-    const formatCurrency = (value, locale = 'en-US', currency = 'USD') => {
-      return new Intl.NumberFormat(locale, {
-        style: 'currency',
-        currency: currency,
-      }).format(value);
-    };
-    const formatTime = (time)=>{
-      const dateObject = new Date(time)
-      return dateObject.toLocaleString()
-    }
+
+    const[id,setId]=useState(-1)
+    const[duyet,setDuyet]=useState(-1)
+    const[open,setOpen]= useState(false)
+    const[open2,setOpen2]= useState(false)
     useEffect(()=>{
         fetchHopDongList()
     },[])
@@ -34,19 +32,36 @@ const DSHopDongCanHo = () => {
             setIsLoading(false)
         }
     }
-    const handleDelete = async(idHopDong)=>{
+    const handleDuyet = async()=>{
+      if(id===-1)return;
+      if(duyet===-1)return;
       try{
-        const result = await huyHopDong(idHopDong)
+        const result = await duyetCanHo(id,duyet)
         setSuccessMessage(result)
         fetchHopDongList()
+        setTimeout(()=>{
+          setSuccessMessage("")
+        },3000)
       }
       catch(error){
         setErrorMessage(error.message)
+        setTimeout(()=>{
+          setErrorMessage("")
+        },3000)
       }
-      setTimeout(()=>{
-        setSuccessMessage("")
-        setErrorMessage("")
-      },3000)
+      
+    }
+
+    const handleDongY = (idHopDong,trangThaiDuyet)=>{
+      setId(idHopDong)
+      setDuyet(trangThaiDuyet)
+      setOpen(true)
+    }
+
+    const handleTuChoi = (idHopDong,trangThaiDuyet)=>{
+      setId(idHopDong)
+      setDuyet(trangThaiDuyet)
+      setOpen2(true)
     }
 
     useEffect(()=>{
@@ -72,7 +87,10 @@ const DSHopDongCanHo = () => {
         <>
         
         <section className='mt-5 mb-5 container'>
-            
+            <div>
+              <SimpleDialog open={open} setOpen={setOpen} handle={handleDuyet} message={'đồng ý yêu cầu của hợp đồng '+id}/>
+              <SimpleDialog open={open2} setOpen={setOpen2} handle={handleDuyet} message={'từ chối yêu cầu của hợp đồng '+id}/>
+            </div>
             <div className='d-flex justify-content-center mb-3 mt-5'>
                 <h2>Hợp đồng thuê căn hộ</h2>
             </div>
@@ -91,9 +109,10 @@ const DSHopDongCanHo = () => {
                   <th>Ngày bắt đầu</th>
                   <th>Thời hạn</th>
                   <th>Giá trị hợp đồng</th>
-                  <th>Chu kỳ</th>
-                  <th>Trạng thái</th>
-                  <th>Hủy đăng ký</th>
+                  <th>Hoạt động</th>
+                  <th>Xem</th>
+                  <th>Yêu cầu</th>
+                  <th>Duyệt</th>
                 </tr>
               </thead>
               <tbody>
@@ -109,31 +128,38 @@ const DSHopDongCanHo = () => {
                     <td>{formatTime(hopDong.ngayLap)}</td>
                     <td>{formatTime(hopDong.ngayBatDau)}</td>
                     <td>{formatTime(hopDong.thoiHan)}</td>
-                    <td>{formatCurrency(hopDong.giaTri,'vi-VN', 'VND')}</td>
-                    <td>{hopDong.chuKy + ' ngày'}</td>
-                    <td>
-                    {hopDong.giaHan?
-                        (<Link to={`/canho/bqlxem/${hopDong.idHopDong}`} className='btn btn-danger btn-sm'>
-                          Chưa gia hạn
-                        </Link>)
-                        :(<Link to={`/canho/bqlxem/${hopDong.idHopDong}`} className='btn btn-success btn-sm'>
-                          Xem
-                        </Link>
-                        )
-                      }
-                    </td>
+                    <td>{formatCurrency(hopDong.giaTri,'vi-VN', 'VND')}{'/'+hopDong.chuKyDong+'ngày'}</td>
                     <td>
                     {!hopDong.trangThai?(
-                        // <button
-                        // className='btn btn-danger btn-sm'
-                        // onClick={()=>handleDelete(hopDong.idHopDong)}>
-                        //   <FaTrashAlt/>
-                        // </button>
                         <text className='text-success'>Hoạt động</text>
                       ):(
-                        <text className='text-danger'>Đã hủy đăng ký</text>
+                        <text className='text-danger'>Không hoạt động</text>
                     )}
-                    
+                    </td>
+                    <td>
+                        <Link to={`/canho/bqlxem/${hopDong.idHopDong}`} className='btn btn-success btn-sm'>
+                          Xem
+                        </Link>
+                    </td>
+                    <td>{sequenceYeuCauCanHo(hopDong.yeuCau)}</td>
+                    <td>
+                      {hopDong.duyet===0?(
+                        <>
+                        <button
+                        className='btn btn-success btn-sm'
+                        style={{marginRight:'10px'}}
+                        onClick={()=>handleDongY(hopDong.idHopDong,1)}>
+                          Đồng ý
+                        </button>
+                        <button
+                        className='btn btn-danger btn-sm'
+                        onClick={()=>handleTuChoi(hopDong.idHopDong,2)}>
+                          Từ chối
+                        </button>
+                        </>
+                      ):(
+                        <text className='text-success'>Đã duyệt</text>
+                      )}
                     </td>
                   </tr>
                 )))}

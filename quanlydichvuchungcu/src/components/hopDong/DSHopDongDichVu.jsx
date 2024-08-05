@@ -3,6 +3,9 @@ import { getAllHopDongDichVuKhachHang, huyHopDongDichVu} from '../utils/ApiFunct
 import DataPaginator from '../common/DataPaginator'
 import {FaEdit, FaTrashAlt, FaEye} from 'react-icons/fa'
 import {Link} from 'react-router-dom'
+import {formatCurrency, formatTime} from '../utils/FormatValue'
+import { sequenceDuyetDichVu } from '../utils/ConvertYeuCau'
+import SimpleDialog from '../common/SimpleDialog'
 const DSHopDongDichVu = () => {
     const[hopDongDichVuList,setHopDongDichVuList]=useState([])
     const[maKhachHang]=useState(localStorage.getItem("tenDangNhap"))
@@ -11,16 +14,9 @@ const DSHopDongDichVu = () => {
     const[isLoading,setIsLoading] = useState(false)
     const[successMessage,setSuccessMessage]=useState("")
     const[errorMessage, setErrorMessage] = useState("")
-    const formatCurrency = (value, locale = 'en-US', currency = 'USD') => {
-      return new Intl.NumberFormat(locale, {
-        style: 'currency',
-        currency: currency,
-      }).format(value);
-    };
-    const formatTime = (time)=>{
-      const dateObject = new Date(time)
-      return dateObject.toLocaleString()
-    }
+
+    const[id,setId]=useState(-1)
+    const[open,setOpen]= useState(false)
     useEffect(()=>{
         fetchHopDongDichVuList()
     },[])
@@ -36,9 +32,12 @@ const DSHopDongDichVu = () => {
         }
     }
     
-    const handleDelete = async(idYeuCauDichVu)=>{
+    const handleDelete = async()=>{
+      if(id===-1){
+        return;
+      }
       try{
-        const result = await huyHopDongDichVu(idYeuCauDichVu)
+        const result = await huyHopDongDichVu(id)
         setSuccessMessage(result)
         fetchHopDongDichVuList()
       }
@@ -46,9 +45,15 @@ const DSHopDongDichVu = () => {
         setErrorMessage(error.message)
       }
       setTimeout(()=>{
+        setId(-1)
         setSuccessMessage("")
         setErrorMessage("")
       },3000)
+    }
+
+    const handleClickOpen = (idYeuCauDichVu)=>{
+      setId(idYeuCauDichVu)
+      setOpen(true)
     }
 
     useEffect(()=>{
@@ -74,7 +79,10 @@ const DSHopDongDichVu = () => {
         <>
         
         <section className='mt-5 mb-5 container'>
-            
+            <div>
+              <SimpleDialog open={open} setOpen={setOpen} handle={handleDelete} message={'đồng ý hủy hợp đồng dịch vụ số '+id}/>
+      
+            </div>
             <div className='d-flex justify-content-center mb-3 mt-5'>
                 <h2>Hợp đồng đăng ký dịch vụ</h2>
             </div>
@@ -91,11 +99,11 @@ const DSHopDongDichVu = () => {
                   <th>Tên dịch vụ</th>
                   <th>Tên căn hộ</th>
                   <th>Ngày bắt đầu</th>
-                  <th>Thời hạn</th>
+                  <th>Thanh toán tiếp theo</th>
                   <th>Giá trị hợp đồng</th>
-                  <th>Chu kỳ</th>
+                  <th>Yêu cầu</th>
+                  <th>Xem</th>
                   <th>Trạng thái</th>
-                  <th>Hủy đăng ký</th>
                 </tr>
               </thead>
               <tbody>
@@ -111,8 +119,8 @@ const DSHopDongDichVu = () => {
                     <td>{'Số '+hopDongDichVu.hopDong.canHo.soPhong+' khu ' +hopDongDichVu.hopDong.canHo.lo}</td>
                     <td>{formatTime(hopDongDichVu.ngayYeuCau)}</td>
                     <td>{formatTime(hopDongDichVu.thoiHan)}</td>
-                    <td>{formatCurrency(hopDongDichVu.giaTra,'vi-VN', 'VND')}</td>
-                    <td>{hopDongDichVu.chuKy + ' ngày'}</td>
+                    <td>{formatCurrency(hopDongDichVu.giaTra,'vi-VN', 'VND')}{'/'+hopDongDichVu.chuKy + ' ngày'}</td>
+                    <td>{sequenceDuyetDichVu(hopDongDichVu.yeuCau,hopDongDichVu.duyet)}</td>
                     <td>
                     {hopDongDichVu.giaHan?
                         (<Link to={`/dichvu/xem/${hopDongDichVu.idYeuCauDichVu}`} className='btn btn-danger btn-sm'>
@@ -132,11 +140,11 @@ const DSHopDongDichVu = () => {
                           !hopDongDichVu.trangThai?(
                             <button
                             className='btn btn-danger btn-sm'
-                            onClick={()=>handleDelete(hopDongDichVu.idYeuCauDichVu)}>
+                            onClick={()=>handleClickOpen(hopDongDichVu.idYeuCauDichVu)}>
                               <FaTrashAlt/>
                             </button>
                           ):(
-                            <text className='text-danger'>Đã hủy đăng ký</text>
+                            <text className='text-danger'>Không hoạt động</text>
                           )
                         )
                       }

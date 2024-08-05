@@ -2,6 +2,7 @@ import React from 'react'
 import { Card, Col } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import apartment from '../../assets/images/apartment.png'
+import { formatCurrency } from '../utils/FormatValue'
 const CanHoCard = ({canHo}) => {
   const truncateText = (text, maxLength)=>{
     if(text===null||text==='')return 'Không mô tả'
@@ -10,12 +11,6 @@ const CanHoCard = ({canHo}) => {
     }
     return text.slice(0, maxLength) + '...'
   }
-  const formatCurrency = (value, locale = 'en-US', currency = 'USD') => {
-    return new Intl.NumberFormat(locale, {
-      style: 'currency',
-      currency: currency,
-    }).format(value);
-  };
   
   return (
     <Col key={canHo.idCanHo} className='mb-4' xs={12} >
@@ -39,7 +34,8 @@ const CanHoCard = ({canHo}) => {
             }
             <div className='flex-grow-1 ml-3 px-5'>
                 <Card.Title className='hotel-color'>Căn hộ {canHo.soPhong} tầng {canHo.tang} khu {canHo.lo}</Card.Title>
-                <Card.Title className='room-price'>{formatCurrency(canHo.giaThue,'vi-VN', 'VND')}/ {canHo.chuKy} ngày</Card.Title>
+                <Card.Title className='room-price'>{formatCurrency(canHo.giaThue,'vi-VN', 'VND')}/ {canHo.chuKyDong} ngày</Card.Title>
+                <Card.Title className='room-price'>{'Thời hạn thuê '+canHo.chuKy+' ngày'}</Card.Title>
                 <Card.Text>{truncateText(canHo.moTa,200)}</Card.Text>
             </div>
             <div className='flex-shrink-0 mt-3'>

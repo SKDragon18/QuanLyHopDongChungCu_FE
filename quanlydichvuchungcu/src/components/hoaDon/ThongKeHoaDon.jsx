@@ -82,7 +82,7 @@ const ThongKeHoaDon = () => {
                   <th>Mã khách hàng</th>
                   <th>Thời gian đóng</th>
                   <th>Tổng số tiền</th>
-                  
+                  <th>Thanh toán</th>
                 </tr>
               </thead>
               <tbody>
@@ -109,7 +109,14 @@ const ThongKeHoaDon = () => {
                     </td>
                     <td>{formatTime(hoaDon.thoiGianDong)}</td>
                     <td>{formatCurrency(hoaDon.tongHoaDon,'vi-VN', 'VND')}</td>
-                    
+                    <td>
+                    {hoaDon.trangThai?(
+                      <>Đã thanh toán</>
+                    ):(<text className='text-danger'>
+                      Chưa thanh toán
+                      </text>
+                    )}
+                    </td>
                   </tr>
                 )))}
               </tbody>

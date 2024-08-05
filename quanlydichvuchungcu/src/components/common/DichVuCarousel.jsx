@@ -3,6 +3,7 @@ import { getDichVuChoDangKy } from '../utils/ApiFunctions'
 import { Link } from 'react-router-dom'
 import {Card, Carousel, Col, Container, Row} from 'react-bootstrap'
 import service from '../../assets/images/service.jpg'
+import { formatCurrency } from '../utils/FormatValue'
 const DichVuCarousel = () => {
     const [dichVuList, setDichVuList] = useState([{
         idDichVu:0,
@@ -34,12 +35,6 @@ const DichVuCarousel = () => {
     if(errorMessage){
         return <div className='text-danger mb-5 mt-5'>Error: {errorMessage}</div>
     }
-    const formatCurrency = (value, locale = 'en-US', currency = 'USD') => {
-        return new Intl.NumberFormat(locale, {
-          style: 'currency',
-          currency: currency,
-        }).format(value);
-      };
   return (
     <section className='bg-light mb-5 mt-5 shadow'>
         <Link to={'/dichvu'} className='hotel-color text-center'>

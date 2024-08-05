@@ -3,22 +3,12 @@ import {checkPayment, createPayment, getHopDongKhachHang, giaHanHopDong} from '.
 import { useParams } from 'react-router-dom'
 import { Form, FormControl } from 'react-bootstrap'
 import apartment from '../../assets/images/apartment.png'
+import {formatCurrency, formatTime} from '../utils/FormatValue'
 const XemCanHo = () => {
     const[errorMessage,setErrorMessage]=useState('')
     const[successMessage,setSuccessMessage]=useState('')
     const[isSubmitted, setIsSubmitted]=useState(false)
     const {idHopDong} = useParams()
-    const formatCurrency = (value, locale = 'en-US', currency = 'USD') => {
-      return new Intl.NumberFormat(locale, {
-        style: 'currency',
-        currency: currency,
-      }).format(value);
-    };
-    const formatTime = (time)=>{
-      const dateObject = new Date(time)
-      return dateObject.toLocaleString()
-    }
-    const[urlPay,setUrlPay] = useState('')
     const[hopDong, setHopDong] = useState({
         ngayLap: '',
         khachHang:{},
@@ -94,24 +84,23 @@ const XemCanHo = () => {
     e.preventDefault()
     setIsSubmitted(true)
   }
-  const handlePay = async (e)=>{
+  const handleGiaHan = async (e)=>{
     e.preventDefault()
     console.log(hopDong)
     try{
       const success = await giaHanHopDong(idHopDong)
-      setUrlPay(success.url)
+      setSuccessMessage(success)
+      setTimeout(()=>{
+        setSuccessMessage("")
+      },3000)
     }
     catch(error){
       setErrorMessage(error.message)
+      setTimeout(()=>{
+        setErrorMessage("")
+      },3000)
     }
-    setTimeout(()=>{
-      setErrorMessage("")
-    },3000)
-  }
-  const changePage = ()=>{
-    if(urlPay!=''){
-      window.location.href=urlPay
-    }
+    
   }
   return (
     <>
@@ -267,6 +256,40 @@ const XemCanHo = () => {
                     />
                     </div>
                   </div>
+                  <div className='row mb-3'>
+                    <div className='col-6'>
+                    <Form.Label htmlFor='ngayLap'>Ngày lập</Form.Label>
+                    <FormControl
+                    readOnly
+                    id='ngayLap'
+                    name='ngayLap'
+                    value={formatTime(hopDong.ngayLap)}
+                    />
+                    </div>
+                    <div className='col-6'>
+                    <Form.Label htmlFor='chuKy'>Thời hạn hợp đồng</Form.Label>
+                    <FormControl
+                    readOnly
+                    id='chuKy'
+                    name='chuKy'
+                    value={String(hopDong.chuKy) +' ngày'}
+                    />
+                    </div>
+                  </div>
+                  <div className='row'>
+                    <div className='col-6'>
+                    
+                    </div>
+                    <div className='col-6'>
+                    <Form.Label htmlFor='thoiGianDong'>Thời gian thanh toán tiếp theo</Form.Label>
+                    <FormControl
+                    readOnly
+                    id='thoiGianDong'
+                    name='thoiGianDong'
+                    value={formatTime(hopDong.thoiGianDong)}
+                    />
+                    </div>
+                  </div>
                 </fieldset>
                 <fieldset style={{border:'2px'}}>
                   <div className='row'>
@@ -280,12 +303,12 @@ const XemCanHo = () => {
                     />
                     </div>
                     <div className='col-6'>
-                    <Form.Label htmlFor='chuKy'>Chu kỳ</Form.Label>
+                    <Form.Label htmlFor='chuKyDong'>Chu kỳ thanh toán</Form.Label>
                     <FormControl
                     readOnly
-                    id='chuKy'
-                    name='chuKy'
-                    value={hopDong.chuKy + ' ngày'}
+                    id='chuKyDong'
+                    name='chuKyDong'
+                    value={hopDong.chuKyDong + ' ngày'}
                     />
                     </div>
                   </div>
@@ -319,17 +342,12 @@ const XemCanHo = () => {
                 )}
                 {isSubmitted&&(
                   <div className='form-group mt-2 mb-2'>
-                      <button type='button' className='btn btn-hotel' onClick={handlePay}>
-                        Xác nhận thanh toán bằng VNPay
+                      <button type='button' className='btn btn-primary' onClick={handleGiaHan}>
+                        Xác nhận gia hạn
                       </button>
                   </div>
                 )}
               </Form>
-              {urlPay!==''&&(
-              <button type='button' className='btn btn-primary mb-3 mt-3' onClick={changePage}>
-              Đến trang VNPay
-              </button>
-              )}
               {successMessage&&(
               <div className='alert alert-success fade show'>{successMessage}</div>
               )}

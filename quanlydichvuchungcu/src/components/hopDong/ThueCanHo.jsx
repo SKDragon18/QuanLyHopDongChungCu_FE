@@ -2,25 +2,18 @@ import React, { useState, useEffect } from 'react'
 import {checkPayment, createPayment, dangKyHopDong, getCanHoChoThueById, getKhachHangById} from '../utils/ApiFunctions'
 import { useParams } from 'react-router-dom'
 import { Form, FormControl } from 'react-bootstrap'
+import {formatCurrency} from '../utils/FormatValue'
 import apartment from '../../assets/images/apartment.png'
 const ThueCanHo = () => {
-    // const[isValidated, setIsValidated]= useState(false)
     const[isSubmitted, setIsSubmitted] = useState(false)
     const[errorMessage,setErrorMessage]=useState('')
     const[successMessage,setSuccessMessage]=useState('')
     const {idCanHo} = useParams()
-    const [urlPay,setUrlPay] = useState('');
     const [username] = useState(localStorage.getItem("tenDangNhap"))
     const [role] = useState(localStorage.getItem("role"))
-    const formatCurrency = (value, locale = 'en-US', currency = 'USD') => {
-      return new Intl.NumberFormat(locale, {
-        style: 'currency',
-        currency: currency,
-      }).format(value);
-    };
     const[hopDong, setHopDong] = useState({
         idHopDong:0,
-        ngayLap: '',
+        
         khachHang:{},
         canHo:{idCanHo:0,
           soPhong:'0',
@@ -38,8 +31,10 @@ const ThueCanHo = () => {
           dieuKhoanList:[],
           hinhAnhList:[]},
         giaTri:0,
+        ngayLap: '',
         ngayBatDau:'',
         thoiHan:'',
+        thoiGianDong:'',
         chuKy:30,
         trangThai:''
     })
@@ -117,9 +112,14 @@ const ThueCanHo = () => {
   },[khachHang])
   useEffect(()=>{
     if(hopDong.ngayBatDau!==''){
+      const thoiGianDong = new Date(hopDong.ngayBatDau);
       const thoiHan = new Date(hopDong.ngayBatDau);
+      thoiGianDong.setDate(thoiGianDong.getDate()+canHo.chuKyDong);
       thoiHan.setDate(thoiHan.getDate()+canHo.chuKy);
-      setHopDong({...hopDong,['thoiHan']:thoiHan.toISOString().slice(0, 16), ['ngayLap']:todayString})
+      setHopDong({...hopDong,
+        ['thoiHan']:thoiHan.toISOString().slice(0, 16), 
+        ['thoiGianDong']:thoiGianDong.toISOString().slice(0, 16), 
+        ['ngayLap']:todayString})
     }
     
   },[hopDong.ngayBatDau])
@@ -130,7 +130,8 @@ const ThueCanHo = () => {
       setHopDong({...hopDong,[name]:value})
       setErrorMessage("")
   }
-  const handleSubmit=()=>{
+  const handleSubmit=(e)=>{
+    e.preventDefault()
     try{
       setIsSubmitted(true)
     }
@@ -138,12 +139,15 @@ const ThueCanHo = () => {
       setErrorMessage(error.message)
     }
   }
-  const handlePay = async (e)=>{
-    e.preventDefault()
+  const handleDangKy = async ()=>{
     console.log(hopDong)
     try{
       const success = await dangKyHopDong(hopDong)
-      setUrlPay(success.url)
+      setSuccessMessage(success)
+      setTimeout(()=>{
+        setSuccessMessage('')
+        window.location.href='/hopdong'
+      },3000)
     }
     catch(error){
       setErrorMessage(error.message)
@@ -151,12 +155,6 @@ const ThueCanHo = () => {
     setTimeout(()=>{
       setErrorMessage("")
     },3000)
-  }
-
-  const changePage = ()=>{
-    if(urlPay!=''){
-      window.location.href=urlPay
-    }
   }
   
   return (
@@ -290,7 +288,7 @@ const ThueCanHo = () => {
               <div className='card card-body mt-5'>
               <h4 className='card card-title text-center'>Hợp đồng thuê căn hộ</h4>
 
-              <Form onSubmit={handlePay}>
+              <Form onSubmit={handleSubmit}>
                 <fieldset style={{border:'2px'}}>
                   <legend>Thông tin hợp đồng</legend>
                   <div className='row'>
@@ -324,6 +322,39 @@ const ThueCanHo = () => {
                 <fieldset style={{border:'2px'}}>
                   <div className='row'>
                     <div className='col-6'>
+                    </div>
+                    <div className='col-6'>
+                    <Form.Label htmlFor='chuKy'>Thời hạn</Form.Label>
+                    <FormControl
+                    readOnly
+                    type='text'
+                    id='chuKy'
+                    name='chuKy'
+                    value={canHo.chuKy + ' ngày'}
+                    />
+                    </div>
+                  </div>
+                </fieldset>  
+                <fieldset style={{border:'2px'}}>
+                  <div className='row mt-3'>
+                    <div className='col-6'>
+                    </div>
+                    <div className='col-6'>
+                    <Form.Label htmlFor='thoiGianDong'>Thời gian thanh toán</Form.Label>
+                    <FormControl
+                    readOnly
+                    type='datetime-local'
+                    id='thoiGianDong'
+                    name='thoiGianDong'
+                    value={hopDong.thoiGianDong}
+                    />
+                    </div>
+                  </div>
+                </fieldset>
+
+                <fieldset style={{border:'2px'}}>
+                  <div className='row'>
+                    <div className='col-6'>
                     <Form.Label htmlFor='giaThue'>Giá thuê</Form.Label>
                     <FormControl
                     readOnly
@@ -334,12 +365,12 @@ const ThueCanHo = () => {
                     />
                     </div>
                     <div className='col-6'>
-                    <Form.Label htmlFor='chuKy'>Chu kỳ</Form.Label>
+                    <Form.Label htmlFor='chuKyDong'>Chu kỳ thanh toán</Form.Label>
                     <FormControl
                     readOnly
-                    id='chuKy'
-                    name='chuKy'
-                    value={canHo.chuKy + ' ngày'}
+                    id='chuKyDong'
+                    name='chuKyDong'
+                    value={canHo.chuKyDong + ' ngày'}
                     />
                     </div>
                   </div>
@@ -365,11 +396,8 @@ const ThueCanHo = () => {
                 </fieldset>
                 {role==='khachhang'&&(
                   <div className='form-group mt-2 mb-2'>
-                  <button type='button' className='btn btn-hotel'
-                  onClick={()=>{
-                    handleSubmit()
-                  }}>
-                    Xác nhận thuê
+                  <button type='submit' className='btn btn-hotel'>
+                    Đăng ký thuê căn hộ
                   </button>
                   </div>
                 )}
@@ -377,8 +405,11 @@ const ThueCanHo = () => {
                 {isSubmitted&&(
                   <div className='form-group mt-2 mb-2'>
                     
-                    <button type='submit' className='btn btn-hotel'>
-                      Xác nhận thanh toán bằng VNPay
+                    <button type='button' className='btn btn-primary'
+                    onClick={()=>{
+                      handleDangKy()
+                    }}>
+                      Xác nhận thuê căn hộ
                     </button>
                     
                   </div>
@@ -386,11 +417,6 @@ const ThueCanHo = () => {
                 )}
                 
               </Form>
-              {urlPay!==''&&(
-              <button type='button' className='btn btn-primary mb-3 mt-3' onClick={changePage}>
-              Đến trang VNPay
-              </button>
-              )}
               {successMessage&&(
                   <div className='alert alert-success fade show'>{successMessage}</div>
               )}

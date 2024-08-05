@@ -51,7 +51,7 @@ const AddDieuKhoan = ({fetchDieuKhoanList, dieuKhoan, setDieuKhoan}) => {
                 noiDung:''
             })
             fetchDieuKhoanList()
-        },1000)
+        },3000)
     }
 
     const handleNew=()=>{

@@ -3,6 +3,7 @@ import { getCanHoChoThue } from '../utils/ApiFunctions'
 import { Link } from 'react-router-dom'
 import {Card, Carousel, Col, Container, Row} from 'react-bootstrap'
 import apartment from '../../assets/images/apartment.png'
+import { formatCurrency } from '../utils/FormatValue'
 const CanHoCarousel = () => {
     const [canHoList, setCanHoList] = useState([{idCanHo:'',
         hinhAnhList:[],
@@ -35,12 +36,6 @@ const CanHoCarousel = () => {
     if(errorMessage){
         return <div className='text-danger mb-5 mt-5'>Error: {errorMessage}</div>
     }
-    const formatCurrency = (value, locale = 'en-US', currency = 'USD') => {
-        return new Intl.NumberFormat(locale, {
-          style: 'currency',
-          currency: currency,
-        }).format(value);
-      };
   return (
     <section className='bg-light mb-5 mt-5 shadow'>
         <Link to={'/canho'} className='hotel-color text-center'>
@@ -74,7 +69,7 @@ const CanHoCarousel = () => {
                                         </Link>)}
                                         <Card.Body>
                                         <Card.Title className='hotel-color'>Căn hộ {canHo.soPhong} khu {canHo.lo}</Card.Title>
-                                        <Card.Title className='room-price'>{formatCurrency(canHo.giaThue,'vi-VN', 'VND')}/ {canHo.chuKy} ngày</Card.Title>
+                                        <Card.Title className='room-price'>{formatCurrency(canHo.giaThue,'vi-VN', 'VND')}/ {canHo.chuKyDong} ngày</Card.Title>
                                         <div className='flex-shrink-0'>
                                             <Link to={`/canho/thue/${canHo.idCanHo}`} className='btn btn-hotel btn-sm'>
                                                 Thuê ngay

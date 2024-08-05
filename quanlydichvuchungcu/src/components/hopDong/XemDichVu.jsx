@@ -2,21 +2,12 @@ import React, { useState, useEffect } from 'react'
 import {checkPayment, createPayment, getHopDongDichVuKhachHang, giaHanHopDongDichVu} from '../utils/ApiFunctions'
 import { useParams } from 'react-router-dom'
 import { Form, FormControl } from 'react-bootstrap'
+import {formatCurrency, formatTime} from '../utils/FormatValue'
 const XemDichVu = () => {
     const[isSubmitted, setIsSubmitted]= useState(false)
     const[errorMessage,setErrorMessage]=useState('')
     const[successMessage,setSuccessMessage]=useState('')
     const {idYeuCauDichVu} = useParams()
-    const formatCurrency = (value, locale = 'en-US', currency = 'USD') => {
-      return new Intl.NumberFormat(locale, {
-        style: 'currency',
-        currency: currency,
-      }).format(value);
-    };
-    const formatTime = (time)=>{
-      const dateObject = new Date(time)
-      return dateObject.toLocaleString()
-    }
     const [urlPay,setUrlPay] = useState('')
     const[yeuCauDichVu, setYeuCauDichVu] = useState({
       hopDong:{
@@ -206,7 +197,7 @@ const XemDichVu = () => {
                     />
                     </div>
                     <div className='col-6'>
-                    <Form.Label htmlFor='thoiHan'>Kết thúc</Form.Label>
+                    <Form.Label htmlFor='thoiHan'>Thời gian thanh toán tiếp theo</Form.Label>
                     <FormControl
                     readOnly
                     id='thoiHan'
@@ -228,7 +219,7 @@ const XemDichVu = () => {
                     />
                     </div>
                     <div className='col-6'>
-                    <Form.Label htmlFor='chuKy'>Chu kỳ</Form.Label>
+                    <Form.Label htmlFor='chuKy'>Chu kỳ thanh toán</Form.Label>
                     <FormControl
                     readOnly
                     id='chuKy'

@@ -19,6 +19,7 @@ const EditCanHo = () => {
         },
         lo:'A',
         chuKy:30,
+        chuKyDong:360,
         hinhAnhList:[],
         dieuKhoanList:[]
     })
@@ -206,7 +207,7 @@ const EditCanHo = () => {
                             onChange={handleCanHoInputChange}/>
                         </div>
                         <div className='mb-3'>
-                            <label htmlFor='giaThue' className='form-label'>Giá thuê</label>
+                            <label htmlFor='giaThue' className='form-label'>Giá thuê (VNĐ)</label>
                             <input
                             className='form-control'
                             required
@@ -219,7 +220,7 @@ const EditCanHo = () => {
                             onChange={handleCanHoInputChange}/>
                         </div>
                         <div className='mb-3'>
-                        <label htmlFor='chuKy' className='form-label'>Chu kỳ</label>
+                        <label htmlFor='chuKy' className='form-label'>Thời hạn hợp đồng (ngày)</label>
                         <input
                             className='form-control'
                             required
@@ -230,6 +231,20 @@ const EditCanHo = () => {
                             id='chuKy'
                             name='chuKy'
                             value={canHo.chuKy}
+                            onChange={handleCanHoInputChange}/>
+                        </div>
+                        <div className='mb-3'>
+                        <label htmlFor='chuKyDong' className='form-label'>Chu kỳ thanh toán (ngày)</label>
+                        <input
+                            className='form-control'
+                            required
+                            type='number'
+                            min='30'
+                            max='365'
+                            step='1'
+                            id='chuKyDong'
+                            name='chuKyDong'
+                            value={canHo.chuKyDong}
                             onChange={handleCanHoInputChange}/>
                         </div>
                         <div className='mb-3'>

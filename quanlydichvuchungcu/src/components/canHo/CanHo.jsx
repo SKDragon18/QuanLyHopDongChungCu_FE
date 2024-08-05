@@ -4,6 +4,7 @@ import CanHoCard from './CanHoCard'
 import { Container, Row, Col } from 'react-bootstrap'
 import CanHoFilter from '../common/CanHoFilter'
 import DataPaginator from '../common/DataPaginator'
+import CanHoSearch from '../common/CanHoSearch'
 const CanHo = () => {
     const[data,setData] = useState([])
     const[error,setError] = useState(null)
@@ -11,6 +12,14 @@ const CanHo = () => {
     const[currentPage,setCurrentPage] = useState(1)
     const[numPerPage] = useState(6)
     const[filteredData,setFilteredData] = useState([{idCanHo:'',
+        hinhAnhList:[],
+        soPhong:0,
+        giaThue:0,
+        giaKhuyenMai:0,
+        trangThaiThue:0,
+        moTa:''
+    }])
+    const[searchData,setSearchData] = useState([{idCanHo:'',
         hinhAnhList:[],
         soPhong:0,
         giaThue:0,
@@ -29,6 +38,7 @@ const CanHo = () => {
             console.log(data2)
             setData(data2)
             setFilteredData(data2)
+            setSearchData(data2)
             setIsLoading(false)
         }).catch((error)=>{
             setError(error.message)
@@ -44,11 +54,11 @@ const CanHo = () => {
     const handlePageChange = (pageNumber)=>{
         setCurrentPage(pageNumber)
     }
-    const totalPages = Math.ceil(filteredData.length/numPerPage)
+    const totalPages = Math.ceil(searchData.length/numPerPage)
     const renderCanHoList = ()=>{
         const startIndex = (currentPage-1)*numPerPage
         const endIndex = startIndex + numPerPage
-        return filteredData.slice(startIndex,endIndex)
+        return searchData.slice(startIndex,endIndex)
         .map((canHo)=><CanHoCard key={canHo.idCanHo} canHo={canHo}/>)
     }
     return (
@@ -59,6 +69,11 @@ const CanHo = () => {
         </Col>
         <Col md={6} className='d-flex align-items-center justify-content-end'>
             <DataPaginator currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange}/>
+        </Col>
+      </Row>
+      <Row>
+        <Col md={6} className='mb-3 mb-md-0'>
+        <CanHoSearch data={filteredData} setFilteredData={setSearchData}/>
         </Col>
       </Row>
       <Row>

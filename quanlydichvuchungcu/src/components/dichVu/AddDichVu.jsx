@@ -80,7 +80,7 @@ const AddDichVu = ({fetchDichVuList}) => {
                         onChange={handleDichVuInputChange}/>
                     </div>
                     <div className='mb-3'>
-                        <label htmlFor='chuKy' className='form-label'>Chu kỳ</label>
+                        <label htmlFor='chuKy' className='form-label'>Chu kỳ thanh toán (Ngày)</label>
                         <input
                         required
                         className='form-control'
@@ -94,7 +94,7 @@ const AddDichVu = ({fetchDichVuList}) => {
                         onChange={handleDichVuInputChange}/>
                     </div>
                     <div className='mb-3'>
-                        <label htmlFor='giaHienTai' className='form-label'>Giá định kỳ</label>
+                        <label htmlFor='giaHienTai' className='form-label'>Giá định kỳ (VNĐ)</label>
                         <input
                         className='form-control'
                         required

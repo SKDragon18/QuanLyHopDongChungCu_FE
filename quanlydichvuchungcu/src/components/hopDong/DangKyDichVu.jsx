@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import {dangKyDichVu, getDichVuChoDangKyById, getKhachHangById, getAllHopDongKhachHang, createPayment, checkPayment, checkHopDongDichVu} from '../utils/ApiFunctions'
 import { useParams } from 'react-router-dom'
 import { Form, FormControl } from 'react-bootstrap'
+import {formatCurrency} from '../utils/FormatValue'
 const DangKyDichVu = () => {
     // const[isValidated, setIsValidated]= useState(false)
     const[isSubmitted, setIsSubmitted] = useState(false)
@@ -10,13 +11,6 @@ const DangKyDichVu = () => {
     const {idDichVu} = useParams()
     const [ma] = useState(localStorage.getItem("tenDangNhap"))
     const [role]= useState(localStorage.getItem("role"))
-    const formatCurrency = (value, locale = 'en-US', currency = 'USD') => {
-      return new Intl.NumberFormat(locale, {
-        style: 'currency',
-        currency: currency,
-      }).format(value);
-    };
-    const [urlPay,setUrlPay]=useState('')
     const[yeuCauDichVu, setYeuCauDichVu] = useState({
       idYeuCauDichVu:0,
       hopDong:{
@@ -81,14 +75,14 @@ const DangKyDichVu = () => {
     try{
         const result = await getAllHopDongKhachHang(ma)
         setHopDongList(result)
-        setTimeout(()=>{
-          setSuccessMessage("")
-          setErrorMessage("")
-      },3000)
+        
     }
     catch(error){
         setErrorMessage(error.message)
     }
+    setTimeout(()=>{
+      setErrorMessage("")
+    },3000)
   }
   useEffect(()=>{
     fetchDichVuById()
@@ -106,17 +100,12 @@ const DangKyDichVu = () => {
     }))
     setDieuKhoanDichVuList(dichVu.dieuKhoanList)
   },[dichVu])
-  useEffect(()=>{
-    if(Array.isArray(hopDongList)&&hopDongList.length>0){
-      setYeuCauDichVu({...yeuCauDichVu,['hopDong']:hopDongList[0]})
-    }
-  },[hopDongList])
 
     const handleInputChange=(e)=>{
         const{name,value} = e.target
         if(name==='hopDong'){
+          console.log(value)
           setIsSubmitted(false)
-          setUrlPay('')
           const hopDongChon = ({
             idHopDong:value
           })
@@ -127,38 +116,43 @@ const DangKyDichVu = () => {
           setYeuCauDichVu({...yeuCauDichVu,[name]:value})
           setErrorMessage("")
         }
-        
     }
-    const handleSubmit=async ()=>{
+    const handleSubmit=async (e)=>{
+      e.preventDefault()
+      console.log(yeuCauDichVu.hopDong)
+      if(yeuCauDichVu.hopDong.idHopDong===0){
+        alert("Bạn cần cung cấp căn hộ đang thuê")
+        return;
+      }
       try{
         const success = await checkHopDongDichVu(yeuCauDichVu)
         if(success==="Hợp lệ"){
           setIsSubmitted(true)
-          setUrlPay('')
         }
         else{
           setIsSubmitted(false)
-          setUrlPay('')
         }
       }
       catch(error){
         setErrorMessage(error.message)
         setIsSubmitted(false)
-        setUrlPay('')
       }
       setTimeout(()=>{
         setErrorMessage("")
       },3000)
     }
-    const handlePay = async (e)=>{
+    const handleDangKy = async ()=>{
       if(yeuCauDichVu.hopDong.idHopDong===0){
         return;
       }
-      e.preventDefault()
       console.log(yeuCauDichVu)
       try{
         const success = await dangKyDichVu(yeuCauDichVu)
-        setUrlPay(success.url)
+        setSuccessMessage(success)
+        setTimeout(()=>{
+          setSuccessMessage("")
+          window.location.href='/hopdong'
+        },3000)
       }
       catch(error){
         setErrorMessage(error.message)
@@ -166,11 +160,6 @@ const DangKyDichVu = () => {
       setTimeout(()=>{
         setErrorMessage("")
       },3000)
-    }
-    const changePage = ()=>{
-      if(urlPay!=''){
-        window.location.href=urlPay
-      }
     }
   return (
     <>
@@ -223,6 +212,9 @@ const DangKyDichVu = () => {
                     name='hopDong'
                     onChange={handleInputChange}
                     value={yeuCauDichVu.hopDong.idHopDong}>
+                      <option key='0' value={0}>
+                      Chọn căn hộ đang thuê
+                      </option>
                       {
                           hopDongList.map((val, key)=>{
                             if(!val.trangThai){
@@ -282,7 +274,7 @@ const DangKyDichVu = () => {
               <div className='card card-body mt-5'>
               <h4 className='card card-title text-center'>Hợp đồng đăng ký dịch vụ</h4>
 
-              <Form onSubmit={handlePay}>
+              <Form onSubmit={handleSubmit}>
                 <fieldset style={{border:'2px'}}>
                   <legend>Thông tin hợp đồng</legend>
                   <div className='row'>
@@ -297,7 +289,7 @@ const DangKyDichVu = () => {
                     />
                     </div>
                     <div className='col-6'>
-                    <Form.Label htmlFor='thoiHan'>Kết thúc</Form.Label>
+                    <Form.Label htmlFor='thoiHan'>Thời gian thanh toán</Form.Label>
                     <FormControl
                     readOnly
                     type='datetime-local'
@@ -321,7 +313,7 @@ const DangKyDichVu = () => {
                     />
                     </div>
                     <div className='col-6'>
-                    <Form.Label htmlFor='chuKy'>Chu kỳ</Form.Label>
+                    <Form.Label htmlFor='chuKy'>Chu kỳ thanh toán</Form.Label>
                     <FormControl
                     readOnly
                     id='chuKy'
@@ -352,30 +344,23 @@ const DangKyDichVu = () => {
                 </fieldset>
                 {role==='khachhang'&&(
                   <div className='form-group mt-2 mb-2'>
-                  <button type='button' className='btn btn-hotel'
-                  onClick={()=>{
-                    handleSubmit()
-                  }}>
-                    Xác nhận đăng ký
+                  <button type='submit' className='btn btn-hotel'>
+                    Đăng ký dịch vụ
                   </button>
                 </div>
                 )}
                 
                 {isSubmitted&&(
                   <div className='form-group mt-2 mb-2'>
-                    
-                    <button type='submit' className='btn btn-hotel'
-                    >
-                      Xác nhận thanh toán bằng VNPay
+                    <button type='button' className='btn btn-primary'
+                    onClick={()=>{
+                      handleDangKy()
+                    }}>
+                      Xác nhận đăng ký
                     </button>
                   </div>
                 )}
               </Form>
-              {urlPay!==''&&(
-              <button type='button' className='btn btn-primary mb-3 mt-3' onClick={changePage}>
-              Đến trang VNPay
-              </button>
-              )}
               {successMessage&&(
                   <div className='alert alert-success fade show'>{successMessage}</div>
               )}

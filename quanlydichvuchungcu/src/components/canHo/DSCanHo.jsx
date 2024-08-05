@@ -143,8 +143,8 @@ const DSCanHo = () => {
                   <th>Số phòng</th>
                   <th>Lô/ Khu</th>
                   <th>Loại phòng</th>
-                  {/* <th>Diện tích</th> */}
-                  <th>Chu kỳ</th>
+                  <th>Thời hạn</th>
+                  <th>Chu kỳ thanh toán</th>
                   <th>Giá thuê</th>
                   <th>Trạng thái</th>
                   <th>Thao tác</th>
@@ -162,8 +162,8 @@ const DSCanHo = () => {
                     <td>{canHo.soPhong}</td>
                     <td>{canHo.lo}</td>
                     <td>{canHo.loaiPhong.tenLoaiPhong}</td>
-                    {/* <td>{canHo.dienTich}</td> */}
                     <td>{canHo.chuKy} ngày</td>
+                    <td>{canHo.chuKyDong} ngày</td>
                     <td>{formatCurrency(canHo.giaThue,'vi-VN', 'VND')}</td>
                     <td>
                       {canHo.trangThai?

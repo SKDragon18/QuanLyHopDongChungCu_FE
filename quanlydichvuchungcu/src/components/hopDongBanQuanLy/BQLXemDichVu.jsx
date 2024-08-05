@@ -198,7 +198,7 @@ const BQLXemDichVu = () => {
                     />
                     </div>
                     <div className='col-6'>
-                    <Form.Label htmlFor='thoiHan'>Kết thúc</Form.Label>
+                    <Form.Label htmlFor='thoiHan'>Thời gian thanh toán tiếp theo</Form.Label>
                     <FormControl
                     readOnly
                     id='thoiHan'
@@ -220,7 +220,7 @@ const BQLXemDichVu = () => {
                     />
                     </div>
                     <div className='col-6'>
-                    <Form.Label htmlFor='chuKy'>Chu kỳ</Form.Label>
+                    <Form.Label htmlFor='chuKy'>Chu kỳ thanh toán</Form.Label>
                     <FormControl
                     readOnly
                     id='chuKy'

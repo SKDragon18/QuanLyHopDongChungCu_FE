@@ -6,9 +6,11 @@ import { getDichVu, deleteDichVu, updateTrangThaiDichVu } from '../utils/ApiFunc
 import DataPaginator from '../common/DataPaginator'
 import AddDichVu from './AddDichVu'
 import SimpleDialog from '../common/SimpleDialog'
+import DichVuSearch from '../common/DichVuSearch'
 
 const DSDichVu = () => {
     const[dichVuList,setDichVuList]=useState([])
+    const[dichVuFilteredList, setDichVuFilteredList] = useState([])
     const[currentPage,setCurrentPage]=useState(1)
     const[numPerPage]=useState(8)
     const[isLoading,setIsLoading] = useState(false)
@@ -31,6 +33,7 @@ const DSDichVu = () => {
         try{
             const result = await getDichVu()
             setDichVuList(result)
+            setDichVuFilteredList(result)
             setIsLoading(false)
         }catch(error){
             setErrorMessage(error.message)
@@ -39,7 +42,7 @@ const DSDichVu = () => {
 
     useEffect(()=>{
       setCurrentPage(1)
-    },[dichVuList])
+    },[dichVuFilteredList])
 
     const handleDelete = async()=>{
       if(id===-1)return
@@ -87,7 +90,7 @@ const DSDichVu = () => {
     }
     const indexOfLastDichVu = currentPage * numPerPage
     const indexOfFirstDichVu = indexOfLastDichVu - numPerPage
-    const currentDichVuList = dichVuList.slice(indexOfFirstDichVu,indexOfLastDichVu)
+    const currentDichVuList = dichVuFilteredList.slice(indexOfFirstDichVu,indexOfLastDichVu)
     const toggleAdd = ()=>{
       setShowFormAdd(!showFormAdd)
     }
@@ -114,7 +117,7 @@ const DSDichVu = () => {
             }
             <Row>
               <Col md={6} className='mb-3 mb-md-0'>
-                Tra cứu
+                <DichVuSearch data={dichVuList} setFilteredData={setDichVuFilteredList} />
               </Col> 
               <Col md={6} className='d-flex justify-content-end'>
                 <button className='btn btn-hotel mb-3' onClick={toggleAdd}>
@@ -190,7 +193,7 @@ const DSDichVu = () => {
             </table>
             <DataPaginator
             currentPage={currentPage}
-            totalPages={calculateTotalPages(numPerPage, dichVuList)}
+            totalPages={calculateTotalPages(numPerPage, dichVuFilteredList)}
             onPageChange={handlePagninationClick}/>
         </section>
         </>

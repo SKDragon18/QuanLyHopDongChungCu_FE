@@ -44,6 +44,7 @@ const Login = () => {
                 </label>
                 <div>
                     <input
+                    required
                     id='tenDangNhap'
                     name='tenDangNhap'
                     type='text'
@@ -58,6 +59,7 @@ const Login = () => {
                 </label>
                 <div>
                     <input
+                    required
                     id='matKhau'
                     name='matKhau'
                     type='password'

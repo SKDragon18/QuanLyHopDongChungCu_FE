@@ -112,7 +112,7 @@ const DSDieuKhoan = () => {
             }
             <Row>
               <Col md={6} className='mb-3 mb-md-0'>
-                Tra cứu
+                
               </Col> 
               <Col md={6} className='d-flex justify-content-end'>
                 <button className='btn btn-hotel mb-3' onClick={toggleAdd}>

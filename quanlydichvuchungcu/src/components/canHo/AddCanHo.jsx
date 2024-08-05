@@ -16,7 +16,8 @@ const AddCanHo = ({fetchCanHoList}) => {
             tenLoaiPhong:''
         },
         lo:'A',
-        chuKy:30
+        chuKy:30,
+        chuKyDong:30
     })
     const[imageSave,setImageSave]=useState("")
     const[imagePreview, setImagePreview] = useState("")
@@ -190,7 +191,7 @@ const AddCanHo = ({fetchCanHoList}) => {
                         onChange={handleCanHoInputChange}/>
                     </div>
                     <div className='mb-3'>
-                        <label htmlFor='giaThue' className='form-label'>Giá thuê</label>
+                        <label htmlFor='giaThue' className='form-label'>Giá thuê (VNĐ)</label>
                         <input
                         className='form-control'
                         required
@@ -203,17 +204,29 @@ const AddCanHo = ({fetchCanHoList}) => {
                         onChange={handleCanHoInputChange}/>
                     </div>
                     <div className='mb-3'>
-                        <label htmlFor='chuKy' className='form-label'>Chu kỳ</label>
+                        <label htmlFor='chuKy' className='form-label'>Thời hạn của hợp đồng (ngày)</label>
                         <input
                         className='form-control'
                         required
                         type='number'
                         min='30'
-                        max='365'
                         step='1'
                         id='chuKy'
                         name='chuKy'
                         value={canHo.chuKy}
+                        onChange={handleCanHoInputChange}/>
+                    </div>
+                    <div className='mb-3'>
+                        <label htmlFor='chuKyDong' className='form-label'>Chu kỳ thanh toán (ngày)</label>
+                        <input
+                        className='form-control'
+                        required
+                        type='number'
+                        min='30'
+                        step='1'
+                        id='chuKyDong'
+                        name='chuKyDong'
+                        value={canHo.chuKyDong}
                         onChange={handleCanHoInputChange}/>
                     </div>
                     <div className='mb-3'>

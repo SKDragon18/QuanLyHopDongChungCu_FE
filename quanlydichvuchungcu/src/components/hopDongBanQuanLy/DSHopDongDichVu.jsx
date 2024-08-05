@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { getAllHopDongDichVu, getAllHopDongDichVuKhachHang, huyHopDongDichVu} from '../utils/ApiFunctions'
+import { duyetDichVu, getAllHopDongDichVu, getAllHopDongDichVuKhachHang, huyHopDongDichVu} from '../utils/ApiFunctions'
 import DataPaginator from '../common/DataPaginator'
 import {FaEdit, FaTrashAlt, FaEye} from 'react-icons/fa'
 import {Link} from 'react-router-dom'
+import { formatCurrency, formatTime } from '../utils/FormatValue'
+import { sequenceYeuCauDichVu } from '../utils/ConvertYeuCau'
+import SimpleDialog from '../common/SimpleDialog'
 const DSHopDongDichVu = () => {
     const[hopDongDichVuList,setHopDongDichVuList]=useState([])
     const[currentPage,setCurrentPage]=useState(1)
@@ -10,16 +13,12 @@ const DSHopDongDichVu = () => {
     const[isLoading,setIsLoading] = useState(false)
     const[successMessage,setSuccessMessage]=useState("")
     const[errorMessage, setErrorMessage] = useState("")
-    const formatCurrency = (value, locale = 'en-US', currency = 'USD') => {
-      return new Intl.NumberFormat(locale, {
-        style: 'currency',
-        currency: currency,
-      }).format(value);
-    };
-    const formatTime = (time)=>{
-      const dateObject = new Date(time)
-      return dateObject.toLocaleString()
-    }
+
+    const[id,setId]=useState(-1)
+    const[duyet,setDuyet]=useState(-1)
+    const[open,setOpen]= useState(false)
+    const[open2,setOpen2]= useState(false)
+
     useEffect(()=>{
         fetchHopDongDichVuList()
     },[])
@@ -35,19 +34,36 @@ const DSHopDongDichVu = () => {
         }
     }
     
-    const handleDelete = async(idYeuCauDichVu)=>{
+    const handleDuyet = async()=>{
+      if(id===-1)return;
+      if(duyet===-1)return;
       try{
-        const result = await huyHopDongDichVu(idYeuCauDichVu)
+        const result = await duyetDichVu(id,duyet)
         setSuccessMessage(result)
-          fetchHopDongDichVuList()
+        fetchHopDongDichVuList()
+        setTimeout(()=>{
+          setSuccessMessage("")
+        },3000)
       }
       catch(error){
         setErrorMessage(error.message)
+        setTimeout(()=>{
+          setErrorMessage("")
+        },3000)
       }
-      setTimeout(()=>{
-        setSuccessMessage("")
-        setErrorMessage("")
-      },3000)
+      
+    }
+
+    const handleDongY = (idHopDongDichVu,trangThaiDuyet)=>{
+      setId(idHopDongDichVu)
+      setDuyet(trangThaiDuyet)
+      setOpen(true)
+    }
+
+    const handleTuChoi = (idHopDongDichVu,trangThaiDuyet)=>{
+      setId(idHopDongDichVu)
+      setDuyet(trangThaiDuyet)
+      setOpen2(true)
     }
 
     useEffect(()=>{
@@ -73,7 +89,10 @@ const DSHopDongDichVu = () => {
         <>
         
         <section className='mt-5 mb-5 container'>
-            
+            <div>
+              <SimpleDialog open={open} setOpen={setOpen} handle={handleDuyet} message={'đồng ý yêu cầu của hợp đồng '+id}/>
+              <SimpleDialog open={open2} setOpen={setOpen2} handle={handleDuyet} message={'từ chối yêu cầu của hợp đồng '+id}/>
+            </div>
             <div className='d-flex justify-content-center mb-3 mt-5'>
                 <h2>Hợp đồng đăng ký dịch vụ</h2>
             </div>
@@ -92,9 +111,9 @@ const DSHopDongDichVu = () => {
                   <th>Ngày bắt đầu</th>
                   <th>Thời hạn</th>
                   <th>Giá trị hợp đồng</th>
-                  <th>Chu kỳ</th>
-                  <th>Trạng thái</th>
-                  <th>Hủy đăng ký</th>
+                  <th>Hoạt động</th>
+                  <th>Xem</th>
+                  
                 </tr>
               </thead>
               <tbody>
@@ -110,31 +129,38 @@ const DSHopDongDichVu = () => {
                     <td>{'Số '+hopDongDichVu.hopDong.canHo.soPhong+' khu ' +hopDongDichVu.hopDong.canHo.lo}</td>
                     <td>{formatTime(hopDongDichVu.ngayYeuCau)}</td>
                     <td>{formatTime(hopDongDichVu.thoiHan)}</td>
-                    <td>{formatCurrency(hopDongDichVu.giaTra,'vi-VN', 'VND')}</td>
-                    <td>{hopDongDichVu.chuKy + ' ngày'}</td>
-                    <td>
-                    {hopDongDichVu.giaHan?
-                        (<Link to={`/dichvu/bqlxem/${hopDongDichVu.idYeuCauDichVu}`} className='btn btn-danger btn-sm'>
-                          Chưa gia hạn
-                        </Link>)
-                        :(<Link to={`/dichvu/bqlxem/${hopDongDichVu.idYeuCauDichVu}`} className='btn btn-success btn-sm'>
-                          Xem
-                        </Link>
-                        )
-                      }
-                    </td>
+                    <td>{formatCurrency(hopDongDichVu.giaTra,'vi-VN', 'VND')}{'/'+hopDongDichVu.chuKy+'ngày'}</td>
                     <td>
                       {!hopDongDichVu.trangThai?(
-                        // <button
-                        // className='btn btn-danger btn-sm'
-                        // onClick={()=>handleDelete(hopDongDichVu.idYeuCauDichVu)}>
-                        //   <FaTrashAlt/>
-                        // </button>
                         <text className='text-success'>Hoạt động</text>
                       ):(
-                        <text className='text-danger'>Đã hủy đăng ký</text>
+                        <text className='text-danger'>Không hoạt động</text>
                       )}
-                    
+                    </td>
+                    <td>
+                    <Link to={`/dichvu/bqlxem/${hopDongDichVu.idYeuCauDichVu}`} className='btn btn-success btn-sm'>
+                          Xem
+                    </Link>
+                    </td>
+                    <td>{sequenceYeuCauDichVu(hopDongDichVu.yeuCau)}</td>
+                    <td>
+                      {hopDongDichVu.duyet===0?(
+                        <>
+                        <button
+                        className='btn btn-success btn-sm'
+                        style={{marginRight:'10px'}}
+                        onClick={()=>handleDongY(hopDongDichVu.idYeuCauDichVu,1)}>
+                          Đồng ý
+                        </button>
+                        <button
+                        className='btn btn-danger btn-sm'
+                        onClick={()=>handleTuChoi(hopDongDichVu.idYeuCauDichVu,2)}>
+                          Từ chối
+                        </button>
+                        </>
+                      ):(
+                        <text className='text-success'>Đã duyệt</text>
+                      )}
                     </td>
                   </tr>
                 )))}

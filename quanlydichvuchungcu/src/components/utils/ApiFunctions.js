@@ -747,7 +747,9 @@ export async function getDichVuChoDangKyById(idDichVu){
 
 export async function dangKyHopDong(hopdong){
     try{
-        const response = await api.post("/hopdong/hopdong/create-payment",hopdong)
+        const response = await api.post("/hopdong",hopdong,{
+            headers:getHeader()
+        })
         const data = response.data
         if(data.code===200){
             return data.result
@@ -762,7 +764,9 @@ export async function dangKyHopDong(hopdong){
 
 export async function dangKyDichVu(yeuCauDichVu){
     try{
-        const response = await api.post("/hopdong/yeucaudichvu/create-payment",yeuCauDichVu)
+        const response = await api.post("/hopdong/dichvu",yeuCauDichVu,
+            {headers:getHeader()}
+        )
         const data = response.data
         if(data.code===200){
             return data.result
@@ -777,7 +781,9 @@ export async function dangKyDichVu(yeuCauDichVu){
 
 export async function checkHopDongDichVu(yeuCauDichVu){
     try{
-        const response = await api.post("/hopdong/dichvu/checkyeucau",yeuCauDichVu)
+        const response = await api.post("/hopdong/dichvu/checkyeucau",yeuCauDichVu, {
+            headers:getHeader()
+        })
         const data = response.data
         if(data.code===200){
             return data.result
@@ -792,7 +798,9 @@ export async function checkHopDongDichVu(yeuCauDichVu){
 
 export async function giaHanHopDong(idHopDong){
     try{
-        const response = await api.post(`/hopdong/giahanhopdong/create-payment/${idHopDong}`)
+        const response = await api.put(`/hopdong/giahan/${idHopDong}`,{},
+            {headers:getHeader()}
+        )
         const data = response.data
         if(data.code===200){
             return data.result
@@ -807,7 +815,9 @@ export async function giaHanHopDong(idHopDong){
 
 export async function giaHanHopDongDichVu(idYeuCauDichVu){
     try{
-        const response = await api.post(`/hopdong/giahanyeucaudichvu/create-payment/${idYeuCauDichVu}`)
+        const response = await api.post(`/hopdong/giahanyeucaudichvu/create-payment/${idYeuCauDichVu}`,{
+            headers:getHeader()
+        })
         const data = response.data
         if(data.code===200){
             return data.result
@@ -822,7 +832,10 @@ export async function giaHanHopDongDichVu(idYeuCauDichVu){
 
 export async function huyHopDong(idHopDong){
     try{
-        const response = await api.put(`/hopdong/huy/${idHopDong}`)
+        const response = await api.put(`/hopdong/huy/${idHopDong}`,{},
+        {
+            headers:getHeader()
+        })
         const data = response.data
         if(data.code===200){
             return data.result
@@ -837,7 +850,11 @@ export async function huyHopDong(idHopDong){
 
 export async function huyHopDongDichVu(idYeuCauDichVu){
     try{
-        const response = await api.put(`/hopdong/dichvu/huy/${idYeuCauDichVu}`)
+        const response = await api.put(`/hopdong/dichvu/huy/${idYeuCauDichVu}`,{},
+            {
+                headers:getHeader()
+            }
+        )
         const data = response.data
         if(data.code===200){
             return data.result
@@ -880,6 +897,8 @@ export async function notifyBanQuanLy(){
     }
 }
 
+//Hóa đơn và thanh toán
+
 export async function getAllHoaDon(){
     try{
         const response  = await api.get(`/hoadon`,{headers:getHeader()})
@@ -911,9 +930,33 @@ export async function getHoaDon(maKhachHang){
     }
 }
 
+export async function thanhToan(id){
+    try{
+        const response = await api.get(`/hoadon/thanhtoan/${id}`,
+        {
+            headers:getHeader()
+        })
+        const data = response.data
+        if(data.code===200){
+            return data.result
+        }
+        else{
+            throw new Error(data.message)
+        }
+    }catch(error){
+        throw new Error(error.message)
+    }
+}
+
+
+//Hợp đồng
 export async function getAllHopDong(){
     try{
-        const response  = await api.get('/hopdong')
+        const response  = await api.get('/hopdong',
+            {
+                headers:getHeader()
+            }
+        )
         const data = response.data
         if(data.code===200){
             return data.result
@@ -928,7 +971,11 @@ export async function getAllHopDong(){
 
 export async function getAllHopDongKhachHang(maKhachHang){
     try{
-        const response  = await api.get(`/hopdong/khachhangall/${maKhachHang}`)
+        const response  = await api.get(`/hopdong/khachhangall/${maKhachHang}`,
+            {
+                headers:getHeader()
+            }
+        )
         const data = response.data
         if(data.code===200){
             return data.result
@@ -943,7 +990,11 @@ export async function getAllHopDongKhachHang(maKhachHang){
 
 export async function getHopDongKhachHang(idHopDong){
     try{
-        const response  = await api.get(`/hopdong/khachhang/${idHopDong}`)
+        const response  = await api.get(`/hopdong/khachhang/${idHopDong}`,
+            {
+                headers:getHeader()
+            }
+        )
         const data = response.data
         if(data.code===200){
             return data.result
@@ -958,7 +1009,11 @@ export async function getHopDongKhachHang(idHopDong){
 
 export async function getAllHopDongDichVu(){
     try{
-        const response  = await api.get('/hopdong/dichvu')
+        const response  = await api.get('/hopdong/dichvu',
+            {
+                headers:getHeader()
+            }
+        )
         const data = response.data
         if(data.code===200){
             return data.result
@@ -973,7 +1028,11 @@ export async function getAllHopDongDichVu(){
 
 export async function getAllHopDongDichVuKhachHang(maKhachHang){
     try{
-        const response  = await api.get(`/hopdong/dichvu/khachhangall/${maKhachHang}`)
+        const response  = await api.get(`/hopdong/dichvu/khachhangall/${maKhachHang}`,
+            {
+                headers:getHeader()
+            }
+        )
         const data = response.data
         if(data.code===200){
             return data.result
@@ -988,7 +1047,11 @@ export async function getAllHopDongDichVuKhachHang(maKhachHang){
 
 export async function getHopDongDichVuKhachHang(idYeuCauDichVu){
     try{
-        const response  = await api.get(`/hopdong/dichvu/khachhang/${idYeuCauDichVu}`)
+        const response  = await api.get(`/hopdong/dichvu/khachhang/${idYeuCauDichVu}`,
+            {
+                headers:getHeader()
+            }
+        )
         const data = response.data
         if(data.code===200){
             return data.result
@@ -1059,7 +1122,9 @@ export async function recoverPassword(doiMatKhau){
 
 export async function changePassword(doiMatKhau){
     try{
-        const response = await api.put('/nguoidung/doimatkhau', doiMatKhau)
+        const response = await api.put('/nguoidung/doimatkhau', doiMatKhau, {
+            headers:getHeader()
+        })
         const data = response.data
         if(data.code===200){
             return data.result
@@ -1307,6 +1372,43 @@ export async function getBanQuanLyById(ma){
 export async function updateBanQuanLy(banquanly){
     try{
         const response  = await api.put('/taikhoan/banquanly',banquanly,{
+            headers:getHeader()
+        })
+        const data = response.data
+        if(data.code===200){
+            return data.result
+        }
+        else{
+            throw new Error(data.message)
+        }
+    }catch(error){
+        throw new Error(error.message)
+    }
+}
+
+//Ban quản lý duyệt hợp đồng và dịch vụ đăng ký của khách hàng
+export async function duyetCanHo(id,duyet){
+    try{
+        const response  = await api.put(`/hopdong/duyet/${id}/${duyet}`,{},
+        {
+            headers:getHeader()
+        })
+        const data = response.data
+        if(data.code===200){
+            return data.result
+        }
+        else{
+            throw new Error(data.message)
+        }
+    }catch(error){
+        throw new Error(error.message)
+    }
+}
+
+export async function duyetDichVu(id,duyet){
+    try{
+        const response  = await api.put(`/hopdong/dichvu/duyet/${id}/${duyet}`,{},
+        {
             headers:getHeader()
         })
         const data = response.data
