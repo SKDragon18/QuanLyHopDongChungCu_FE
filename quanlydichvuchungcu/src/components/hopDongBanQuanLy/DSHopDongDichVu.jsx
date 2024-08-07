@@ -6,8 +6,10 @@ import {Link} from 'react-router-dom'
 import { formatCurrency, formatTime } from '../utils/FormatValue'
 import { sequenceYeuCauDichVu } from '../utils/ConvertYeuCau'
 import SimpleDialog from '../common/SimpleDialog'
+import HopDongDichVuSearch from '../common/HopDongDichVuSearch'
 const DSHopDongDichVu = () => {
     const[hopDongDichVuList,setHopDongDichVuList]=useState([])
+    const[hopDongDichVuFilterList,setHopDongDichVuFilterList]=useState([])
     const[currentPage,setCurrentPage]=useState(1)
     const[numPerPage]=useState(8)
     const[isLoading,setIsLoading] = useState(false)
@@ -40,16 +42,17 @@ const DSHopDongDichVu = () => {
       try{
         const result = await duyetDichVu(id,duyet)
         setSuccessMessage(result)
-        fetchHopDongDichVuList()
+        
         setTimeout(()=>{
+          fetchHopDongDichVuList()
           setSuccessMessage("")
-        },3000)
+        },5000)
       }
       catch(error){
         setErrorMessage(error.message)
         setTimeout(()=>{
           setErrorMessage("")
-        },3000)
+        },5000)
       }
       
     }
@@ -80,7 +83,7 @@ const DSHopDongDichVu = () => {
     }
     const indexOfLastHopDongDichVu = currentPage * numPerPage
     const indexOfFirstHopDongDichVu = indexOfLastHopDongDichVu - numPerPage
-    const currentHopDongDichVuList = hopDongDichVuList.slice(indexOfFirstHopDongDichVu,indexOfLastHopDongDichVu)
+    const currentHopDongDichVuList = hopDongDichVuFilterList.slice(indexOfFirstHopDongDichVu,indexOfLastHopDongDichVu)
     return (
     <>
       {isLoading?(
@@ -96,6 +99,7 @@ const DSHopDongDichVu = () => {
             <div className='d-flex justify-content-center mb-3 mt-5'>
                 <h2>Hợp đồng đăng ký dịch vụ</h2>
             </div>
+            <HopDongDichVuSearch data={hopDongDichVuList} setFilteredData={setHopDongDichVuFilterList}/>
             {successMessage&&(
               <div className='alert alert-success fade show'>{successMessage}</div>
             )}
@@ -113,7 +117,9 @@ const DSHopDongDichVu = () => {
                   <th>Giá trị hợp đồng</th>
                   <th>Hoạt động</th>
                   <th>Xem</th>
-                  
+                  <th>Yêu cầu</th>
+                  <th>Duyệt</th>
+                  <th>Bởi</th>
                 </tr>
               </thead>
               <tbody>
@@ -162,13 +168,18 @@ const DSHopDongDichVu = () => {
                         <text className='text-success'>Đã duyệt</text>
                       )}
                     </td>
+                    <td>
+                      {hopDongDichVu.banQuanLy!==null?(
+                        <text>{hopDongDichVu.banQuanLy.ma}</text>
+                      ):(<text>N/A</text>)}
+                    </td>
                   </tr>
                 )))}
               </tbody>
             </table>
             <DataPaginator
             currentPage={currentPage}
-            totalPages={calculateTotalPages(numPerPage, hopDongDichVuList)}
+            totalPages={calculateTotalPages(numPerPage, hopDongDichVuFilterList)}
             onPageChange={handlePagninationClick}/>
         </section>
         </>

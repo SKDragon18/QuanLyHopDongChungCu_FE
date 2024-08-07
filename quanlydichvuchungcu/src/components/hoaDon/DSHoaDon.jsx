@@ -112,7 +112,8 @@ const DSHoaDon = () => {
                     <td>{formatTime(hoaDon.thoiGianTao)}</td>
                     <td>{formatTime(hoaDon.thoiGianDong)}</td>
                     <td>{formatCurrency(hoaDon.tongHoaDon,'vi-VN', 'VND')}</td>
-                    <td>{(hoaDon.hopDong===null)?('Dịch vụ'):('Căn hộ')}</td>
+                    <td>{(hoaDon.hopDong===null)?('Dịch vụ '+ String(hoaDon.yeuCauDichVu.idYeuCauDichVu))
+                    :('Căn hộ '+String(hoaDon.hopDong.idHopDong))}</td>
                     <td>
                     {hoaDon.trangThai?(
                       <>Đã thanh toán</>

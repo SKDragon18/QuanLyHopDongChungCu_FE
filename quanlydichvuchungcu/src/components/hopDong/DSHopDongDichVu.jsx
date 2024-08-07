@@ -6,8 +6,10 @@ import {Link} from 'react-router-dom'
 import {formatCurrency, formatTime} from '../utils/FormatValue'
 import { sequenceDuyetDichVu } from '../utils/ConvertYeuCau'
 import SimpleDialog from '../common/SimpleDialog'
+import HopDongDichVuSearch from '../common/HopDongDichVuSearch'
 const DSHopDongDichVu = () => {
     const[hopDongDichVuList,setHopDongDichVuList]=useState([])
+    const[hopDongDichVuFilterList,setHopDongDichVuFilterList]=useState([])
     const[maKhachHang]=useState(localStorage.getItem("tenDangNhap"))
     const[currentPage,setCurrentPage]=useState(1)
     const[numPerPage]=useState(8)
@@ -25,6 +27,7 @@ const DSHopDongDichVu = () => {
         try{
             const result = await getAllHopDongDichVuKhachHang(maKhachHang)
             setHopDongDichVuList(result)
+            setHopDongDichVuFilterList(result)
             setIsLoading(false)
         }catch(error){
             setErrorMessage(error.message)
@@ -70,7 +73,7 @@ const DSHopDongDichVu = () => {
     }
     const indexOfLastHopDongDichVu = currentPage * numPerPage
     const indexOfFirstHopDongDichVu = indexOfLastHopDongDichVu - numPerPage
-    const currentHopDongDichVuList = hopDongDichVuList.slice(indexOfFirstHopDongDichVu,indexOfLastHopDongDichVu)
+    const currentHopDongDichVuList = hopDongDichVuFilterList.slice(indexOfFirstHopDongDichVu,indexOfLastHopDongDichVu)
     return (
     <>
       {isLoading?(
@@ -86,6 +89,7 @@ const DSHopDongDichVu = () => {
             <div className='d-flex justify-content-center mb-3 mt-5'>
                 <h2>Hợp đồng đăng ký dịch vụ</h2>
             </div>
+            <HopDongDichVuSearch data={hopDongDichVuList} setFilteredData={setHopDongDichVuFilterList}/>
             {successMessage&&(
               <div className='alert alert-success fade show'>{successMessage}</div>
             )}
@@ -102,6 +106,7 @@ const DSHopDongDichVu = () => {
                   <th>Thanh toán tiếp theo</th>
                   <th>Giá trị hợp đồng</th>
                   <th>Yêu cầu</th>
+                  <th>Bởi</th>
                   <th>Xem</th>
                   <th>Trạng thái</th>
                 </tr>
@@ -121,6 +126,11 @@ const DSHopDongDichVu = () => {
                     <td>{formatTime(hopDongDichVu.thoiHan)}</td>
                     <td>{formatCurrency(hopDongDichVu.giaTra,'vi-VN', 'VND')}{'/'+hopDongDichVu.chuKy + ' ngày'}</td>
                     <td>{sequenceDuyetDichVu(hopDongDichVu.yeuCau,hopDongDichVu.duyet)}</td>
+                    <td>
+                      {hopDongDichVu.banQuanLy!==null?(
+                        <text>{hopDongDichVu.banQuanLy.ma}</text>
+                      ):(<text>N/A</text>)}
+                    </td>
                     <td>
                     {hopDongDichVu.giaHan?
                         (<Link to={`/dichvu/xem/${hopDongDichVu.idYeuCauDichVu}`} className='btn btn-danger btn-sm'>
@@ -157,7 +167,7 @@ const DSHopDongDichVu = () => {
             </table>
             <DataPaginator
             currentPage={currentPage}
-            totalPages={calculateTotalPages(numPerPage, hopDongDichVuList)}
+            totalPages={calculateTotalPages(numPerPage, hopDongDichVuFilterList)}
             onPageChange={handlePagninationClick}/>
         </section>
         </>

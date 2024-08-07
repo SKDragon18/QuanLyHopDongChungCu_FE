@@ -6,8 +6,10 @@ import {FaEdit, FaTrashAlt, FaEye} from 'react-icons/fa'
 import {sequenceDuyetCanHo} from '../utils/ConvertYeuCau'
 import {formatCurrency, formatTime} from '../utils/FormatValue'
 import SimpleDialog from '../common/SimpleDialog'
+import HopDongSearch from '../common/HopDongSearch'
 const DSHopDongCanHo = () => {
     const[hopDongList,setHopDongList]=useState([])
+    const[hopDongFilterList,setHopDongFilterList]=useState([])
     const[maKhachHang]=useState(localStorage.getItem("tenDangNhap"))
     const[currentPage,setCurrentPage]=useState(1)
     const[numPerPage]=useState(8)
@@ -26,6 +28,7 @@ const DSHopDongCanHo = () => {
         try{
             const result = await getAllHopDongKhachHang(maKhachHang)
             setHopDongList(result)
+            setHopDongFilterList(result)
             setIsLoading(false)
         }catch(error){
             setErrorMessage(error.message)
@@ -70,7 +73,7 @@ const DSHopDongCanHo = () => {
     }
     const indexOfLastHopDong = currentPage * numPerPage
     const indexOfFirstHopDong = indexOfLastHopDong - numPerPage
-    const currentHopDongList = hopDongList.slice(indexOfFirstHopDong,indexOfLastHopDong)
+    const currentHopDongList = hopDongFilterList.slice(indexOfFirstHopDong,indexOfLastHopDong)
     return (
     <>
       {isLoading?(
@@ -85,6 +88,7 @@ const DSHopDongCanHo = () => {
             <div className='d-flex justify-content-center mb-3 mt-5'>
                 <h2>Hợp đồng thuê căn hộ</h2>
             </div>
+            <HopDongSearch data={hopDongList} setFilteredData={setHopDongFilterList}/>
             {successMessage&&(
               <div className='alert alert-success fade show'>{successMessage}</div>
             )}
@@ -101,6 +105,7 @@ const DSHopDongCanHo = () => {
                   <th>Ngày kết thúc</th>
                   <th>Giá trị hợp đồng</th>
                   <th>Yêu cầu</th>
+                  <th>Bởi</th>
                   <th>Xem</th>
                   <th>Trạng thái</th>
                 </tr>
@@ -120,6 +125,11 @@ const DSHopDongCanHo = () => {
                     <td>{formatTime(hopDong.thoiHan)}</td>
                     <td>{formatCurrency(hopDong.giaTri,'vi-VN', 'VND')} {'/'+hopDong.chuKyDong+'ngày'}</td>
                     <td>{sequenceDuyetCanHo(hopDong.yeuCau,hopDong.duyet)}</td>
+                    <td>
+                      {hopDong.banQuanLy!==null?(
+                        <text>{hopDong.banQuanLy.ma}</text>
+                      ):(<text>N/A</text>)}
+                    </td>
                     <td>
                     {hopDong.giaHan?
                         (<Link to={`/canho/xem/${hopDong.idHopDong}`} className='btn btn-danger btn-sm'>
@@ -149,7 +159,7 @@ const DSHopDongCanHo = () => {
             </table>
             <DataPaginator
             currentPage={currentPage}
-            totalPages={calculateTotalPages(numPerPage, hopDongList)}
+            totalPages={calculateTotalPages(numPerPage, hopDongFilterList)}
             onPageChange={handlePagninationClick}/>
         </section>
         </>

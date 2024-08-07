@@ -6,8 +6,10 @@ import {formatCurrency, formatTime} from '../utils/FormatValue'
 import {sequenceYeuCauCanHo} from '../utils/ConvertYeuCau'
 import {FaEdit, FaTrashAlt, FaEye} from 'react-icons/fa'
 import SimpleDialog from '../common/SimpleDialog'
+import HopDongSearch from '../common/HopDongSearch'
 const DSHopDongCanHo = () => {
     const[hopDongList,setHopDongList]=useState([])
+    const[hopDongFilterList,setHopDongFilterList]=useState([])
     const[currentPage,setCurrentPage]=useState(1)
     const[numPerPage]=useState(8)
     const[isLoading,setIsLoading] = useState(false)
@@ -38,16 +40,17 @@ const DSHopDongCanHo = () => {
       try{
         const result = await duyetCanHo(id,duyet)
         setSuccessMessage(result)
-        fetchHopDongList()
+        
         setTimeout(()=>{
           setSuccessMessage("")
-        },3000)
+          fetchHopDongList()
+        },5000)
       }
       catch(error){
         setErrorMessage(error.message)
         setTimeout(()=>{
           setErrorMessage("")
-        },3000)
+        },5000)
       }
       
     }
@@ -78,7 +81,7 @@ const DSHopDongCanHo = () => {
     }
     const indexOfLastHopDong = currentPage * numPerPage
     const indexOfFirstHopDong = indexOfLastHopDong - numPerPage
-    const currentHopDongList = hopDongList.slice(indexOfFirstHopDong,indexOfLastHopDong)
+    const currentHopDongList = hopDongFilterList.slice(indexOfFirstHopDong,indexOfLastHopDong)
     return (
     <>
       {isLoading?(
@@ -94,6 +97,7 @@ const DSHopDongCanHo = () => {
             <div className='d-flex justify-content-center mb-3 mt-5'>
                 <h2>Hợp đồng thuê căn hộ</h2>
             </div>
+            <HopDongSearch data={hopDongList} setFilteredData={setHopDongFilterList}/>
             {successMessage&&(
               <div className='alert alert-success fade show'>{successMessage}</div>
             )}
@@ -113,6 +117,7 @@ const DSHopDongCanHo = () => {
                   <th>Xem</th>
                   <th>Yêu cầu</th>
                   <th>Duyệt</th>
+                  <th>Bởi</th>
                 </tr>
               </thead>
               <tbody>
@@ -161,13 +166,18 @@ const DSHopDongCanHo = () => {
                         <text className='text-success'>Đã duyệt</text>
                       )}
                     </td>
+                    <td>
+                      {hopDong.banQuanLy!==null?(
+                        <text>{hopDong.banQuanLy.ma}</text>
+                      ):(<text>N/A</text>)}
+                    </td>
                   </tr>
                 )))}
               </tbody>
             </table>
             <DataPaginator
             currentPage={currentPage}
-            totalPages={calculateTotalPages(numPerPage, hopDongList)}
+            totalPages={calculateTotalPages(numPerPage, hopDongFilterList)}
             onPageChange={handlePagninationClick}/>
         </section>
         </>

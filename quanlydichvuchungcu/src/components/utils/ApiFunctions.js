@@ -918,6 +918,7 @@ export async function getHoaDon(maKhachHang){
         const response  = await api.get(`/hoadon/khachhang/${maKhachHang}`,{
             headers:getHeader()
         })
+        
         const data = response.data
         if(data.code===200){
             return data.result
