@@ -86,8 +86,8 @@ const AddDichVu = ({fetchDichVuList}) => {
                         className='form-control'
                         type='number'
                         min='0'
-                        max='365'
-                        step='1'
+                        max='360'
+                        step='30'
                         id='chuKy'
                         name='chuKy'
                         value={dichVu.chuKy}

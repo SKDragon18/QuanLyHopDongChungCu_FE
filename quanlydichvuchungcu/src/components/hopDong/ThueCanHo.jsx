@@ -97,7 +97,6 @@ const ThueCanHo = () => {
   const [today] = useState(new Date());
   const [todayString] = useState(today.toISOString().slice(0, 16));
   const [day7after] = useState(new Date());
-
   day7after.setDate(today.getDate()+7);
   const [day7afterString] = useState(day7after.toISOString().slice(0, 16));
   useEffect(()=>{
@@ -142,7 +141,20 @@ const ThueCanHo = () => {
   const handleDangKy = async ()=>{
     console.log(hopDong)
     try{
-      const success = await dangKyHopDong(hopDong)
+      const hopDongCopy = {...hopDong}
+      const thoiHan = new Date(hopDong.thoiHan)
+      const thoiGianDong = new Date(hopDong.thoiGianDong)
+      const ngayLap = new Date(hopDong.ngayLap)
+      const ngayBatDau = new Date(hopDong.ngayBatDau)
+      thoiHan.setHours(thoiHan.getHours())
+      thoiGianDong.setHours(thoiGianDong.getHours())
+      ngayLap.setHours(ngayLap.getHours())
+      ngayBatDau.setHours(ngayBatDau.getHours())
+      hopDongCopy.thoiHan = thoiHan.toISOString().slice(0, 16)
+      hopDongCopy.thoiGianDong = thoiGianDong.toISOString().slice(0, 16)
+      hopDongCopy.ngayLap = ngayLap.toISOString().slice(0, 16)
+      hopDongCopy.ngayBatDau = ngayBatDau.toISOString().slice(0, 16)
+      const success = await dangKyHopDong(hopDongCopy)
       setSuccessMessage(success)
       setTimeout(()=>{
         setSuccessMessage('')

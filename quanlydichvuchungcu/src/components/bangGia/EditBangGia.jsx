@@ -67,8 +67,8 @@ const EditBangGia = () => {
     },[dichVuUpdateList])
 
     const handleUploadCanHo = async(idBangGia)=>{
-        if(bangGia.banQuanLy!==null&&bangGia.banQuanLy.ma!==tenDangNhap){
-            alert("Bạn không có quyền thay đổi")
+        if(bangGia.banQuanLy===null||bangGia.banQuanLy.ma!==tenDangNhap){
+            alert("Bạn không phải là người tạo bảng nên không thể thực hiện thao tác chỉnh sửa!!!")
             return
         }
         try{
@@ -86,8 +86,8 @@ const EditBangGia = () => {
     }
 
     const handleUploadDichVu = async(idBangGia)=>{
-        if(bangGia.banQuanLy!==null&&bangGia.banQuanLy.ma!==tenDangNhap){
-            alert("Bạn không có quyền thay đổi")
+        if(bangGia.banQuanLy===null||bangGia.banQuanLy.ma!==tenDangNhap){
+            alert("Bạn không phải là người tạo bảng nên không thể thực hiện thao tác chỉnh sửa!!!")
             return
         }
         try{
@@ -112,8 +112,8 @@ const EditBangGia = () => {
 
     const handleSubmit = async(e) =>{
         e.preventDefault()
-        if(bangGia.banQuanLy!==null&&bangGia.banQuanLy.ma!==tenDangNhap){
-            alert("Bạn không có quyền thay đổi")
+        if(bangGia.banQuanLy===null||bangGia.banQuanLy.ma!==tenDangNhap){
+            alert("Bạn không phải là người tạo bảng nên không thể thực hiện thao tác chỉnh sửa!!!")
             return
         }
         try{

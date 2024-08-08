@@ -35,8 +35,15 @@ const AddBangGia = ({fetchBangGiaList}) => {
     
     const handleSubmit = async(e) =>{
         e.preventDefault()
+        const bangGiaCopy = {...bangGia}
+        const thoiGianBatDau = new Date(bangGia.thoiGianBatDau)
+        const thoiGianKetThuc = new Date(bangGia.thoiGianKetThuc)
+        thoiGianBatDau.setHours(thoiGianBatDau.getHours())
+        thoiGianKetThuc.setHours(thoiGianKetThuc.getHours())
+        bangGiaCopy.thoiGianBatDau = thoiGianBatDau.toISOString().slice(0, 16)
+        bangGiaCopy.thoiGianKetThuc = thoiGianKetThuc.toISOString().slice(0, 16)
         try{
-            const success = await insertBangGia(bangGia)
+            const success = await insertBangGia(bangGiaCopy)
             setSuccessMessage("Thêm bảng giả thành công")
                 setBangGia({
                     idBangGia: 0,

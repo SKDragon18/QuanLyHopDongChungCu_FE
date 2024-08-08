@@ -89,17 +89,29 @@ const DangKyDichVu = () => {
     fetchKhachHangById()
     fetchHopDongById()
   },[])
+  const [today] = useState(new Date());
+  const [todayString] = useState(today.toISOString().slice(0, 16));
+  const [day7after] = useState(new Date());
+  day7after.setDate(today.getDate()+7);
+  const [day7afterString] = useState(day7after.toISOString().slice(0, 16));
+
   useEffect(()=>{
-    const ngayYeuCau = new Date();
-    const thoiHan = new Date();
-    thoiHan.setDate(thoiHan.getDate()+dichVu.chuKy);
+    if(yeuCauDichVu.ngayYeuCau!==''){
+      const thoiHan = new Date(yeuCauDichVu.ngayYeuCau);
+      thoiHan.setDate(thoiHan.getDate()+dichVu.chuKy);
+      setYeuCauDichVu(yeuCauDichVu=>({...yeuCauDichVu,['thoiHan']:thoiHan.toISOString().slice(0, 16)
+      }))
+    }
+  },[yeuCauDichVu.ngayYeuCau])
+
+  useEffect(()=>{
     const giaTri = (dichVu.giaKhuyenMai===null)?dichVu.giaHienTai:dichVu.giaKhuyenMai
-    setYeuCauDichVu(yeuCauDichVu=>({...yeuCauDichVu,['dichVu']:dichVu,['giaTra']:giaTri,
-      ['ngayYeuCau']:ngayYeuCau.toISOString().slice(0, 16),
-      ['thoiHan']:thoiHan.toISOString().slice(0, 16)
+    setYeuCauDichVu(yeuCauDichVu=>({...yeuCauDichVu,['dichVu']:dichVu,['giaTra']:giaTri
     }))
     setDieuKhoanDichVuList(dichVu.dieuKhoanList)
   },[dichVu])
+
+
 
     const handleInputChange=(e)=>{
         const{name,value} = e.target
@@ -146,8 +158,15 @@ const DangKyDichVu = () => {
         return;
       }
       console.log(yeuCauDichVu)
+      const yeuCauDichVuCopy = {...yeuCauDichVu}
+      const thoiHan = new Date(yeuCauDichVu.thoiHan)
+      const ngayYeuCau = new Date(yeuCauDichVu.ngayYeuCau)
+      thoiHan.setHours(thoiHan.getHours())
+      ngayYeuCau.setHours(ngayYeuCau.getHours())
+      yeuCauDichVuCopy.thoiHan = thoiHan.toISOString().slice(0, 16)
+      yeuCauDichVuCopy.ngayYeuCau = ngayYeuCau.toISOString().slice(0, 16)
       try{
-        const success = await dangKyDichVu(yeuCauDichVu)
+        const success = await dangKyDichVu(yeuCauDichVuCopy)
         setSuccessMessage(success)
         setTimeout(()=>{
           setSuccessMessage("")
@@ -281,12 +300,18 @@ const DangKyDichVu = () => {
                     <div className='col-6'>
                     <Form.Label htmlFor='ngayYeuCau'>Bắt đầu</Form.Label>
                     <FormControl
-                    readOnly
+                    required
                     type='datetime-local'
                     id='ngayYeuCau'
                     name='ngayYeuCau'
+                    min={todayString}
+                    max={day7afterString}
                     value={yeuCauDichVu.ngayYeuCau}
+                    onChange={(e)=>{
+                      handleInputChange(e)
+                    }}
                     />
+                    
                     </div>
                     <div className='col-6'>
                     <Form.Label htmlFor='thoiHan'>Thời gian thanh toán</Form.Label>

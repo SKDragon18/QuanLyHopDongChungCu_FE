@@ -6,8 +6,10 @@ import { getBangGia, deleteBangGia, updateTrangThaiBangGia } from '../utils/ApiF
 import DataPaginator from '../common/DataPaginator'
 import AddBangGia from './AddBangGia'
 import SimpleDialog from '../common/SimpleDialog'
+import { formatTime } from '../utils/FormatValue'
 
 const DSBangGia = () => {
+    const[tenDangNhap] = useState(localStorage.getItem("tenDangNhap"))
     const[bangGiaList,setBangGiaList]=useState([])
     const[currentPage,setCurrentPage]=useState(1)
     const[numPerPage]=useState(8)
@@ -17,10 +19,6 @@ const DSBangGia = () => {
     const[errorMessage, setErrorMessage] = useState("")
     const[open,setOpen]= useState(false)
     const[id,setId]=useState(-1)
-    const formatTime = (time)=>{
-      const dateObject = new Date(time)
-      return dateObject.toLocaleString()
-    }
     useEffect(()=>{
         fetchBangGiaList()
     },[])
@@ -56,7 +54,11 @@ const DSBangGia = () => {
       },3000)
     }
 
-    const handleClickOpen=(id)=>{
+    const handleClickOpen=(id, banQuanLy)=>{
+      if(banQuanLy===null||banQuanLy.ma!==tenDangNhap){
+        alert("Bạn không phải là người tạo bảng nên không thể thực hiện thao tác chỉnh sửa!!!")
+        return;
+      }
       setId(id)
       setOpen(true)
     }
@@ -166,21 +168,21 @@ const DSBangGia = () => {
                     </td>
                     <td className='gap-2'>
                       
+                        <Link to={`/edit-banggia/${bangGia.idBangGia}`}>
+                        <span className='btn btn-info btn-sm'>
+                          <FaEye/>
+                        </span>
+                        <span className='btn btn-warning btn-sm'>
+                          <FaEdit/>
+                        </span>
+                        </Link>
+
+                        <button
+                        className='btn btn-danger btn-sm'
+                        onClick={()=>handleClickOpen(bangGia.idBangGia,bangGia.banQuanLy)}>
+                          <FaTrashAlt/>
+                        </button>
                       
-                      <Link to={`/edit-banggia/${bangGia.idBangGia}`}>
-                      <span className='btn btn-info btn-sm'>
-                        <FaEye/>
-                      </span>
-                      <span className='btn btn-warning btn-sm'>
-                        <FaEdit/>
-                      </span>
-                      </Link>
-                      
-                      <button
-                      className='btn btn-danger btn-sm'
-                      onClick={()=>handleClickOpen(bangGia.idBangGia)}>
-                        <FaTrashAlt/>
-                      </button>
                     </td>
                   </tr>
                 )))}
