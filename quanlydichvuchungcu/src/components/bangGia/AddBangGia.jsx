@@ -12,6 +12,7 @@ const AddBangGia = ({fetchBangGiaList}) => {
     const tenDangNhap = localStorage.getItem("tenDangNhap")
     const[successMessage, setSuccessMessage] = useState("")
     const[errorMessage, setErrorMessage] = useState("")
+    const[error,setError]=useState(false)
     const fetchBanQuanLy = async()=>{
         try{
             const result = await getBanQuanLyById(tenDangNhap)
@@ -30,11 +31,29 @@ const AddBangGia = ({fetchBangGiaList}) => {
     const handleBangGiaInputChange = (e)=>{
         const name = e.target.name
         let value = e.target.value
+        if(name==='thoiGianBatDau'||name==='thoiGianKetThuc'){
+            const thoiGianBatDau = name==='thoiGianBatDau'? value:bangGia.thoiGianBatDau
+            const thoiGianKetThuc = name==='thoiGianKetThuc'? value:bangGia.thoiGianKetThuc
+            if(thoiGianBatDau!==''&&thoiGianKetThuc!==''){
+                if(thoiGianBatDau>thoiGianKetThuc){
+                    setErrorMessage("Thời gian bắt đầu phải nhỏ hơn hoặc bằng thời gian kết thúc!!!")
+                    setError(true)
+                }
+                else{
+                    setErrorMessage("")
+                    setError(false)
+                }
+            }
+        }
         setBangGia({...bangGia, [name]:value})
     }
     
     const handleSubmit = async(e) =>{
         e.preventDefault()
+        if(error){
+            alert("Hãy xử lý lỗi trước khi gửi")
+            return;
+        }
         const bangGiaCopy = {...bangGia}
         const thoiGianBatDau = new Date(bangGia.thoiGianBatDau)
         const thoiGianKetThuc = new Date(bangGia.thoiGianKetThuc)
@@ -86,6 +105,7 @@ const AddBangGia = ({fetchBangGiaList}) => {
                     <div className='mb-3'>
                         <label htmlFor='thoiGianBatDau' className='form-label'>Thời gian bắt đầu</label>
                         <input
+                        required
                         className='form-control'
                         id='thoiGianBatDau'
                         name='thoiGianBatDau'
@@ -96,6 +116,7 @@ const AddBangGia = ({fetchBangGiaList}) => {
                     <div className='mb-3'>
                         <label htmlFor='thoiGianKetThuc' className='form-label'>Thời gian kết thúc</label>
                         <input
+                        required
                         className='form-control'
                         id='thoiGianKetThuc'
                         name='thoiGianKetThuc'

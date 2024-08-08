@@ -49,7 +49,7 @@ const CanHoCarousel = () => {
                             {canHoList.slice(index*4,index*4 + 4).map((canHo)=>(
                                 <Col key={canHo.idCanHo} className='mb-4' xs={12} md={6} lg={3}>
                                     <Card>
-                                        {(canHo.hinhAnhList.length>0)?
+                                        {(canHo.hinhAnhList!==null&&canHo.hinhAnhList.length>0)?
                                         (<Link to={`thue/${canHo.idCanHo}`}>
                                             <Card.Img
                                             variant='top'

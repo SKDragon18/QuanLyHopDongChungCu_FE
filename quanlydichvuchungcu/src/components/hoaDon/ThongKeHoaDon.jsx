@@ -3,24 +3,19 @@ import {Col, Row} from 'react-bootstrap'
 import {FaEdit, FaTrashAlt, FaEye} from 'react-icons/fa'
 import {Link} from 'react-router-dom'
 import { getAllHoaDon, getHoaDon} from '../utils/ApiFunctions'
+import {formatCurrency, formatTime} from '../utils/FormatValue'
 import DataPaginator from '../common/DataPaginator'
+import HoaDonFilter from '../common/HoaDonFilter'
+import { exportExcel } from '../utils/ExportExcel'
 const ThongKeHoaDon = () => {
     const[hoaDonList,setHoaDonList]=useState([])
+    const[hoaDonFilterList,setHoaDonFilterList]=useState([])
+    const[file,setFile]=useState('')
     const[currentPage,setCurrentPage]=useState(1)
     const[numPerPage]=useState(8)
     const[isLoading,setIsLoading] = useState(false)
     const[successMessage,setSuccessMessage]=useState("")
     const[errorMessage, setErrorMessage] = useState("")
-    const formatCurrency = (value, locale = 'en-US', currency = 'USD') => {
-      return new Intl.NumberFormat(locale, {
-        style: 'currency',
-        currency: currency,
-      }).format(value);
-    };
-    const formatTime = (time)=>{
-      const dateObject = new Date(time)
-      return dateObject.toLocaleString()
-    }
     useEffect(()=>{
         fetchHoaDonList()
     },[])
@@ -29,6 +24,7 @@ const ThongKeHoaDon = () => {
         try{
             const result = await getAllHoaDon()
             setHoaDonList(result)
+            setHoaDonFilterList(result)
             setIsLoading(false)
         }catch(error){
             setErrorMessage(error.message)
@@ -44,6 +40,24 @@ const ThongKeHoaDon = () => {
       setCurrentPage(1)
     },[hoaDonList])
 
+    const submit = ()=>{
+      const data = hoaDonFilterList.map(hoaDon =>{
+        const partData = {}
+        partData.soHoaDon = hoaDon.soHoaDon
+        partData.khachHang = hoaDon.hopDong?
+        hoaDon.hopDong.khachHang.maKhachHang:
+        hoaDon.yeuCauDichVu.hopDong.khachHang.maKhachHang
+        partData.tongHoaDon = hoaDon.tongHoaDon
+        partData.thoiGianTao = hoaDon.thoiGianTao
+        partData.thoiGianDong = hoaDon.thoiGianDong
+        partData.trangThai = hoaDon.trangThai?('Đã thanh toán'):('Chưa thanh toán')
+        partData.noiDung = hoaDon.hopDong?
+        (hoaDon.hopDong.canHo.soPhong+'-'+hoaDon.hopDong.canHo.tang + '-' + hoaDon.hopDong.canHo.lo):
+        (hoaDon.yeuCauDichVu.dichVu.tenDichVu)
+        return partData
+      })
+      exportExcel(data,file)
+    }
 
     const handlePagninationClick=(pageNumber)=>{
       setCurrentPage(pageNumber)
@@ -54,7 +68,7 @@ const ThongKeHoaDon = () => {
     }
     const indexOfLastHoaDon = currentPage * numPerPage
     const indexOfFirstHoaDon = indexOfLastHoaDon - numPerPage
-    const currentHoaDonList = hoaDonList.slice(indexOfFirstHoaDon,indexOfLastHoaDon)
+    const currentHoaDonList = hoaDonFilterList.slice(indexOfFirstHoaDon,indexOfLastHoaDon)
     return (
     <>
       {isLoading?(
@@ -67,6 +81,24 @@ const ThongKeHoaDon = () => {
             <div className='d-flex justify-content-center mb-3 mt-5'>
                 <h2>Danh sách hóa đơn của chung cư</h2>
             </div>
+            <HoaDonFilter data={hoaDonList} setFilteredData={setHoaDonFilterList}/>
+            <br/>
+            <Row>
+              <Col md={6} className='mb-3 mb-md-0'>
+              <div className='input-group mb-3'>
+                <span className='input-group-text' id='exportFile'>Xuất file</span>
+                <input
+                className='form-control'
+                value={file}
+                onChange={(e)=>{
+                  setFile(e.target.value)
+                }}
+                placeholder='Tên file'
+                />
+                <button className='btn btn-hotel' onClick={submit}>Xuất file excel</button>
+                </div>
+              </Col>
+            </Row>
             {successMessage&&(
               <div className='alert alert-success fade show'>{successMessage}</div>
             )}
@@ -123,7 +155,7 @@ const ThongKeHoaDon = () => {
             </table>
             <DataPaginator
             currentPage={currentPage}
-            totalPages={calculateTotalPages(numPerPage, hoaDonList)}
+            totalPages={calculateTotalPages(numPerPage, hoaDonFilterList)}
             onPageChange={handlePagninationClick}/>
         </section>
         </>

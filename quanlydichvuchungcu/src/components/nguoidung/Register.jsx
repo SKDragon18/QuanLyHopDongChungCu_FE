@@ -16,11 +16,50 @@ const Register = () => {
     })
     const [errorMessage,setErrorMessage] = useState('')
     const [successMessage,setSuccessMessage] = useState('')
+    const [error,setError] = useState(false)
     const handleInputChange=(e)=>{
-        setUser({...user, [e.target.name]:e.target.value})
+        const name = e.target.name
+        let value = e.target.value
+        const phonePattern = /^\d{10}$/
+        const cmndPattern = /^\d{12}$/
+        if(name==='sdt'){
+            if(!phonePattern.test(value)){
+                setErrorMessage("Không đúng định dạng số điện thoại 10 chữ số")
+                setError(true)
+            }
+            else{
+                setErrorMessage("")
+                setError(false)
+            }
+        }
+        if(name==='cmnd'){
+            if(!cmndPattern.test(value)){
+                setErrorMessage("Không đúng định dạng số cmnd 12 chữ số")
+                setError(true)
+            }
+            else{
+                setErrorMessage("")
+                setError(false)
+            }
+        }
+        if(name==='email'){
+            if(!value.toLowerCase().includes("@")){
+                setErrorMessage("Không đúng định dạng email")
+                setError(true)
+            }
+            else{
+                setErrorMessage("")
+                setError(false)
+            }
+        }
+        setUser({...user, [name]:value})
     }
     const handleRegister= async(e)=>{
         e.preventDefault()
+        if(error){
+            alert("Hãy xử lý lỗi trước khi gửi")
+            return;
+        }
         try{
             const result = await registerUser(user)
             setSuccessMessage(result)

@@ -16,7 +16,7 @@ const CanHoCard = ({canHo}) => {
     <Col key={canHo.idCanHo} className='mb-4' xs={12} >
       <Card>
         <Card.Body className='d-flex flex-wrap align-items-center'>
-            {(canHo.hinhAnhList.length>0)?
+            {(canHo.hinhAnhList!==null&&canHo.hinhAnhList.length>0)?
             (<div className='flex-shrink-0 mr-3 mb-3 md-md-0'>
                 <Card.Img
                 variant='top'
