@@ -21,6 +21,7 @@ const Profile = () => {
     const[errorMessage, setErrorMessage] = useState("")
     const[successMessage2, setSuccessMessage2] = useState("")
     const[errorMessage2, setErrorMessage2] = useState("")
+    const [error,setError] = useState(false)
     const fetchTaiKhoanById= async()=>{
         try{
             const result = await getTaiKhoanById(tenDangNhap);
@@ -70,6 +71,38 @@ const Profile = () => {
     const handleInputChange = (e)=>{
         const name = e.target.name
         let value = e.target.value
+        const phonePattern = /^\d{10}$/
+        const cmndPattern = /^\d{12}$/
+        if(name==='sdt'){
+            if(!phonePattern.test(value)){
+                setErrorMessage("Không đúng định dạng số điện thoại 10 chữ số")
+                setError(true)
+            }
+            else{
+                setErrorMessage("")
+                setError(false)
+            }
+        }
+        if(name==='cmnd'){
+            if(!cmndPattern.test(value)){
+                setErrorMessage("Không đúng định dạng số cmnd 12 chữ số")
+                setError(true)
+            }
+            else{
+                setErrorMessage("")
+                setError(false)
+            }
+        }
+        if(name==='email'){
+            if(!value.toLowerCase().includes("@")){
+                setErrorMessage("Không đúng định dạng email")
+                setError(true)
+            }
+            else{
+                setErrorMessage("")
+                setError(false)
+            }
+        }
         setTaiKhoan({...taiKhoan, [name]:value})
     }
 
@@ -81,6 +114,10 @@ const Profile = () => {
 
     const handleSubmit = async(e) =>{
         e.preventDefault()
+        if(error){
+            alert("Hãy xử lý lỗi trước khi gửi")
+            return;
+        }
         try{
             const success = await updateKhachHang(taiKhoan)
             console.log(taiKhoan)

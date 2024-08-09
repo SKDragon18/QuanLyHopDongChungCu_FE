@@ -6,7 +6,8 @@ import { getAllHoaDon, getHoaDon} from '../utils/ApiFunctions'
 import {formatCurrency, formatTime} from '../utils/FormatValue'
 import DataPaginator from '../common/DataPaginator'
 import HoaDonFilter from '../common/HoaDonFilter'
-import { exportExcel } from '../utils/ExportExcel'
+import HoaDonTGFilter from '../common/HoaDonTGFilter'
+import { exportExcel } from '../utils/Export'
 const ThongKeHoaDon = () => {
     const[hoaDonList,setHoaDonList]=useState([])
     const[hoaDonFilterList,setHoaDonFilterList]=useState([])
@@ -69,6 +70,18 @@ const ThongKeHoaDon = () => {
     const indexOfLastHoaDon = currentPage * numPerPage
     const indexOfFirstHoaDon = indexOfLastHoaDon - numPerPage
     const currentHoaDonList = hoaDonFilterList.slice(indexOfFirstHoaDon,indexOfLastHoaDon)
+    const tongDoanhThu = hoaDonFilterList.reduce((sum,hoaDon)=>{
+      if(hoaDon.trangThai){
+        return sum+hoaDon.tongHoaDon
+      }
+      return sum
+    },0)
+    const tongNo = hoaDonFilterList.reduce((sum,hoaDon)=>{
+      if(!hoaDon.trangThai){
+        return sum+hoaDon.tongHoaDon
+      }
+      return sum
+    },0)
     return (
     <>
       {isLoading?(
@@ -79,9 +92,9 @@ const ThongKeHoaDon = () => {
         <section className='mt-5 mb-5 container'>
             
             <div className='d-flex justify-content-center mb-3 mt-5'>
-                <h2>Danh sách hóa đơn của chung cư</h2>
+                <h2>Thống kê hóa đơn của chung cư</h2>
             </div>
-            <HoaDonFilter data={hoaDonList} setFilteredData={setHoaDonFilterList}/>
+            <HoaDonTGFilter data={hoaDonList} setFilteredData={setHoaDonFilterList}/>
             <br/>
             <Row>
               <Col md={6} className='mb-3 mb-md-0'>
@@ -99,6 +112,11 @@ const ThongKeHoaDon = () => {
                 </div>
               </Col>
             </Row>
+            <div className='row mb-3'>
+            <div className='col-3'>Tổng doanh thu: {formatCurrency(tongDoanhThu,'vi-VN', 'VND')}</div>
+            <div className='col-3'>Tổng nợ: {formatCurrency(tongNo,'vi-VN', 'VND')}</div>
+            </div>
+            
             {successMessage&&(
               <div className='alert alert-success fade show'>{successMessage}</div>
             )}
@@ -112,6 +130,7 @@ const ThongKeHoaDon = () => {
                   <th>Loại đóng</th>
                   <th>Nội dung</th>
                   <th>Mã khách hàng</th>
+                  <th>Thời gian tạo</th>
                   <th>Thời gian đóng</th>
                   <th>Tổng số tiền</th>
                   <th>Thanh toán</th>
@@ -139,6 +158,7 @@ const ThongKeHoaDon = () => {
                       )}
                       {hoaDon.yeuCauDichVu!==null&&(hoaDon.yeuCauDichVu.hopDong.khachHang.maKhachHang)}
                     </td>
+                    <td>{formatTime(hoaDon.thoiGianTao)}</td>
                     <td>{formatTime(hoaDon.thoiGianDong)}</td>
                     <td>{formatCurrency(hoaDon.tongHoaDon,'vi-VN', 'VND')}</td>
                     <td>

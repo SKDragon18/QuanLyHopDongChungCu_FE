@@ -6,6 +6,7 @@ import { getHoaDon, thanhToan} from '../utils/ApiFunctions'
 import DataPaginator from '../common/DataPaginator'
 import {formatCurrency, formatTime} from '../utils/FormatValue'
 import SimpleDialog from '../common/SimpleDialog'
+import {exportPDF} from '../utils/Export'
 const DSHoaDon = () => {
     const[hoaDonList,setHoaDonList]=useState([])
     const[maKhachHang]=useState(localStorage.getItem("tenDangNhap"))
@@ -43,15 +44,19 @@ const DSHoaDon = () => {
       }
       catch(error){
         setErrorMessage(error.message)
+        setTimeout(()=>{
+          setErrorMessage("")
+        },3000)
       }
-      setTimeout(()=>{
-        setErrorMessage("")
-      },3000)
+      
     }
 
     const handleClickOpen = (idHoaDon)=>{
       setId(idHoaDon)
       setOpen(true)
+    }
+    const handlePrint = (hoaDon)=>{
+      exportPDF(hoaDon)
     }
     
     useEffect(()=>{
@@ -123,6 +128,13 @@ const DSHoaDon = () => {
                         Thanh toán
                       </button>
                     )}
+                    </td>
+                    <td>
+                    <button
+                      className='btn btn-primary btn-sm'
+                      onClick={()=>handlePrint(hoaDon)}>
+                        In PDF
+                      </button>
                     </td>
                   </tr>
                 )))}
