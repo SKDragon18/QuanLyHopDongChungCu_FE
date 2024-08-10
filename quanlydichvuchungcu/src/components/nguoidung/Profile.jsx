@@ -10,7 +10,7 @@ const Profile = () => {
         ten:'',
         email:'',
         sdt:'',
-        cmnd:'',
+        ngaySinh:'',
         diaChi:''
     })
     const[imageSave,setImageSave]=useState("")
@@ -72,7 +72,7 @@ const Profile = () => {
         const name = e.target.name
         let value = e.target.value
         const phonePattern = /^\d{10}$/
-        const cmndPattern = /^\d{12}$/
+        const ngaySinhPattern = /^\d{12}$/
         if(name==='sdt'){
             if(!phonePattern.test(value)){
                 setErrorMessage("Không đúng định dạng số điện thoại 10 chữ số")
@@ -83,9 +83,11 @@ const Profile = () => {
                 setError(false)
             }
         }
-        if(name==='cmnd'){
-            if(!cmndPattern.test(value)){
-                setErrorMessage("Không đúng định dạng số cmnd 12 chữ số")
+        if(name==='ngaySinh'){
+            const now = new Date()
+            const ngaySinh = new Date(value)
+            if(ngaySinh>=now){
+                setErrorMessage("Ngày sinh không hợp lý (phải bé hơn ngày hiện tại)")
                 setError(true)
             }
             else{
@@ -258,18 +260,17 @@ const Profile = () => {
                         </div>
                     </div>
                     <div className='row mb-3'>
-                        <label htmlFor='cmnd' className='col-sm-2 col-form-label'>
-                            CMND
+                        <label htmlFor='ngaySinh' className='col-sm-2 col-form-label'>
+                            Ngày sinh
                         </label>
                         <div>
                             <input
                             readOnly={changeable}
-                            id='cmnd'
-                            name='cmnd'
-                            type='text'
-                            maxLength='12'
+                            id='ngaySinh'
+                            name='ngaySinh'
+                            type='date'
                             className='form-control'
-                            value={taiKhoan.cmnd}
+                            value={taiKhoan.ngaySinh}
                             onChange={handleInputChange}/>
                         </div>
                     </div>

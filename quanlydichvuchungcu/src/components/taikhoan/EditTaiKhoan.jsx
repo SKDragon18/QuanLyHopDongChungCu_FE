@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { getBanQuanLyById, updateBanQuanLy, doiHinhAnh, getKhachHangById, getTaiKhoanById } from '../utils/ApiFunctions'
 import { useParams } from 'react-router-dom'
 import {Link} from 'react-router-dom'
+import { formatDay } from '../utils/FormatValue'
 const EditTaiKhoan = () => {
     const {tenDangNhap} = useParams()
     const [taiKhoan, setTaiKhoan] = useState({
@@ -10,7 +11,6 @@ const EditTaiKhoan = () => {
         ten:'',
         email:'',
         sdt:'',
-        cmnd:'',
         diaChi:''
     })
     const[imagePreview, setImagePreview] = useState("")
@@ -51,7 +51,6 @@ const EditTaiKhoan = () => {
         const name = e.target.name
         let value = e.target.value
         const phonePattern = /^\d{10}$/
-        const cmndPattern = /^\d{12}$/
         if(name==='sdt'){
             if(!phonePattern.test(value)){
                 setErrorMessage("Không đúng định dạng số điện thoại 10 chữ số")
@@ -62,16 +61,7 @@ const EditTaiKhoan = () => {
                 setError(false)
             }
         }
-        if(name==='cmnd'){
-            if(!cmndPattern.test(value)){
-                setErrorMessage("Không đúng định dạng số cmnd 12 chữ số")
-                setError(true)
-            }
-            else{
-                setErrorMessage("")
-                setError(false)
-            }
-        }
+        
         if(name==='email'){
             if(!value.toLowerCase().includes("@")){
                 setErrorMessage("Không đúng định dạng email")
@@ -220,24 +210,21 @@ const EditTaiKhoan = () => {
                             onChange={handleInputChange}/>
                         </div>
                     </div>
-                    <div className='row mb-3'>
-                        <label htmlFor='cmnd' className='col-sm-2 col-form-label'>
-                            CMND
-                        </label>
-                        <div>
-                            <input
-                            readOnly={changeable}
-                            required
-                            id='cmnd'
-                            name='cmnd'
-                            type='text'
-                            maxLength='12'
-                            className='form-control'
-                            value={taiKhoan.cmnd}
-                            onChange={handleInputChange}/>
-                        </div>
-                    </div>
                     
+                    <div className='row mb-3'>
+                    <label htmlFor='ngaySinh' className='col-sm-2 col-form-label'>
+                        Ngày sinh
+                    </label>
+                    <div>
+                        <input
+                        readOnly
+                        id='ngaySinh'
+                        name='ngaySinh'
+                        type='text'
+                        className='form-control'
+                        value={formatDay(taiKhoan.ngaySinh)}/>
+                    </div>
+                    </div>
                     <div className='mb-3'>
                     {errorMessage&&<p className='alert alert-danger'>{errorMessage}</p>}
                     {successMessage&&<p className='alert alert-success'>{successMessage}</p>}

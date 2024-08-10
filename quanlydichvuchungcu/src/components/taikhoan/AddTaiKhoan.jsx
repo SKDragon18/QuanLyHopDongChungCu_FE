@@ -8,7 +8,6 @@ const AddTaiKhoan = ({fetchTaiKhoanList}) => {
         ten:'',
         email:'',
         sdt:'',
-        cmnd:'',
         diaChi:'',
         tenDangNhap:'NV_Số',
         idQuyen:0,
@@ -23,7 +22,6 @@ const AddTaiKhoan = ({fetchTaiKhoanList}) => {
         const name = e.target.name
         let value = e.target.value
         const phonePattern = /^\d{10}$/
-        const cmndPattern = /^\d{12}$/
         if(name==='sdt'){
             if(!phonePattern.test(value)){
                 setErrorMessage("Không đúng định dạng số điện thoại 10 chữ số")
@@ -34,16 +32,7 @@ const AddTaiKhoan = ({fetchTaiKhoanList}) => {
                 setError(false)
             }
         }
-        if(name==='cmnd'){
-            if(!cmndPattern.test(value)){
-                setErrorMessage("Không đúng định dạng số cmnd 12 chữ số")
-                setError(true)
-            }
-            else{
-                setErrorMessage("")
-                setError(false)
-            }
-        }
+        
         if(name==='email'){
             if(!value.toLowerCase().includes("@")){
                 setErrorMessage("Không đúng định dạng email")
@@ -162,22 +151,7 @@ const AddTaiKhoan = ({fetchTaiKhoanList}) => {
                             onChange={handleInputChange}/>
                         </div>
                     </div>
-                    <div className='row mb-3'>
-                        <label htmlFor='cmnd' className='col-sm-2 col-form-label'>
-                            CMND
-                        </label>
-                        <div>
-                            <input
-                            required
-                            id='cmnd'
-                            name='cmnd'
-                            type='text'
-                            maxLength='12'
-                            className='form-control'
-                            value={taiKhoan.cmnd}
-                            onChange={handleInputChange}/>
-                        </div>
-                    </div>
+                    
                     <div className='row mb-3'>
                         <label htmlFor='tenDangNhap' className='col-sm-3 col-form-label'>
                             Tên đăng nhập

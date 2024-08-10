@@ -8,7 +8,7 @@ const Register = () => {
         ten:'',
         email:'',
         sdt:'',
-        cmnd:'',
+        ngaySinh:'',
         tenDangNhap:'',
         matKhau:'',
         matKhauNhapLai:''
@@ -21,10 +21,12 @@ const Register = () => {
         const name = e.target.name
         let value = e.target.value
         const phonePattern = /^\d{10}$/
-        const cmndPattern = /^\d{12}$/
-        if(name==='sdt'){
-            if(!phonePattern.test(value)){
-                setErrorMessage("Không đúng định dạng số điện thoại 10 chữ số")
+        const ngaySinhPattern = /^\d{12}$/
+        if(name==='ngaySinh'){
+            const now = new Date()
+            const ngaySinh = new Date(value)
+            if(ngaySinh>=now){
+                setErrorMessage("Ngày sinh không hợp lý (phải bé hơn ngày hiện tại)")
                 setError(true)
             }
             else{
@@ -32,9 +34,9 @@ const Register = () => {
                 setError(false)
             }
         }
-        if(name==='cmnd'){
-            if(!cmndPattern.test(value)){
-                setErrorMessage("Không đúng định dạng số cmnd 12 chữ số")
+        if(name==='sdt'){
+            if(!phonePattern.test(value)){
+                setErrorMessage("Không đúng định dạng số điện thoại 10 chữ số")
                 setError(true)
             }
             else{
@@ -63,17 +65,18 @@ const Register = () => {
         try{
             const result = await registerUser(user)
             setSuccessMessage(result)
+            setTimeout(()=>{
+                setSuccessMessage("")
+                window.location.href="/login"
+            },3000)
         }
         catch(error){
             setErrorMessage(`Register error: ${error.message}`)
+            setTimeout(()=>{
+                setErrorMessage("")
+            },3000)
         }
-        setTimeout(()=>{
-            setSuccessMessage("")
-            setErrorMessage("")
-            const navigate = useNavigate()
-            navigate('/login')
-            return;
-        },5000)
+        
     }
   return (
     <section className='container col-6 mt-5 mb-5'>
@@ -144,17 +147,17 @@ const Register = () => {
                 </div>
             </div>
             <div className='row mb-3'>
-                <label htmlFor='cmnd' className='col-sm-2 col-form-label'>
-                    CMND
+                <label htmlFor='ngaySinh' className='col-sm-2 col-form-label'>
+                    Ngày sinh
                 </label>
                 <div>
                     <input
-                    id='cmnd'
-                    name='cmnd'
-                    type='text'
-                    maxLength='12'
+                    required
+                    id='ngaySinh'
+                    name='ngaySinh'
+                    type='date'
                     className='form-control'
-                    value={user.cmnd}
+                    value={user.ngaySinh}
                     onChange={handleInputChange}/>
                 </div>
             </div>

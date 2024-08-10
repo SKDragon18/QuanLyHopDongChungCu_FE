@@ -21,3 +21,13 @@ export function formatTime (time){
   const seconds = String(dateObject.getSeconds()).padStart(2,'0')
   return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`
 }
+
+export function formatDay (time){
+  if(!time)return ''
+  const dateObject = new Date(time)
+  const day = String(dateObject.getDate()).padStart(2,'0')
+  const month = String(dateObject.getMonth()+1).padStart(2,'0')
+  const year = dateObject.getFullYear()
+  
+  return `${day}/${month}/${year}`
+}

@@ -13,9 +13,7 @@ const DangKyDichVu = () => {
     const [role]= useState(localStorage.getItem("role"))
     const[yeuCauDichVu, setYeuCauDichVu] = useState({
       idYeuCauDichVu:0,
-      hopDong:{
-        idHopDong:0
-      },
+      khachHang:{},
       dichVu:{},
       giaTra:0,
       ngayYeuCau:'',
@@ -40,14 +38,6 @@ const DangKyDichVu = () => {
       email:'',
       cmnd:''
   })
-  const [hopDongList,setHopDongList]=useState([{
-    idHopDong:0,
-    canHo:{
-      soPhong:'',
-      tang:0,
-      lo:''
-    }
-  }])
     const[dieuKhoanDichVuList,setDieuKhoanDichVuList] = useState([{}])
     const fetchDichVuById= async()=>{
       try{
@@ -71,24 +61,11 @@ const DangKyDichVu = () => {
         setErrorMessage(error.message)
     }
   }
-  const fetchHopDongById= async()=>{
-    try{
-        const result = await getAllHopDongKhachHang(ma)
-        setHopDongList(result)
-        
-    }
-    catch(error){
-        setErrorMessage(error.message)
-    }
-    setTimeout(()=>{
-      setErrorMessage("")
-    },3000)
-  }
   useEffect(()=>{
     fetchDichVuById()
     fetchKhachHangById()
-    fetchHopDongById()
   },[])
+
   const [today] = useState(new Date());
   const [todayString] = useState(today.toISOString().slice(0, 16));
   const [day7after] = useState(new Date());
@@ -111,31 +88,17 @@ const DangKyDichVu = () => {
     setDieuKhoanDichVuList(dichVu.dieuKhoanList)
   },[dichVu])
 
+  useEffect(()=>{
+    setYeuCauDichVu(yeuCauDichVu=>({...yeuCauDichVu, ['khachHang']:khachHang}))
+  },[khachHang])
 
 
     const handleInputChange=(e)=>{
         const{name,value} = e.target
-        if(name==='hopDong'){
-          console.log(value)
-          setIsSubmitted(false)
-          const hopDongChon = ({
-            idHopDong:value
-          })
-          setYeuCauDichVu({...yeuCauDichVu,[name]:hopDongChon})
-          setErrorMessage("")
-        }
-        else{
-          setYeuCauDichVu({...yeuCauDichVu,[name]:value})
-          setErrorMessage("")
-        }
+        setYeuCauDichVu({...yeuCauDichVu,[name]:value})
     }
     const handleSubmit=async (e)=>{
       e.preventDefault()
-      console.log(yeuCauDichVu.hopDong)
-      if(yeuCauDichVu.hopDong.idHopDong===0){
-        alert("Bạn cần cung cấp căn hộ đang thuê")
-        return;
-      }
       try{
         const success = await checkHopDongDichVu(yeuCauDichVu)
         if(success==="Hợp lệ"){
@@ -154,9 +117,6 @@ const DangKyDichVu = () => {
       },3000)
     }
     const handleDangKy = async ()=>{
-      if(yeuCauDichVu.hopDong.idHopDong===0){
-        return;
-      }
       console.log(yeuCauDichVu)
       const yeuCauDichVuCopy = {...yeuCauDichVu}
       const thoiHan = new Date(yeuCauDichVu.thoiHan)
@@ -221,7 +181,7 @@ const DangKyDichVu = () => {
                     value={khachHang.sdt}
                     />
                   </Form.Group>
-                  <Form.Group>
+                  {/* <Form.Group>
                   <Form.Label htmlFor='hopDong'>Chọn hợp đồng đã có: </Form.Label>
                   {Array.isArray(hopDongList)&&hopDongList.length>0&&(
                     <select
@@ -248,7 +208,7 @@ const DangKyDichVu = () => {
                   </select>
                   )}
                     
-                  </Form.Group>
+                  </Form.Group> */}
                 </fieldset>
                 <fieldset style={{border:'2px'}}>
                   <legend className='mt-3'>Thông tin dịch vụ</legend>

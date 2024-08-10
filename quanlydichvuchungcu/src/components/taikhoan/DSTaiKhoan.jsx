@@ -38,7 +38,10 @@ const DSTaiKhoan = () => {
 
     const handleTrangThaiChange = async(tenDangNhap)=>{
       
-      if(tenDangNhap===username)return
+      if(tenDangNhap===username){
+        alert("Bạn không thể thay đổi trạng thái tài khoản chính mình!")
+        return
+      }
       try{
         const result = await updateTrangThaiTaiKhoan(tenDangNhap)
         setSuccessMessage("Thay đổi trạng thái thành công " + String(tenDangNhap))
@@ -54,7 +57,10 @@ const DSTaiKhoan = () => {
     }
 
     const handleQuyenChange = async(tenDangNhap)=>{
-      if(tenDangNhap===username)return
+      if(tenDangNhap===username){
+        alert("Bạn không thể đổi quyền tài khoản chính mình")
+        return
+      }
       try{
         const result = await updateQuyenTaiKhoan(tenDangNhap)
         setSuccessMessage("Thay đổi quyền thành công " + String(tenDangNhap))

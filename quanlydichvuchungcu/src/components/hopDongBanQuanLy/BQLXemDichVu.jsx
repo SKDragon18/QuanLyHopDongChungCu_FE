@@ -2,25 +2,14 @@ import React, { useState, useEffect } from 'react'
 import {getHopDongDichVuKhachHang, giaHanHopDongDichVu} from '../utils/ApiFunctions'
 import { useParams } from 'react-router-dom'
 import { Form, FormControl } from 'react-bootstrap'
+import { formatCurrency, formatTime } from '../utils/FormatValue'
 const BQLXemDichVu = () => {
     // const[isValidated, setIsValidated]= useState(false)
     const[errorMessage,setErrorMessage]=useState('')
     const[successMessage,setSuccessMessage]=useState('')
     const {idYeuCauDichVu} = useParams()
-    const formatCurrency = (value, locale = 'en-US', currency = 'USD') => {
-      return new Intl.NumberFormat(locale, {
-        style: 'currency',
-        currency: currency,
-      }).format(value);
-    };
-    const formatTime = (time)=>{
-      const dateObject = new Date(time)
-      return dateObject.toLocaleString()
-    }
     const[yeuCauDichVu, setYeuCauDichVu] = useState({
-      hopDong:{
-        idHopDong:0
-      },
+      khachHang:{},
       dichVu:{},
       giaTra:0,
       ngayYeuCau:'',
@@ -45,22 +34,13 @@ const BQLXemDichVu = () => {
       email:'',
       cmnd:''
   })
-  const [hopDong,setHopDong]=useState({
-    idHopDong:0,
-    canHo:{
-      soPhong:'',
-      tang:0,
-      lo:''
-    }
-  })
     const[dieuKhoanDichVuList,setDieuKhoanDichVuList] = useState([{}])
     const fetchHopDongDichVu= async()=>{
       try{
           const result = await getHopDongDichVuKhachHang(idYeuCauDichVu)
           setYeuCauDichVu(result)
           setDichVu(result.dichVu)
-          setKhachHang(result.hopDong.khachHang)
-          setHopDong(result.hopDong)
+          setKhachHang(result.khachHang)
           setDieuKhoanDichVuList(result.dieuKhoanList)
       }
       catch(error){
@@ -128,16 +108,6 @@ const BQLXemDichVu = () => {
                     id='sdt'
                     name='sdt'
                     value={khachHang.sdt}
-                    />
-                  </Form.Group>
-                  <Form.Group>
-                  <Form.Label htmlFor='hopDong'>Căn hộ đăng ký dịch vụ: </Form.Label>
-                  <FormControl
-                    readOnly
-                    type='text'
-                    id='hopDong'
-                    name='hopDong'
-                    value={'Căn hộ '+hopDong.canHo.soPhong + ' tầng '+hopDong.canHo.tang+' khu '+hopDong.canHo.lo}
                     />
                   </Form.Group>
                 </fieldset>

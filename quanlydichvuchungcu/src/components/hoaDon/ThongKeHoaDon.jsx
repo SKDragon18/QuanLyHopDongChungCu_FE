@@ -47,13 +47,14 @@ const ThongKeHoaDon = () => {
         partData.soHoaDon = hoaDon.soHoaDon
         partData.khachHang = hoaDon.hopDong?
         hoaDon.hopDong.khachHang.maKhachHang:
-        hoaDon.yeuCauDichVu.hopDong.khachHang.maKhachHang
+        hoaDon.yeuCauDichVu.khachHang.maKhachHang
         partData.tongHoaDon = hoaDon.tongHoaDon
-        partData.thoiGianTao = hoaDon.thoiGianTao
-        partData.thoiGianDong = hoaDon.thoiGianDong
+        partData.VND = formatCurrency(hoaDon.tongHoaDon,'vi-VN', 'VND')
+        partData.thoiGianTao = formatTime(hoaDon.thoiGianTao)
+        partData.thoiGianDong = formatTime(hoaDon.thoiGianDong)
         partData.trangThai = hoaDon.trangThai?('Đã thanh toán'):('Chưa thanh toán')
         partData.noiDung = hoaDon.hopDong?
-        (hoaDon.hopDong.canHo.soPhong+'-'+hoaDon.hopDong.canHo.tang + '-' + hoaDon.hopDong.canHo.lo):
+        ('CanHo '+hoaDon.hopDong.canHo.soPhong+'-'+hoaDon.hopDong.canHo.tang + '-' + hoaDon.hopDong.canHo.lo):
         (hoaDon.yeuCauDichVu.dichVu.tenDichVu)
         return partData
       })
@@ -156,7 +157,7 @@ const ThongKeHoaDon = () => {
                       {hoaDon.hopDong!==null&&(
                         hoaDon.hopDong.khachHang.maKhachHang
                       )}
-                      {hoaDon.yeuCauDichVu!==null&&(hoaDon.yeuCauDichVu.hopDong.khachHang.maKhachHang)}
+                      {hoaDon.yeuCauDichVu!==null&&(hoaDon.yeuCauDichVu.khachHang.maKhachHang)}
                     </td>
                     <td>{formatTime(hoaDon.thoiGianTao)}</td>
                     <td>{formatTime(hoaDon.thoiGianDong)}</td>

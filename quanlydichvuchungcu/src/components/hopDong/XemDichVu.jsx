@@ -10,9 +10,7 @@ const XemDichVu = () => {
     const {idYeuCauDichVu} = useParams()
     const [urlPay,setUrlPay] = useState('')
     const[yeuCauDichVu, setYeuCauDichVu] = useState({
-      hopDong:{
-        idHopDong:0
-      },
+      khachHang:{},
       dichVu:{},
       giaTra:0,
       ngayYeuCau:'',
@@ -37,22 +35,13 @@ const XemDichVu = () => {
       email:'',
       cmnd:''
   })
-  const [hopDong,setHopDong]=useState({
-    idHopDong:0,
-    canHo:{
-      soPhong:'',
-      tang:0,
-      lo:''
-    }
-  })
     const[dieuKhoanDichVuList,setDieuKhoanDichVuList] = useState([{}])
     const fetchHopDongDichVu= async()=>{
       try{
           const result = await getHopDongDichVuKhachHang(idYeuCauDichVu)
           setYeuCauDichVu(result)
           setDichVu(result.dichVu)
-          setKhachHang(result.hopDong.khachHang)
-          setHopDong(result.hopDong)
+          setKhachHang(result.khachHang)
           setDieuKhoanDichVuList(result.dieuKhoanList)
       }
       catch(error){
@@ -127,16 +116,6 @@ const XemDichVu = () => {
                     id='sdt'
                     name='sdt'
                     value={khachHang.sdt}
-                    />
-                  </Form.Group>
-                  <Form.Group>
-                  <Form.Label htmlFor='hopDong'>Căn hộ đăng ký dịch vụ: </Form.Label>
-                  <FormControl
-                    readOnly
-                    type='text'
-                    id='hopDong'
-                    name='hopDong'
-                    value={'Căn hộ '+hopDong.canHo.soPhong + ' tầng '+hopDong.canHo.tang+' khu '+hopDong.canHo.lo}
                     />
                   </Form.Group>
                 </fieldset>

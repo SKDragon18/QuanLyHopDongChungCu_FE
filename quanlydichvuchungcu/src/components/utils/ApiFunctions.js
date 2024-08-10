@@ -1138,6 +1138,23 @@ export async function changePassword(doiMatKhau){
     }
 }
 
+export async function getAvatar(id){
+    try{
+        const response  = await api.get(`/nguoidung/hinhanh/${id}`,{
+            headers:getHeader()
+        })
+        const data = response.data
+        if(data.code===200){
+            return data.result
+        }
+        else{
+            throw new Error(data.message)
+        }
+    }catch(error){
+        throw new Error(error.message)
+    }
+}
+
 //Admin
 
 export async function getTaiKhoanList(taikhoan){

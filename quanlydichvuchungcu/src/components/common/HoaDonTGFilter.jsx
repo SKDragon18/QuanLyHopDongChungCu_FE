@@ -7,9 +7,17 @@ const HoaDonTGFilterFilter = ({data,setFilteredData}) => {
       const name = e.target.name
       let value = e.target.value
       if(name==='thoiGianBatDau'){
+        if(thoiGianKetThuc!==''&&value>thoiGianKetThuc){
+          alert("Thời gian bắt đầu phải nhỏ hơn hoặc bằng thời gian kết thúc")
+          return;
+        }
         setThoiGianBatDau(value)
       }
       if(name==='thoiGianKetThuc'){
+        if(thoiGianBatDau!==''&&value<thoiGianBatDau){
+          alert("Thời gian bắt đầu phải nhỏ hơn hoặc bằng thời gian kết thúc")
+          return;
+        }
         setThoiGianKetThuc(value)
       }
       const thoiGianBatDau2 = name==='thoiGianBatDau'?value:thoiGianBatDau
@@ -17,13 +25,13 @@ const HoaDonTGFilterFilter = ({data,setFilteredData}) => {
       if(thoiGianBatDau2!==''&&thoiGianKetThuc2!==''){
         const filteredHoaDonTGFilterList = data.filter((hoaDon)=>
           hoaDon.thoiGianTao>=thoiGianBatDau2 && hoaDon.thoiGianTao<=thoiGianKetThuc2)
-        console.log(thoiGianBatDau2)
-        console.log(thoiGianKetThuc2)
         setFilteredData(filteredHoaDonTGFilterList)
+        
       }
     }
     const clearFilter = () =>{
-      setFilter("")
+      setThoiGianBatDau('')
+      setThoiGianKetThuc('')
       setFilteredData(data)
     }
   return (

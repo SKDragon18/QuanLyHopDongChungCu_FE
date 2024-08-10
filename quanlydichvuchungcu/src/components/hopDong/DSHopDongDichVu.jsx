@@ -101,7 +101,6 @@ const DSHopDongDichVu = () => {
                 <tr className='text-center'>
                   <th>ID</th>
                   <th>Tên dịch vụ</th>
-                  <th>Tên căn hộ</th>
                   <th>Ngày bắt đầu</th>
                   <th>Thanh toán tiếp theo</th>
                   <th>Giá trị hợp đồng</th>
@@ -121,7 +120,6 @@ const DSHopDongDichVu = () => {
                   <tr key={hopDongDichVu.idYeuCauDichVu} className='text-center'>
                     <td>{hopDongDichVu.idYeuCauDichVu}</td>
                     <td>{hopDongDichVu.dichVu.tenDichVu}</td>
-                    <td>{'Số '+hopDongDichVu.hopDong.canHo.soPhong+' khu ' +hopDongDichVu.hopDong.canHo.lo}</td>
                     <td>{formatTime(hopDongDichVu.ngayYeuCau)}</td>
                     <td>{formatTime(hopDongDichVu.thoiHan)}</td>
                     <td>{formatCurrency(hopDongDichVu.giaTra,'vi-VN', 'VND')}{'/'+hopDongDichVu.chuKy + ' ngày'}</td>
